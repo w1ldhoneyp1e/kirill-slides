@@ -1,0 +1,7 @@
+.container {
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    background-color: azure;
+    color: rgb(76, 76, 76);
+}

@@ -1,0 +1,8 @@
+.container {
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    background-color: azure;
+    color: rgb(76, 76, 76);
+    border-top: 1px solid rgb(76, 76, 76);
+}

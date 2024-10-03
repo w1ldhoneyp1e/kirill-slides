@@ -1,0 +1,9 @@
+.collection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 400px;
+    width: 30%;
+    /* border-color: rgb(76, 76, 76); */
+    border-right: 1px solid rgb(76, 76, 76);
+}
