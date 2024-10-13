@@ -1,8 +1,8 @@
 .container {
+    height:  var(--top-bar-height);
     display: flex;
     flex-direction: row;
     justify-content: left;
-    background-color: azure;
+    background-color: rgb(198, 207, 215);
     color: rgb(76, 76, 76);
-    border-top: 1px solid rgb(76, 76, 76);
 }
