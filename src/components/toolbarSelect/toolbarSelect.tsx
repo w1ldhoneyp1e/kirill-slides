@@ -1,4 +1,4 @@
-import { ChooseOption } from "../../types"
+import { ChooseOption } from "../../store/types"
 import styles from "./toolbarSelect.module.css"
 
 type ToolbarSelectProps = {

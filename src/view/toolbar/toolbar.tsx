@@ -1,10 +1,8 @@
-import { ToolbarButton } from "../toolbarButton/toolbarButton"
-import { ToolbarSelect } from "../toolbarSelect/toolbarSelect"
-import { Button } from "../../types"
+import { ToolbarButton } from "../../components/toolbarButton/toolbarButton"
+import { ToolbarSelect } from "../../components/toolbarSelect/toolbarSelect"
 import styles from "./toolbar.module.css"
-
+import { buttons } from "./buttons.ts";
 type ToolbarProps = {
-    buttons: Button[],
     id: string
 }
 
@@ -13,7 +11,7 @@ type ToolbarProps = {
 function Toolbar(props:ToolbarProps) {
     return (
         <div key={props.id} className={styles.bar}>
-            {props.buttons.map((button) => {
+            {buttons.map((button) => {
                 if (button.type === 'button') {
                     return (
                         <ToolbarButton 

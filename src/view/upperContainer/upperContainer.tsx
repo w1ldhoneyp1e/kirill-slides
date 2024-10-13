@@ -1,23 +1,22 @@
-import { getUID } from "../../methods";
-import { Button } from "../../types";
+import { getUID } from "../../store/methods";
+import { Presentation } from "../../store/types";
 import { Name } from "../name/name";
 import { Toolbar } from "../toolbar/toolbar";
 import styles from "./upperContainer.module.css"
 
 type UpperContainerProps = {
-    toolbar: Button[]
+    presentation: Presentation
 }
 
 function UpperContainer(props:UpperContainerProps) {
     return (
         <div className={styles.container}>
             <Name 
-                text={'My New Presentation'}
+                text={props.presentation.name}
                 key={getUID()}
             />
             <Toolbar
                 id={getUID()}
-                buttons={props.toolbar}
             />
         </div>
     )

@@ -1,6 +1,6 @@
  
 import { changePresentationName, addSlide, deleteSlide, changeSlidePosition, addText,
-    addPicture, setTextValue, setTextFontSize, setTextFamily, setTextColor, setSlideBackground, setObjectPosition, setObjectSize } from './methods.js';
+    addPicture, setTextValue, setTextFontSize, setTextFamily, setTextColor, setSlideBackground, setObjectPosition, setObjectSize } from './store/methods.js';
 import { SolidBackground, ImageBackground, Size, TextObj, PictureObj, Presentation, Slide } from './types.js';
 
 const solidBack: SolidBackground = {

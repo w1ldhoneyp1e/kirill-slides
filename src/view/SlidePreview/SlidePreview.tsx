@@ -1,4 +1,4 @@
-import { Slide } from "../../types";
+import { Slide } from "../../store/types";
 import styles from "./SlidePreview.module.css"
 
 type SlideProps = {

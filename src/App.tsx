@@ -1,16 +1,19 @@
 import './App.css'
-import { LowerContainer } from './components/lowerContainer/lowerContainer'
-import { UpperContainer } from './components/upperContainer/upperContainer'
-import { toolbarButtons } from './consts/buttons'
+import { LowerContainer } from './view/lowerContainer/lowerContainer'
+import { UpperContainer } from './view/upperContainer/upperContainer'
 import { myPres } from './consts/presentation'
-import { getUID } from './methods'
+import { getUID } from './store/methods'
+import { Editor } from './store/types'
+type AppProps = {
+  editor: Editor,
+}
 
-function App() {
+function App(props: AppProps) {
 
   return (
     <div>
-      <UpperContainer //
-        toolbar={toolbarButtons}
+      <UpperContainer // Передавать editor
+        presentation={props.editor.presentations[0]}
       />
       <LowerContainer //
         key={getUID()}//

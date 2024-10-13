@@ -1,7 +1,7 @@
-import { getUID } from "../methods";
-import { Button } from "../types";
+import { getUID } from "../../store/methods";
+import { Button } from "../../store/types";
 
-const toolbarButtons: Button[] = [
+const buttons: Button[] = [
     {
         type: 'button',
         text: 'создать слайд',
@@ -78,4 +78,4 @@ const toolbarButtons: Button[] = [
     },
 ]
 
-export {toolbarButtons};
+export {buttons};

@@ -1,5 +1,5 @@
-import { getUID } from "../methods";
-import { Presentation } from "../types";
+import { getUID } from "../store/methods";
+import { Presentation } from "../store/types";
 import { slides } from "./slides";
 
 const myPres: Presentation = {

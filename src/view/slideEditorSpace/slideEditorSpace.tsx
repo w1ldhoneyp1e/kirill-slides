@@ -1,4 +1,4 @@
-import { Slide } from "../../types";
+import { Slide } from "../../store/types";
 import styles from "./slideEditorSpace.module.css"
 
 type SlideEditorSpaceProps = {

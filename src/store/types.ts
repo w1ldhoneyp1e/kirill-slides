@@ -18,6 +18,7 @@ type Button = {
     options: ChooseOption[],
     id: string,
 }
+
 type Presentation = {
     id: string,
     name: string,
@@ -25,7 +26,7 @@ type Presentation = {
 }
 type Slide = {
     id: string,
-    contentObjects: (TextObj | PictureObj)[],
+    contentObjects: (Text | Picture)[],
     background: Background
 }
  
@@ -36,39 +37,44 @@ type ObjectsSelection = {
 type SlideObject = {
     id: string,
     position: Position,
-    size: Size
+    size: Size,
+    type: string,
 }
-type TextObj = SlideObject & {
-    text: string,
+type Text = SlideObject & {
+    value: string,
     fontSize: number,
-    family: string,
+    fontFamily: string,
     hexColor: string
 }
-type PictureObj = SlideObject & {
+type Picture = SlideObject & {
     src: string
 }
-type Background = SolidBackground | ImageBackground
-type SolidBackground = {
+type Background = Solid | Image
+type Solid = {
     hexColor: string,
     type: 'solid'
 }
-type ImageBackground = {
+type Image = {
     src: string,
     type: 'image'
+}
+type Editor = {
+    presentations: Presentation[],
+    currentPresentationId: string
 }
 
 export type {
     Size,
-    Button,
-    ChooseOption,
     Position,
     Presentation,
     Slide,
     ObjectsSelection,
     SlideObject,
-    TextObj,
-    PictureObj,
+    Text,
+    Picture,
     Background,
-    SolidBackground,
-    ImageBackground,
+    Solid,
+    Image,
+    Button,
+    Editor,
 };
