@@ -32,6 +32,36 @@ const slides: Slide[] = [
         contentObjects: [],
         background: getDefaultBackground()
     },
+    {
+        id: getUID(),
+        contentObjects: [],
+        background: getDefaultBackground()
+    },
+    {
+        id: getUID(),
+        contentObjects: [],
+        background: getDefaultBackground()
+    },
+    {
+        id: getUID(),
+        contentObjects: [],
+        background: getDefaultBackground()
+    },
+    {
+        id: getUID(),
+        contentObjects: [],
+        background: getDefaultBackground()
+    },
+    {
+        id: getUID(),
+        contentObjects: [],
+        background: getDefaultBackground()
+    },
+    {
+        id: getUID(),
+        contentObjects: [],
+        background: getDefaultBackground()
+    },
 ]
 
 export {slides};

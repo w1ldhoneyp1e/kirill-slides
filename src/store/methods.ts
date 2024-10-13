@@ -1,7 +1,7 @@
-import { Background, Picture, Position, Presentation, Size, Slide, SlideObject, Text } from './types.js';
+import { BackgroundType, PictureType, PositionType, PresentationType, SizeType, SlideType, SlideObjectType, TextType } from './types.js';
 
 // изменение названия презентации
-function changePresentationName(presentation: Presentation, newName: string): Presentation {
+function changePresentationName(presentation: PresentationType, newName: string): PresentationType {
     return {
         ...presentation,
         name: newName
@@ -9,11 +9,11 @@ function changePresentationName(presentation: Presentation, newName: string): Pr
 }
 
 // добавление/удаление слайда
-function addSlide(presentation: Presentation): Presentation {
+function addSlide(presentation: PresentationType): PresentationType {
     const newPresentation = {
         ...presentation
     }
-    const newSlide: Slide = {
+    const newSlide: SlideType = {
         id: getUID(),
         contentObjects: [],
         background: getDefaultBackground()
@@ -25,8 +25,8 @@ function addSlide(presentation: Presentation): Presentation {
     return newPresentation
 }
 
-function deleteSlide(presentation: Presentation, slideIdToDelete: string): Presentation {
-    const newPresentation: Presentation = {
+function deleteSlide(presentation: PresentationType, slideIdToDelete: string): PresentationType {
+    const newPresentation: PresentationType = {
         ...presentation
     }
     newPresentation.slides = presentation.slides.filter((slide) => slide.id !== slideIdToDelete);
@@ -34,11 +34,11 @@ function deleteSlide(presentation: Presentation, slideIdToDelete: string): Prese
 }
 
 // изменение позиции слайда
-function changeSlidePosition(presentation: Presentation, {slideId, positionToMove}: {slideId: string, positionToMove: number}): Presentation {
+function changeSlidePosition(presentation: PresentationType, {slideId, positionToMove}: {slideId: string, positionToMove: number}): PresentationType {
     const newPresentation = {
         ...presentation
     }
-    const collection: Slide[] = newPresentation.slides
+    const collection: SlideType[] = newPresentation.slides
     const slideToMove = collection.find(s => s.id === slideId)!;
     const baseIndex = collection.indexOf(slideToMove);
     
@@ -49,12 +49,12 @@ function changeSlidePosition(presentation: Presentation, {slideId, positionToMov
 }
 
 // добавление/удаление текста и картинки
-function addText(presentation: Presentation, id: string): Presentation {
+function addText(presentation: PresentationType, id: string): PresentationType {
     const newText = getDefaultText();
     let newPresentation = {
         ...presentation
     }
-    const wantedSlide: Slide = findSlideById(presentation.slides, id);
+    const wantedSlide: SlideType = findSlideById(presentation.slides, id);
     wantedSlide.contentObjects.push(newText)
 
     newPresentation = updateSlide(newPresentation, wantedSlide)
@@ -62,12 +62,12 @@ function addText(presentation: Presentation, id: string): Presentation {
     return newPresentation;
 }
 
-function addPicture(presentation: Presentation, {id, src}: {id: string, src: string}): Presentation {
+function addPicture(presentation: PresentationType, {id, src}: {id: string, src: string}): PresentationType {
     let newPresentation = {
         ...presentation
     }
-    const wantedSlide: Slide = findSlideById(newPresentation.slides, id);
-    const newPic: Picture = {
+    const wantedSlide: SlideType = findSlideById(newPresentation.slides, id);
+    const newPic: PictureType = {
         id: getUID(),
         position: {
             x: 0,
@@ -88,9 +88,9 @@ function addPicture(presentation: Presentation, {id, src}: {id: string, src: str
 }
 // изменение позиции текста/картинки
 function changeObjectPosition(
-    presentation: Presentation, 
+    presentation: PresentationType, 
     {slideId, objId, position}: 
-    {slideId: string, objId: string, position: Position}): Presentation {
+    {slideId: string, objId: string, position: PositionType}): PresentationType {
     const newPresentation = {
         ...presentation
     }
@@ -103,7 +103,7 @@ function changeObjectPosition(
     newPresentation.slides[indexOfSlide] = thisSlide
     return newPresentation;
 }
-function setObjectPosition<T extends SlideObject>(object: T, position: Position): T {
+function setObjectPosition<T extends SlideObjectType>(object: T, position: PositionType): T {
     return {
         ...object,
         position,
@@ -112,9 +112,9 @@ function setObjectPosition<T extends SlideObject>(object: T, position: Position)
 
 // изменение размера текста/картинки
 function changeObjectSize(
-    presentation: Presentation, 
+    presentation: PresentationType, 
     {slideId, objId, size}: 
-    {slideId: string, objId: string, size: Size}): Presentation{
+    {slideId: string, objId: string, size: SizeType}): PresentationType{
     const newPresentation = {
         ...presentation
     }
@@ -127,7 +127,7 @@ function changeObjectSize(
     newPresentation.slides[indexOfSlide] = thisSlide
     return newPresentation;
 }
-function setObjectSize<T extends SlideObject>(object: T, size: Size): T {
+function setObjectSize<T extends SlideObjectType>(object: T, size: SizeType): T {
     return {
         ...object,
         size,
@@ -136,9 +136,9 @@ function setObjectSize<T extends SlideObject>(object: T, size: Size): T {
 
 // изменение текста
 function changeTextValue(
-    presentation: Presentation, 
+    presentation: PresentationType, 
     {slideId, objId, value}: 
-    {slideId: string, objId: string, value: string}): Presentation{
+    {slideId: string, objId: string, value: string}): PresentationType{
     const newPresentation = {
         ...presentation
     }
@@ -151,7 +151,7 @@ function changeTextValue(
     newPresentation.slides[indexOfSlide] = thisSlide
     return newPresentation;
 }
-function setTextValue(obj: Text | Picture, newText: string): Text | Picture {
+function setTextValue(obj: TextType | PictureType, newText: string): TextType | PictureType {
     return (obj.type === 'text')
     ?  {...obj, value: newText}
     : {...obj}
@@ -159,9 +159,9 @@ function setTextValue(obj: Text | Picture, newText: string): Text | Picture {
 
 // изменение размера текста
 function changeTextFontSize(
-    presentation: Presentation, 
+    presentation: PresentationType, 
     {slideId, objId, fontSize}: 
-    {slideId: string, objId: string, fontSize: number}): Presentation{
+    {slideId: string, objId: string, fontSize: number}): PresentationType{
     const newPresentation = {
         ...presentation
     }
@@ -174,7 +174,7 @@ function changeTextFontSize(
     newPresentation.slides[indexOfSlide] = thisSlide
     return newPresentation;
 }
-function setTextFontSize(obj: Text | Picture, newSize: number): Text | Picture {
+function setTextFontSize(obj: TextType | PictureType, newSize: number): TextType | PictureType {
     return (obj.type === 'text')
     ?  {...obj, fontSize: newSize}
     : {...obj}
@@ -182,9 +182,9 @@ function setTextFontSize(obj: Text | Picture, newSize: number): Text | Picture {
 
 // изменение семейства шрифтов у текста
 function changeTextFontFamily(
-    presentation: Presentation, 
+    presentation: PresentationType, 
     {slideId, objId, fontFamily}: 
-    {slideId: string, objId: string, fontFamily: string}): Presentation{
+    {slideId: string, objId: string, fontFamily: string}): PresentationType{
     const newPresentation = {
         ...presentation
     }
@@ -197,16 +197,16 @@ function changeTextFontFamily(
     newPresentation.slides[indexOfSlide] = thisSlide
     return newPresentation;
 }
-function setTextFontFamily(obj: Text | Picture, newFontFamily: string): Text | Picture {
+function setTextFontFamily(obj: TextType | PictureType, newFontFamily: string): TextType | PictureType {
     return (obj.type === 'text')
     ?  {...obj, fontFamily: newFontFamily}
     : {...obj}
 }
 // изменение цвета текста
 function changeTextColor(
-    presentation: Presentation, 
+    presentation: PresentationType, 
     {slideId, objId, newColor}: 
-    {slideId: string, objId: string, newColor: string}): Presentation{
+    {slideId: string, objId: string, newColor: string}): PresentationType{
     const newPresentation = {
         ...presentation
     }
@@ -219,7 +219,7 @@ function changeTextColor(
     newPresentation.slides[indexOfSlide] = thisSlide
     return newPresentation;
 }
-function setTextColor(obj: Text | Picture, newColor: string): Text | Picture {
+function setTextColor(obj: TextType | PictureType, newColor: string): TextType | PictureType {
     return (obj.type === 'text')
     ?  {...obj, hexColor: newColor}
     : {...obj}
@@ -227,9 +227,9 @@ function setTextColor(obj: Text | Picture, newColor: string): Text | Picture {
 
 // изменение фона слайда
 function changeSlideBackground(
-    presentation: Presentation, 
+    presentation: PresentationType, 
     {slideId, value, type}: 
-    {slideId: string, value: string, type: string}): Presentation{
+    {slideId: string, value: string, type: string}): PresentationType{
     const newPresentation = {
         ...presentation
     }
@@ -239,8 +239,8 @@ function changeSlideBackground(
     newPresentation.slides[indexOfSlide] = thisSlide
     return newPresentation;
 }
-function setSlideBackground(slide: Slide, value: string, type: string): Slide {
-    let newBackground: Background;
+function setSlideBackground(slide: SlideType, value: string, type: string): SlideType {
+    let newBackground: BackgroundType;
     if (type === 'solid') {
         newBackground = {
             hexColor: value,
@@ -270,23 +270,23 @@ function getUID(): string {
     return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 }
 
-function getDefaultBackground(): Background {
-    const defaultSolid: Background = {
+function getDefaultBackground(): BackgroundType {
+    const defaultSolid: BackgroundType = {
         hexColor: '#000000',    //
         type: 'solid'
     };
     return defaultSolid;
 }
 function getDefaultText() {
-    const defaultPosition: Position = {
+    const defaultPosition: PositionType = {
         x: 0,
         y: 0,
     };
-    const defaultSize: Size = {
+    const defaultSize: SizeType = {
         width: 0,
         height: 0,
     };
-    const defaultText: Text = {
+    const defaultText: TextType = {
         id: getUID(),
         position: defaultPosition,
         size: defaultSize,
@@ -299,14 +299,14 @@ function getDefaultText() {
     return defaultText;
 }
 
-// function findPresentationById(presentations: Presentation[], id: string): Presentation {
+// function findPresentationById(presentations: PresentationType[], id: string): PresentationType {
 //     return presentations.find(s => s.id === id)!;
 // }
 
-function findSlideById(collection: Slide[], id: string): Slide {
+function findSlideById(collection: SlideType[], id: string): SlideType {
     return collection.find(s => s.id === id)!
 }
-// function updatePresentation(editor: Editor, presentation: Presentation): Editor {
+// function updatePresentation(editor: Editor, presentation: PresentationType): Editor {
 //     const newEditor = {
 //         ...editor
 //     }
@@ -317,7 +317,7 @@ function findSlideById(collection: Slide[], id: string): Slide {
 
 //     return newEditor;
 // }
-function updateSlide(presentation: Presentation, slide: Slide): Presentation {
+function updateSlide(presentation: PresentationType, slide: SlideType): PresentationType {
     const newPresentation = {
         ...presentation
     }

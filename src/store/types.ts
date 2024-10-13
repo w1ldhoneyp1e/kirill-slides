@@ -1,80 +1,81 @@
-type Size = {
+type SizeType = {
     width: number,
     height: number
 }
-type Position = {
+type PositionType = {
     x: number,
     y: number
 }
-type ChooseOption = {
+type ChooseOptionType = {
     text: string,
     onClick: () => void,
     id: string
 }
-type Button = {
+type ButtonType = {
     type: string,
     text: string,
     onClick: () => void,
-    options: ChooseOption[],
+    options: ChooseOptionType[],
     id: string,
 }
 
-type Presentation = {
+type PresentationType = {
     id: string,
     name: string,
-    slides: Slide[]
+    slides: SlideType[]
 }
-type Slide = {
+type SlideType = {
     id: string,
-    contentObjects: (Text | Picture)[],
-    background: Background
+    contentObjects: (TextType | PictureType)[],
+    background: BackgroundType
 }
  
-type ObjectsSelection = {
+type ObjectsSelectionType = {
     objectsIds: string[],
     slidesIds: string[]
 }
-type SlideObject = {
+type SlideObjectType = {
     id: string,
-    position: Position,
-    size: Size,
+    position: PositionType,
+    size: SizeType,
     type: string,
 }
-type Text = SlideObject & {
+type TextType = SlideObjectType & {
     value: string,
     fontSize: number,
     fontFamily: string,
     hexColor: string
 }
-type Picture = SlideObject & {
+type PictureType = SlideObjectType & {
     src: string
 }
-type Background = Solid | Image
-type Solid = {
+type BackgroundType = SolidType | ImageType
+type SolidType = {
     hexColor: string,
     type: 'solid'
 }
-type Image = {
+type ImageType = {
     src: string,
     type: 'image'
 }
-type Editor = {
-    presentations: Presentation[],
+type EditorType = {
+    presentations: PresentationType[],
     currentPresentationId: string
 }
 
 export type {
-    Size,
-    Position,
-    Presentation,
-    Slide,
-    ObjectsSelection,
-    SlideObject,
-    Text,
-    Picture,
-    Background,
-    Solid,
-    Image,
-    Button,
-    Editor,
+    SizeType,
+    PositionType,
+    PresentationType,
+    SlideType,
+    ObjectsSelectionType,
+    SlideObjectType,
+    TextType,
+    PictureType,
+    BackgroundType,
+    SolidType,
+    ImageType,
+    ButtonType,
+    EditorType,
+    ChooseOptionType,
 };
