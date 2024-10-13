@@ -1,7 +1,7 @@
-import { ToolbarButton } from "../../components/toolbarButton/toolbarButton"
-import { ToolbarSelect } from "../../components/toolbarSelect/toolbarSelect"
 import styles from "./toolbar.module.css"
-import { buttons } from "./buttons.ts";
+import { buttons } from "./buttons.ts"
+import { ToolbarButton } from "../../components/ToolbarButton/toolbarButton.tsx"
+import { ToolbarSelect } from "../../components/ToolbarSelect/toolbarSelect.tsx"
 type ToolbarProps = {
     id: string
 }
@@ -22,11 +22,13 @@ function Toolbar(props:ToolbarProps) {
                     )
                 }
                 if (button.type === 'select') {
-                    return (<ToolbarSelect
-                    text={button.text}
-                    options={button.options}
-                    key={button.id}
-                    />)
+                    return (
+                        <ToolbarSelect
+                            text={button.text}
+                            options={button.options}
+                            key={button.id}
+                        />
+                    )
                 }
             }
             )}

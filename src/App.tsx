@@ -1,11 +1,10 @@
 import './App.css'
-import { LowerContainer } from './view/lowerContainer/lowerContainer'
-import { UpperContainer } from './view/upperContainer/upperContainer'
+import { LowerContainer } from './view/LowerContainer/LowerContainer'
 import { myPres } from './consts/presentation'
-import { getUID } from './store/methods'
-import { Editor } from './store/types'
+import { EditorType } from './store/types'
+import { UpperContainer } from './view/UpperContainer/upperContainer'
 type AppProps = {
-  editor: Editor,
+  editor: EditorType,
 }
 
 function App(props: AppProps) {
@@ -16,7 +15,6 @@ function App(props: AppProps) {
         presentation={props.editor.presentations[0]}
       />
       <LowerContainer //
-        key={getUID()}//
         presentation={myPres}
       />
     </div>

@@ -1,15 +1,18 @@
-import { Slide } from "../../store/types";
+import { Slide } from "../../components/SlidePreview/Slide";
+import { SlideType } from "../../store/types";
 import styles from "./slideEditorSpace.module.css"
 
 type SlideEditorSpaceProps = {
-    slide: Slide,
-    key: string
+    slide: SlideType,
 }
 
 function SlideEditorSpace(props:SlideEditorSpaceProps) {
     return (
-        <div key={props.key} className={styles.canvas}>
-            
+        <div className={styles.canvas}>
+            <Slide
+                slide={props.slide}
+            >
+            </Slide>
         </div>
     )
 }

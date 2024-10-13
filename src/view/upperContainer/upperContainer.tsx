@@ -1,11 +1,11 @@
 import { getUID } from "../../store/methods";
-import { Presentation } from "../../store/types";
-import { Name } from "../name/name";
-import { Toolbar } from "../toolbar/toolbar";
+import { PresentationType } from "../../store/types";
+import { Name } from "../Name/Name";
+import { Toolbar } from "../Toolbar/Toolbar";
 import styles from "./upperContainer.module.css"
 
 type UpperContainerProps = {
-    presentation: Presentation
+    presentation: PresentationType
 }
 
 function UpperContainer(props:UpperContainerProps) {
@@ -13,7 +13,6 @@ function UpperContainer(props:UpperContainerProps) {
         <div className={styles.container}>
             <Name 
                 text={props.presentation.name}
-                key={getUID()}
             />
             <Toolbar
                 id={getUID()}

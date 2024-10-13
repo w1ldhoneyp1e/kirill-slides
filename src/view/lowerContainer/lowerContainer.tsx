@@ -1,23 +1,19 @@
-import { getUID } from "../../store/methods";
-import { Presentation } from "../../store/types";
-import { SlideCollection } from "../slideCollection/slideCollection";
-import { SlideEditorSpace } from "../slideEditorSpace/slideEditorSpace";
+import { PresentationType } from "../../store/types";
+import { SlideCollection } from "../SlideCollection/SlideCollection";
+import { SlideEditorSpace } from "../SlideEditorSpace/SlideEditorSpace";
 import styles from "./lowerContainer.module.css"
 
 type LowerContainerProps = {
-    key: string,
-    presentation: Presentation
+    presentation: PresentationType
 }
 
 function LowerContainer(props:LowerContainerProps) {
     return (
-        <div key={props.key} className={styles.container}>
+        <div className={styles.container}>
             <SlideCollection
                 collection={props.presentation.slides}
-                key={getUID()}
             />
             <SlideEditorSpace
-                key={getUID()}
                 slide={props.presentation.slides[0]}
             />
         </div>

@@ -8,7 +8,10 @@ type ToolbarButtonProps = {
 
 function ToolbarButton(props:ToolbarButtonProps) {
     return (
-        <button key={props.key} onClick={props.onClick} className={styles.button}>
+        <button
+            onClick={props.onClick} 
+            className={styles.button}
+        >
             {props.text}
         </button>
     )
