@@ -1,10 +1,10 @@
 import { getUID } from "../store/methods";
-import { Presentation } from "../store/types";
+import { PresentationType } from "../store/types";
 import { slides } from "./slides";
 
-const myPres: Presentation = {
+const myPres: PresentationType = {
     id: getUID(),
-    name: 'New Presentation',
+    name: 'Новая презентация',
     slides: slides
 }
 export {myPres};

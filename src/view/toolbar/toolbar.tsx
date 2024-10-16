@@ -1,16 +1,22 @@
 import styles from "./toolbar.module.css"
 import { buttons } from "./buttons.ts"
-import { ToolbarButton } from "../../components/ToolbarButton/toolbarButton.tsx"
-import { ToolbarSelect } from "../../components/ToolbarSelect/toolbarSelect.tsx"
+import { ToolbarButton } from "../../components/ToolbarButton/ToolbarButton.tsx"
+import { ToolbarSelect } from "../../components/ToolbarSelect/ToolbarSelect.tsx"
+import { dispatch } from "../../store/editor.ts"
+import { changeSlideBackground } from "../../store/methods.ts"
+import { EditorType } from "../../store/types.ts"
 type ToolbarProps = {
-    id: string
+    editor: EditorType
 }
 
 
 
-function Toolbar(props:ToolbarProps) {
+function Toolbar({editor}:ToolbarProps) {
+    const thisSlide = editor.presentation.slides.find(slide => slide.id === editor.selection.selectedSlideId)!
+    const background = (thisSlide) ? thisSlide.background : null
+    const value = background?.type === 'solid' ? background?.hexColor : background?.src 
     return (
-        <div key={props.id} className={styles.bar}>
+        <div className={styles.bar}>
             {buttons.map((button) => {
                 if (button.type === 'button') {
                     return (
@@ -30,8 +36,13 @@ function Toolbar(props:ToolbarProps) {
                         />
                     )
                 }
-            }
-            )}
+            })}
+            <input 
+                type="color" 
+                value={value ?? '#FFFFFF'}
+                onChange={(e) => dispatch(changeSlideBackground, {value: e.target.value, type:"solid"})}
+                className={styles.colorpicker}
+            />
         </div>
         
     )

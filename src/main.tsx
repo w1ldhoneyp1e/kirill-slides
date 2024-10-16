@@ -2,10 +2,18 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import App from './App.tsx'
 import './index.css'
-import { getEditor } from './store/editor.ts'
+import { addEditorChangeHandler, getEditor } from './store/editor.ts'
+const root = createRoot(document.getElementById('root')!)
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <App editor={getEditor()}/>
-  </StrictMode>,
-)
+console.log(getEditor());
+
+const render = function() {
+  root.render(
+    <StrictMode>
+      <App editor={getEditor()}/>
+    </StrictMode>,
+  ) 
+}
+
+addEditorChangeHandler(render)
+render()

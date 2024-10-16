@@ -1,21 +1,22 @@
-import { getUID } from "../../store/methods";
-import { PresentationType } from "../../store/types";
+import { EditorType } from "../../store/types";
 import { Name } from "../Name/Name";
 import { Toolbar } from "../Toolbar/Toolbar";
 import styles from "./upperContainer.module.css"
 
 type UpperContainerProps = {
-    presentation: PresentationType
+    editor: EditorType
 }
 
-function UpperContainer(props:UpperContainerProps) {
+function UpperContainer({editor}:UpperContainerProps) {
     return (
         <div className={styles.container}>
-            <Name 
-                text={props.presentation.name}
-            />
+            <div className={styles.name}>
+                <Name 
+                    text={editor.presentation.name}
+                />
+            </div>
             <Toolbar
-                id={getUID()}
+                editor={editor}
             />
         </div>
     )

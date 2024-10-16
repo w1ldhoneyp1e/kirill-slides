@@ -1,14 +1,22 @@
+import { dispatch } from "../../store/editor";
+import { changePresentationName } from "../../store/methods";
 import styles from "./name.module.css";
 
 type NameProps = {
     text: string,
 }
 
-function Name(props:NameProps) {
+function Name({text}:NameProps) {
+    function onTitleChange(e: React.ChangeEvent<HTMLInputElement>) {
+        const value = e.target.value;
+        dispatch(changePresentationName, {newName: value})
+    }
     return (
-        <div className={styles.name}>
-            {props.text}
-        </div>
+        <input 
+            value={text ?? 'Название презентации'} 
+            onChange={e => onTitleChange(e)} 
+            className={styles.name}
+        />
     )
 }
 

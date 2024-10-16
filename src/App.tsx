@@ -1,21 +1,20 @@
 import './App.css'
 import { LowerContainer } from './view/LowerContainer/LowerContainer'
-import { myPres } from './consts/presentation'
 import { EditorType } from './store/types'
-import { UpperContainer } from './view/UpperContainer/upperContainer'
+import { UpperContainer } from './view/UpperContainer/UpperContainer'
 type AppProps = {
   editor: EditorType,
 }
 
-function App(props: AppProps) {
+function App({editor}: AppProps) {
 
   return (
     <div>
       <UpperContainer // Передавать editor
-        presentation={props.editor.presentations[0]}
+        editor={editor}
       />
       <LowerContainer //
-        presentation={myPres}
+        editor={editor}
       />
     </div>
   )

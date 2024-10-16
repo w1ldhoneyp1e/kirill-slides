@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-function-type */
 import { getDefaultBackground, getUID } from "./methods";
-import { Editor, Presentation, Slide } from "./types";
+import { EditorType, PresentationType, SlideType } from "./types";
 
-const slides: Slide[] = [
+const slides: SlideType[] = [
     {
         id: getUID(),
         contentObjects: [],
@@ -20,15 +20,18 @@ const slides: Slide[] = [
     },
 ]
 
-const myPres: Presentation = {
+const myPres: PresentationType = {
     id: getUID(),
-    name: 'New Presentation',
+    name: 'Новая презентация',
     slides: slides
 }
 
-let editor: Editor = {
-    presentations: [myPres],
-    currentPresentationId: myPres.id
+let editor: EditorType = {
+    presentation: myPres,
+    selection: {
+        selectedSlideId: '',
+        selectedObjIds: [],
+    },
 }
 let editorChangeHandler: Function | null = null;
 
@@ -36,7 +39,7 @@ function getEditor() {
     return editor;
 }
 
-function setEditor(newEditor: Editor) {
+function setEditor(newEditor: EditorType) {
     editor = newEditor;
 }
 
@@ -44,8 +47,9 @@ function addEditorChangeHandler(handler: Function) {
     editorChangeHandler = handler;
 }
 
-function dispatch(modifyFn: Function, payload: object) {
-    const newEditor = modifyFn(payload);
+function dispatch(modifyFn: Function, payload?: object) {
+    
+    const newEditor = modifyFn(editor, payload);
     setEditor(newEditor);
     if (editorChangeHandler) {
         editorChangeHandler();

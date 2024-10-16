@@ -6,6 +6,10 @@ type PositionType = {
     x: number,
     y: number
 }
+type SelectionType = {
+    selectedSlideId: string,
+    selectedObjIds: string[],
+}
 type ChooseOptionType = {
     text: string,
     onClick: () => void,
@@ -27,7 +31,7 @@ type PresentationType = {
 type SlideType = {
     id: string,
     contentObjects: (TextType | PictureType)[],
-    background: BackgroundType
+    background: BackgroundType,
 }
  
 type ObjectsSelectionType = {
@@ -59,8 +63,8 @@ type ImageType = {
     type: 'image'
 }
 type EditorType = {
-    presentations: PresentationType[],
-    currentPresentationId: string
+    presentation: PresentationType,
+    selection: SelectionType,
 }
 
 export type {
@@ -78,4 +82,5 @@ export type {
     ButtonType,
     EditorType,
     ChooseOptionType,
+    SelectionType,
 };

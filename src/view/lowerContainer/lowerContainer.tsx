@@ -1,20 +1,21 @@
-import { PresentationType } from "../../store/types";
-import { SlideCollection } from "../SlideCollection/SlideCollection";
-import { SlideEditorSpace } from "../SlideEditorSpace/SlideEditorSpace";
+import { EditorType } from "../../store/types";
+import { Collection } from "../Collection/Collection";
+import { EditorSpace } from "../EditorSpace/EditorSpace";
 import styles from "./lowerContainer.module.css"
 
 type LowerContainerProps = {
-    presentation: PresentationType
+    editor: EditorType,
 }
 
-function LowerContainer(props:LowerContainerProps) {
+function LowerContainer({editor}:LowerContainerProps) {
     return (
         <div className={styles.container}>
-            <SlideCollection
-                collection={props.presentation.slides}
+            <Collection
+                collection={editor.presentation.slides}
+                selection={editor.selection}
             />
-            <SlideEditorSpace
-                slide={props.presentation.slides[0]}
+            <EditorSpace
+                editor={editor}
             />
         </div>
     )
