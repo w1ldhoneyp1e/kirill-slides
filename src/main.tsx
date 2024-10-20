@@ -5,8 +5,6 @@ import './index.css'
 import { addEditorChangeHandler, getEditor } from './store/editor.ts'
 const root = createRoot(document.getElementById('root')!)
 
-console.log(getEditor());
-
 const render = function() {
   root.render(
     <StrictMode>

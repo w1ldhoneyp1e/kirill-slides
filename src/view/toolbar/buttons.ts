@@ -1,5 +1,5 @@
 import { dispatch } from "../../store/editor";
-import { addSlide, deleteSlide, getUID } from "../../store/methods";
+import { addSlide, addText, deleteSlide, getUID } from "../../store/methods";
 import { ButtonType } from "../../store/types";
 
 const buttons: ButtonType[] = [
@@ -9,6 +9,7 @@ const buttons: ButtonType[] = [
         onClick: () => dispatch(addSlide),
         options: [],
         id: getUID(),
+        isDisable: false,
     },
     {
         type: 'button',
@@ -16,14 +17,16 @@ const buttons: ButtonType[] = [
         onClick: () => dispatch(deleteSlide),
         options: [],
         id: getUID(),
+        isDisable: false,
     },
-    // {
-    //     type: 'button',
-    //     text: 'добавить текст',
-    //     onClick: ,
-    //     options: [],
-    //     id: getUID()
-    // },
+    {
+        type: 'button',
+        text: 'добавить текст',
+        onClick: () => dispatch(addText),
+        options: [],
+        id: getUID(),
+        isDisable: false,
+    },
     // {
     //     type: 'button',
     //     text: 'добавить картинку',

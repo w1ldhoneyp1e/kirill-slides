@@ -21,6 +21,7 @@ type ButtonType = {
     onClick: () => void,
     options: ChooseOptionType[],
     id: string,
+    isDisable: boolean,
 }
 
 type PresentationType = {
@@ -42,21 +43,22 @@ type SlideObjectType = {
     id: string,
     position: PositionType,
     size: SizeType,
-    type: string,
 }
 type TextType = SlideObjectType & {
     value: string,
     fontSize: number,
     fontFamily: string,
-    hexColor: string
+    hexColor: string,
+    type: 'text',
 }
 type PictureType = SlideObjectType & {
-    src: string
+    src: string,
+    type: 'picture',
 }
 type BackgroundType = SolidType | ImageType
 type SolidType = {
     hexColor: string,
-    type: 'solid'
+    type: 'solid',
 }
 type ImageType = {
     src: string,

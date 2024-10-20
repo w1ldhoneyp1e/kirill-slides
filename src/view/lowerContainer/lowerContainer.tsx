@@ -11,6 +11,7 @@ function LowerContainer({editor}:LowerContainerProps) {
     return (
         <div className={styles.container}>
             <Collection
+                editor={editor}
                 collection={editor.presentation.slides}
                 selection={editor.selection}
             />

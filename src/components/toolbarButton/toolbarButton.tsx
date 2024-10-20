@@ -3,16 +3,17 @@ import styles from "./toolbarButton.module.css"
 type ToolbarButtonProps = {
     text: string,
     onClick: () => void,
-    key: string
+    isDisabled?: boolean,
 }
 
-function ToolbarButton(props:ToolbarButtonProps) {
+function ToolbarButton({text, onClick, isDisabled}:ToolbarButtonProps) {
     return (
         <button
-            onClick={props.onClick} 
+            disabled={isDisabled}
+            onClick={onClick} 
             className={styles.button}
         >
-            {props.text}
+            {text}
         </button>
     )
 }
