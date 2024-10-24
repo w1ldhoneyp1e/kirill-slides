@@ -1,7 +1,7 @@
 .space {
-    height: 100%;
-    width: calc(100vw - var(--left-part-width));
-    display: flex;
-    justify-content: center;
-    align-items: center;
+	height: 100%;
+	width: calc(100vw - var(--left-part-width));
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }

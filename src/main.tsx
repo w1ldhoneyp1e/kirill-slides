@@ -5,12 +5,12 @@ import './index.css'
 import { addEditorChangeHandler, getEditor } from './store/editor.ts'
 const root = createRoot(document.getElementById('root')!)
 
-const render = function() {
-  root.render(
-    <StrictMode>
-      <App editor={getEditor()}/>
-    </StrictMode>,
-  ) 
+const render = function () {
+	root.render(
+		<StrictMode>
+			<App editor={getEditor()} />
+		</StrictMode>
+	)
 }
 
 addEditorChangeHandler(render)

@@ -1,15 +1,15 @@
 .collection {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    height: 100%;
-    width: var(--left-part-width);
-    border-right: 1px solid rgb(76, 76, 76);
-    overflow-y: auto;
-    gap: 30px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	height: 100%;
+	width: var(--left-part-width);
+	border-right: 1px solid rgb(76, 76, 76);
+	overflow-y: auto;
+	gap: 30px;
 }
 .shell {
-    --preview-width: 300px;
-    width: var(--preview-width);
-    min-height: calc(var(--preview-width) * 9 / 16);
+	--preview-width: 300px;
+	width: var(--preview-width);
+	min-height: calc(var(--preview-width) * 9 / 16);
 }

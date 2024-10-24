@@ -1,8 +1,8 @@
 .container {
-    height: calc(100vh - var(--top-bar-height));
-    display: flex;
-    flex-direction: row;
-    justify-content: left;
-    background-color: rgb(245, 245, 245);
-    color: rgb(76, 76, 76);
+	height: calc(100vh - var(--top-bar-height));
+	display: flex;
+	flex-direction: row;
+	justify-content: left;
+	background-color: rgb(245, 245, 245);
+	color: rgb(76, 76, 76);
 }
