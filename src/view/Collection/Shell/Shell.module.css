@@ -1,0 +1,5 @@
+.shell {
+	--preview-width: 300px;
+	width: var(--preview-width);
+	min-height: calc(var(--preview-width) * 9 / 16);
+}

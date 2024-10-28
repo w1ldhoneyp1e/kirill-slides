@@ -10,7 +10,7 @@ type EditorSpaceProps = {
 
 function EditorSpace({ editor }: EditorSpaceProps) {
 	const slide = editor.presentation.slides.find(
-		(slide) => slide.id === editor.selection.selectedSlideId
+		(slide) => slide.id === editor.selection.selectedSlideId,
 	)!
 	return slide ? (
 		<div className={styles.space} onMouseDown={() => dispatch(deselectObjects)}>
