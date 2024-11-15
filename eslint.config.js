@@ -34,12 +34,11 @@ export default [
             'indent': ['error', 4], // Отступы в 4 пробела
             'array-element-newline': ['error', { 'multiline': true }], // Элементы списка на новой строке
             'object-property-newline': ['error', { 'allowMultiplePropertiesPerLine': false }], // Свойства объекта на новой строке
-            'linebreak-style': ['error', 'unix'], // Перенос строк в стиле Unix
             'eol-last': ['error', 'always'], // Пустая строка в конце файла
             'no-magic-numbers': ['warn',
                 {
                     'ignoreArrayIndexes': true,
-                    'ignore': [0, 1], 
+                    'ignore': [0, 1],
                 }], // Игнорирование магических чисел
             'no-else-return': 'error', // Убираем `else`, если можно вернуть значение до
             'no-unneeded-ternary': 'error', // Убираем лишние тернарные операторы
@@ -48,23 +47,23 @@ export default [
             'consistent-return': 'error', // Консистентные возвращаемые значения в функциях
             'function-paren-newline': ['error', 'multiline'], // Переносить аргументы функции на новую строку, если их больше одного
             'object-curly-newline': [
-                'error', 
+                'error',
                 {
                     'ObjectExpression': {
                         'multiline': true,
-                        'minProperties': 2, 
+                        'minProperties': 2,
                     }, // Если больше одного элемента в объекте
                     'ObjectPattern': {
                         'multiline': true,
-                        'minProperties': 2, 
+                        'minProperties': 2,
                     }, // Для деструктуризации объектов
                     'ImportDeclaration': {
                         'multiline': true,
-                        'minProperties': 2, 
+                        'minProperties': 2,
                     }, // Для импортов
                     'ExportDeclaration': {
                         'multiline': true,
-                        'minProperties': 2, 
+                        'minProperties': 2,
                     }, // Для экспортов
                 },
             ], // Переносить элементы объекта на новую строку
