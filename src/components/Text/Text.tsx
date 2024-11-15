@@ -9,6 +9,7 @@ import {
     TextType, PositionType,
 } from '../../store/types'
 import { useDragAndDrop } from '../../view/hooks/useDragAndDrop'
+import { useBoundedPosition } from '../../view/hooks/useBoundedPosition'  // Импортируем кастомный хук
 import styles from './Text.module.css'
 
 type TextProps = {
@@ -37,55 +38,19 @@ function Text({
         [text.id],
     )
 
-    const updatedPosition = useDragAndDrop(textRef, dispatchFn)
+    const updatedPosition = useDragAndDrop(textRef, parentRef, dispatchFn)
 
-    // Сохраняем позицию в состоянии
+    const boundedPosition = useBoundedPosition(updatedPosition || position, parentRef, textRef)
+
     useEffect(() => {
         if (updatedPosition) {
             setPosition(updatedPosition)
         }
-    }, [updatedPosition])  // зависимость на обновление позиции
-
-    useEffect(() => {
-        if (!parentRef.current || !position || !text.position || !textRef.current) {
-            return
-        }
-        const parentRect = parentRef.current.getBoundingClientRect()
-        const textRect = textRef.current.getBoundingClientRect()
-
-        // Клонируем позицию для работы
-        const newPosition = { ...position }
-
-        // Ограничение по границам
-        if (newPosition.x < parentRect.left) {
-            newPosition.x = parentRect.left
-        }
-        if (newPosition.x + textRect.width > parentRect.left + parentRect.width) {
-            newPosition.x = parentRect.left + parentRect.width - textRect.width
-        }
-        if (newPosition.y < parentRect.top) {
-            newPosition.y = parentRect.top
-        }
-        if (newPosition.y + textRect.height > parentRect.top + parentRect.height) {
-            newPosition.y = parentRect.top + parentRect.height - textRect.height
-        }
-
-        // Обновляем состояние только при изменении позиции
-        if (
-            newPosition.x !== position.x ||
-            newPosition.y !== position.y
-        ) {
-            setPosition(newPosition)
-        }
-    }, [parentRef, position, text.position])
+    }, [updatedPosition])
 
     const style = {
-        top: position && parentRef.current
-            ? (position.y - parentRef.current.getBoundingClientRect().top) * scale
-            : 100,
-        left: position && parentRef.current
-            ? (position.x - parentRef.current.getBoundingClientRect().left) * scale
-            : 100,
+        top: boundedPosition.y * scale,
+        left: boundedPosition.x * scale,
         color: text.hexColor,
         fontSize: text.fontSize * scale,
         width: text.size.width * scale,
