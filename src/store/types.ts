@@ -33,6 +33,7 @@ type SlideType = {
 	id: string
 	contentObjects: (TextType | PictureType)[]
 	background: BackgroundType
+	position: PositionType | null
 }
 
 type ObjectsSelectionType = {
@@ -70,19 +71,19 @@ type EditorType = {
 }
 
 export type {
-	SizeType,
-	PositionType,
-	PresentationType,
-	SlideType,
-	ObjectsSelectionType,
-	SlideObjectType,
-	TextType,
-	PictureType,
-	BackgroundType,
-	SolidType,
-	ImageType,
-	ButtonType,
-	EditorType,
-	ChooseOptionType,
-	SelectionType,
+    SizeType,
+    PositionType,
+    PresentationType,
+    SlideType,
+    ObjectsSelectionType,
+    SlideObjectType,
+    TextType,
+    PictureType,
+    BackgroundType,
+    SolidType,
+    ImageType,
+    ButtonType,
+    EditorType,
+    ChooseOptionType,
+    SelectionType,
 }

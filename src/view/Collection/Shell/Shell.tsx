@@ -1,9 +1,20 @@
-import { useState, useEffect, useRef, RefObject } from 'react'
-import styles from './Shell.module.css'
+import {
+    useRef, useEffect, 
+} from 'react'
+
 import { Slide } from '../../../components/Slide/Slide'
-import { EditorType, PositionType, SlideType } from '../../../store/types'
+import {
+    EditorType, SlideType, 
+} from '../../../store/types'
+import { useDragAndDrop } from '../../hooks/useDragAndDrop'
 import { dispatch } from '../../../store/editor'
-import { changeSlidePosition } from '../../../store/methods'
+import {
+    changeSlidePosition, changeSlideIndex, 
+} from '../../../store/methods'
+
+import styles from './Shell.module.css'
+
+const SLIDE_SCALE = 1 / 3
 
 type ShellProps = {
 	editor: EditorType
@@ -11,111 +22,66 @@ type ShellProps = {
 	slide: SlideType
 }
 
-function Shell({ editor, onClick, slide }: ShellProps) {
-	const slideRef = useRef<HTMLDivElement>(null)
-	const [position, setPosition] = useState<PositionType | null>({ x: 0, y: 0 })
-	const [isDragging, setDragging] = useState<boolean>(false)
-	const [startPos, setStartPos] = useState<PositionType | null>(null)
-	const [modelStartPos, setModelStartPos] = useState<PositionType | null>(null)
-	const [dragIndex, setDragIndex] = useState<number | null>(null)
-	const SLIDE_HEIGHT = (300 * 9) / 16
+function Shell({
+    editor, onClick, slide, 
+}: ShellProps) {
+    const slideRef = useRef<HTMLDivElement>(null)
+    const gap = 30
+    const index = editor.presentation.slides.findIndex((s) => s.id === slide.id)
+    const height = slideRef.current
+        ? slideRef.current.getBoundingClientRect().height
+        : 0
+    const indexPositionY = (height + gap) * index
 
-	const collection = [...editor.presentation.slides]
+    useDragAndDrop(slideRef, changeSlidePosition, slide.id)
 
-	function useDragAndDrop(ref: RefObject<HTMLDivElement>) {
-		const handleMouseDown = (e: MouseEvent): void => {
-			const index = collection.findIndex((s) => s.id === slide.id)
-			setDragIndex(index)
-			setStartPos({ x: e.pageX, y: e.pageY })
-			ref.current
-				? setModelStartPos({
-						x: ref.current.getBoundingClientRect().left,
-						y: ref.current.getBoundingClientRect().top,
-				  })
-				: setModelStartPos({ x: 0, y: 0 })
-			setDragging(true)
-			e.preventDefault() // предотвращает выделение текста
-		}
+    // Высчитываем дельту и потенциальный целевой индекс
+    useEffect(() => {
+        const delta = slide.position ? slide.position.y - indexPositionY : 0
+        let targetIndex = index
 
-		const handleMouseMove = (e: MouseEvent) => {
-			const delta = startPos
-				? { x: e.pageX - startPos.x, y: e.pageY - startPos.y }
-				: { x: 0, y: 0 }
-			const newPos = modelStartPos
-				? {
-						x: modelStartPos.x + delta.x,
-						y: modelStartPos.y + delta.y,
-				  }
-				: { x: 0, y: 0 }
-			setPosition(newPos)
-			const deltaYAbs = Math.abs(delta.y)
-			if (deltaYAbs > SLIDE_HEIGHT && dragIndex !== null) {
-				const targetIndex = delta.y > 0 ? dragIndex + 1 : dragIndex - 1
-				if (targetIndex >= 0 && targetIndex < collection.length) {
-					dispatch(changeSlidePosition, {
-						slideId: slide.id,
-						positionToMove: targetIndex,
-					})
-					setDragIndex(targetIndex)
-					// Сбрасываем стартовую позицию и начальное положение модели
-					setStartPos({ x: e.pageX, y: e.pageY })
-					setModelStartPos(newPos)
-				}
-			}
-			e.preventDefault() // предотвращает выделение текста
-		}
+        if (delta > height + gap) {
+            targetIndex = targetIndex + 1
+        } else if (delta < (height + gap) / -2) {
+            targetIndex = targetIndex - 1
+        }
 
-		const handleMouseUp = () => {
-			if (ref.current) {
-				ref.current.removeEventListener('mousedown', handleMouseDown)
-			}
-			document.removeEventListener('mousemove', handleMouseMove)
-			document.removeEventListener('mouseup', handleMouseUp)
-			setDragIndex(null)
-			setStartPos(null)
-			setDragging(false)
-		}
+        // Перемещаем слайд, если целевой индекс изменился
+        if (
+            targetIndex !== index &&
+			targetIndex >= 0 &&
+			targetIndex < editor.presentation.slides.length
+        ) {
+            dispatch(changeSlideIndex, {
+                slideId: slide.id,
+                positionToMove: targetIndex,
+            })
+        }
+    }, [
+        slide.position, index, height, indexPositionY, editor.presentation.slides.length,
+    ])
 
-		useEffect(() => {
-			if (ref.current) {
-				ref.current.addEventListener('mousedown', handleMouseDown)
-			}
-
-			document.addEventListener('mousemove', handleMouseMove)
-			document.addEventListener('mouseup', handleMouseUp)
-
-			return () => {
-				if (ref.current) {
-					ref.current.removeEventListener('mousedown', handleMouseDown)
-				}
-				document.removeEventListener('mousemove', handleMouseMove)
-				document.removeEventListener('mouseup', handleMouseUp)
-			}
-		}, [slide.id, collection])
-	}
-
-	useDragAndDrop(slideRef)
-
-	return (
-		<div
-			className={styles.shell}
-			ref={slideRef}
-			onClick={onClick}
-			style={{
-				cursor: 'pointer',
-				position: isDragging ? 'absolute' : 'static',
-				top: isDragging && position ? `${position.y}px` : 'auto',
-				left: isDragging && position ? `${position.x}px` : 'auto',
-				// transition: isDragging ? 'none' : 'top 0.2s, left 0.2s', // Плавный переход при завершении перетаскивания
-			}}
-		>
-			<Slide
-				editor={editor}
-				slide={slide}
-				isSelected={slide.id === editor.selection.selectedSlideId}
-			/>
-		</div>
-	)
+    return (
+        <div
+            className={styles.shell}
+            ref={slideRef}
+            onClick={onClick}
+            style={{
+                cursor: 'pointer',
+                position: slide.position ? 'absolute' : 'static',
+                top: slide.position ? `${slide.position.y}px` : 'auto',
+                left: slide.position ? `${slide.position.x}px` : 'auto',
+                height: `${height}px`,
+            }}
+        >
+            <Slide
+                editor={editor}
+                slide={slide}
+                isSelected={slide.id === editor.selection.selectedSlideId}
+                scale={SLIDE_SCALE}
+            />
+        </div>
+    )
 }
 
 export { Shell }

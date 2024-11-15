@@ -1,4 +1,5 @@
 import { ChooseOptionType } from '../../store/types'
+
 import styles from './toolbarSelect.module.css'
 
 type ToolbarSelectProps = {
@@ -8,15 +9,15 @@ type ToolbarSelectProps = {
 }
 
 function ToolbarSelect(props: ToolbarSelectProps) {
-	return (
-		<select className={styles.button}>
-			{props.options.map((option) => (
-				<option onClick={option.onClick} key={option.id}>
-					{option.text}
-				</option>
-			))}
-		</select>
-	)
+    return (
+        <select className={styles.button}>
+            {props.options.map((option) => (
+                <option onClick={option.onClick} key={option.id}>
+                    {option.text}
+                </option>
+            ))}
+        </select>
+    )
 }
 
 export { ToolbarSelect }

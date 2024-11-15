@@ -1,6 +1,9 @@
 import { dispatch } from '../../store/editor'
-import { deselectSlide, setSlideAsSelected } from '../../store/methods'
+import {
+    deselectSlide, setSlideAsSelected, 
+} from '../../store/methods'
 import { EditorType } from '../../store/types'
+
 import styles from './Collection.module.css'
 import { Shell } from './Shell/Shell'
 
@@ -9,21 +12,21 @@ type CollectionProps = {
 }
 
 function Collection({ editor }: CollectionProps) {
-	return (
-		<div
-			className={styles.collection}
-			onMouseDown={() => dispatch(deselectSlide)}
-		>
-			{editor.presentation.slides.map((slide) => (
-				<Shell
-					editor={editor}
-					slide={slide}
-					key={slide.id}
-					onClick={() => dispatch(setSlideAsSelected, { slideId: slide.id })}
-				/>
-			))}
-		</div>
-	)
+    return (
+        <div
+            className={styles.collection}
+            onMouseDown={() => dispatch(deselectSlide)}
+        >
+            {editor.presentation.slides.map((slide) => (
+                <Shell
+                    editor={editor}
+                    slide={slide}
+                    key={slide.id}
+                    onClick={() => dispatch(setSlideAsSelected, { slideId: slide.id })}
+                />
+            ))}
+        </div>
+    )
 }
 
 export { Collection }
