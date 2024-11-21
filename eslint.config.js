@@ -1,9 +1,9 @@
-import globals from 'globals';
-import pluginJs from '@eslint/js';
-import tseslint from 'typescript-eslint';
-import pluginReact from 'eslint-plugin-react';
-import eslintPluginImport from 'eslint-plugin-import';
-import pluginReactHooks from 'eslint-plugin-react-hooks';
+import globals from 'globals'
+import pluginJs from '@eslint/js'
+import tseslint from 'typescript-eslint'
+import pluginReact from 'eslint-plugin-react'
+import eslintPluginImport from 'eslint-plugin-import'
+import pluginReactHooks from 'eslint-plugin-react-hooks'
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
@@ -46,6 +46,7 @@ export default [
             'no-self-assign': 'error', // Предотвращение присваивания переменной самой себе
             'consistent-return': 'error', // Консистентные возвращаемые значения в функциях
             'function-paren-newline': ['error', 'multiline'], // Переносить аргументы функции на новую строку, если их больше одного
+            'semi': ['error', 'never'], // Запретить точки с запятой
             'object-curly-newline': [
                 'error',
                 {
@@ -74,4 +75,4 @@ export default [
             'no-mixed-spaces-and-tabs': 'error', // Предотвращает смешивание пробелов и табуляций
         },
     },
-];
+]
