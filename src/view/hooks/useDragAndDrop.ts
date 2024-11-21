@@ -1,30 +1,41 @@
-import { RefObject, useEffect, useRef, useState } from 'react'
+import {
+    RefObject, useEffect, useRef, useState,
+} from 'react'
 import { PositionType } from '../../store/types'
 
-function useDragAndDrop(
+type useDragAndDropProps = {
     ref: RefObject<HTMLDivElement>,
     parentRef: RefObject<HTMLDivElement>,
-    dispatchFn: (delta: PositionType) => void,
-): PositionType | null {
+    onMouseDown?: () => void,
+    onMouseUp?: (delta: PositionType) => void,
+}
+
+function useDragAndDrop({
+    ref,
+    parentRef,
+    onMouseDown = () => {},
+    onMouseUp = () => {},
+}: useDragAndDropProps): PositionType | null {
     const [delta, setDelta] = useState<PositionType | null>(null)
     const deltaRef = useRef<PositionType | null>(null)
     const startPos = useRef<PositionType | null>(null)
     const modelStartPos = useRef<PositionType | null>(null)
 
     const handleMouseDown = (e: MouseEvent): void => {
+        onMouseDown()
         startPos.current = {
             x: e.pageX,
             y: e.pageY,
         }
         modelStartPos.current = ref.current
             ? {
-                  x: ref.current.getBoundingClientRect().left,
-                  y: ref.current.getBoundingClientRect().top,
-              }
+                x: ref.current.getBoundingClientRect().left,
+                y: ref.current.getBoundingClientRect().top,
+            }
             : {
-                  x: 0,
-                  y: 0,
-              }
+                x: 0,
+                y: 0,
+            }
 
         document.addEventListener('mousemove', handleMouseMove)
         document.addEventListener('mouseup', handleMouseUp)
@@ -55,8 +66,8 @@ function useDragAndDrop(
         document.removeEventListener('mousemove', handleMouseMove)
         document.removeEventListener('mouseup', handleMouseUp)
 
-        if (deltaRef.current) {
-            dispatchFn(deltaRef.current)
+        if (deltaRef.current !== null) {
+            onMouseUp(deltaRef.current)
         }
     }
 

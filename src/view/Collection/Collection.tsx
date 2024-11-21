@@ -1,6 +1,7 @@
+import { useRef } from 'react'
 import { dispatch } from '../../store/editor'
 import {
-    deselectSlide, setSlideAsSelected, 
+    deselectSlide, setSlideAsSelected,
 } from '../../store/methods'
 import { EditorType } from '../../store/types'
 
@@ -12,16 +13,19 @@ type CollectionProps = {
 }
 
 function Collection({ editor }: CollectionProps) {
+    const parentRef = useRef<HTMLDivElement>(null) // Ссылка на родительский контейнер
     return (
         <div
             className={styles.collection}
             onMouseDown={() => dispatch(deselectSlide)}
+            ref={parentRef}
         >
             {editor.presentation.slides.map((slide) => (
                 <Shell
                     editor={editor}
                     slide={slide}
                     key={slide.id}
+                    parentRef={parentRef}
                     onClick={() => dispatch(setSlideAsSelected, { slideId: slide.id })}
                 />
             ))}

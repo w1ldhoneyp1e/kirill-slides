@@ -1,86 +1,137 @@
 import {
-    useRef, useEffect, 
+    useRef,
+    useCallback,
+    useState,
+    useEffect,
 } from 'react'
-
 import { Slide } from '../../../components/Slide/Slide'
 import {
-    EditorType, SlideType, 
+    EditorType, PositionType, SlideType,
 } from '../../../store/types'
 import { useDragAndDrop } from '../../hooks/useDragAndDrop'
 import { dispatch } from '../../../store/editor'
-import {
-    changeSlidePosition, changeSlideIndex, 
-} from '../../../store/methods'
-
+import { changeSlideIndex } from '../../../store/methods'
 import styles from './Shell.module.css'
 
 const SLIDE_SCALE = 1 / 3
 
 type ShellProps = {
-	editor: EditorType
-	onClick: () => void
-	slide: SlideType
+    editor: EditorType
+    onClick: () => void
+    slide: SlideType
+    parentRef: React.RefObject<HTMLDivElement>
 }
 
 function Shell({
-    editor, onClick, slide, 
+    editor,
+    slide,
+    onClick,
+    parentRef,
 }: ShellProps) {
+    const [onDrag, setOnDrag] = useState(false)
+    const [targetIndex, setTargetIndex] = useState(editor.presentation.slides.findIndex((s) => s.id === slide.id))
     const slideRef = useRef<HTMLDivElement>(null)
     const gap = 30
-    const index = editor.presentation.slides.findIndex((s) => s.id === slide.id)
-    const height = slideRef.current
-        ? slideRef.current.getBoundingClientRect().height
-        : 0
-    const indexPositionY = (height + gap) * index
+    const heightRef = useRef(0)
 
-    useDragAndDrop(slideRef, changeSlidePosition, slide.id)
 
-    // Высчитываем дельту и потенциальный целевой индекс
+    const onMouseUp = useCallback(() => {
+        setOnDrag(false)
+    }, [])
+
+    const onMouseDown = useCallback(() => {
+        setOnDrag(true)
+    }, [])
+
+    const delta = useDragAndDrop({
+        ref: slideRef,
+        parentRef,
+        onMouseDown,
+        onMouseUp,
+    })
+
     useEffect(() => {
-        const delta = slide.position ? slide.position.y - indexPositionY : 0
-        let targetIndex = index
-
-        if (delta > height + gap) {
-            targetIndex = targetIndex + 1
-        } else if (delta < (height + gap) / -2) {
-            targetIndex = targetIndex - 1
+        if (slideRef.current) {
+            heightRef.current = slideRef.current.getBoundingClientRect().height
         }
+    }, [slideRef])
 
-        // Перемещаем слайд, если целевой индекс изменился
+    useEffect(() => {
+        const calculateTargetIndex = (delta: PositionType | null): number => {
+            if (!delta || !heightRef.current) {
+                return editor.presentation.slides.findIndex((s) => s.id === slide.id) // Return current index if no delta or height
+            }
+
+            const currentIndex = editor.presentation.slides.findIndex((s) => s.id === slide.id)
+            const indexPositionY = (heightRef.current + gap) * currentIndex
+            let newTargetIndex = currentIndex
+
+            if (delta.y - indexPositionY > heightRef.current + gap) {
+                newTargetIndex = currentIndex + 1
+            } else if (delta.y - indexPositionY < -(heightRef.current + gap)) {
+                newTargetIndex = currentIndex - 1
+            }
+
+            return newTargetIndex
+        }
+        const newTargetIndex = calculateTargetIndex(delta)
+        if (newTargetIndex !== targetIndex) {
+            setTargetIndex(newTargetIndex)
+        }
+    }, [delta, editor.presentation.slides, slide.id, targetIndex])
+
+
+    useEffect(() => {
         if (
-            targetIndex !== index &&
-			targetIndex >= 0 &&
-			targetIndex < editor.presentation.slides.length
+            targetIndex !== editor.presentation.slides.findIndex((s) => s.id === slide.id)
+            && targetIndex >= 0
+            && targetIndex < editor.presentation.slides.length
         ) {
             dispatch(changeSlideIndex, {
                 slideId: slide.id,
                 positionToMove: targetIndex,
             })
         }
-    }, [
-        slide.position, index, height, indexPositionY, editor.presentation.slides.length,
-    ])
+    }, [targetIndex, editor.presentation.slides.length, slide.id, editor.presentation.slides])
+
+    const style = onDrag && !!delta
+        ? {
+            cursor: 'pointer',
+            position: 'absolute' as const,
+            top: delta ? delta.y : 0,
+            left: delta ? delta.x : 0,
+            height: heightRef.current,
+        }
+        : {}
 
     return (
-        <div
-            className={styles.shell}
-            ref={slideRef}
-            onClick={onClick}
-            style={{
-                cursor: 'pointer',
-                position: slide.position ? 'absolute' : 'static',
-                top: slide.position ? `${slide.position.y}px` : 'auto',
-                left: slide.position ? `${slide.position.x}px` : 'auto',
-                height: `${height}px`,
-            }}
-        >
-            <Slide
-                editor={editor}
-                slide={slide}
-                isSelected={slide.id === editor.selection.selectedSlideId}
-                scale={SLIDE_SCALE}
-            />
-        </div>
+        <>
+            {onDrag
+            && (targetIndex === editor.presentation.slides.findIndex((s) => s.id === slide.id))
+            && (
+                <div
+                    className={styles.placeholder}
+                    style={{
+                        height: heightRef.current,
+                        width: '100%',
+                        background: 'transparent',
+                    }}
+                />
+            )}
+            <div
+                className={styles.shell}
+                ref={slideRef}
+                onClick={onClick}
+                style={style}
+            >
+                <Slide
+                    editor={editor}
+                    slide={slide}
+                    isSelected={slide.id === editor.selection.selectedSlideId}
+                    scale={SLIDE_SCALE}
+                />
+            </div>
+        </>
     )
 }
 

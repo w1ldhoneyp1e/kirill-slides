@@ -23,7 +23,7 @@ type SlideProps = {
 function Slide({
     slide, isSelected, editor, scale = 1,
 }: SlideProps) {
-    const parentRef = useRef<HTMLDivElement>(null) // Ссылка на родительский контейнер
+    const parentRef = useRef<HTMLDivElement>(null)
 
     function setBackground(background: BackgroundType): string {
         let value: string = ''

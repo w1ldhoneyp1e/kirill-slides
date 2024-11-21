@@ -38,7 +38,11 @@ function Text({
         [text.id],
     )
 
-    const updatedPosition = useDragAndDrop(textRef, parentRef, dispatchFn)
+    const updatedPosition = useDragAndDrop({
+        ref: textRef,
+        parentRef,
+        onMouseUp: dispatchFn,
+    })
 
     const boundedPosition = useBoundedPosition(updatedPosition || position, parentRef, textRef)
 

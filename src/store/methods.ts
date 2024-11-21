@@ -48,7 +48,7 @@ function deleteSlide(editor: EditorType): EditorType {
 function changeSlideIndex(
     editor: EditorType,
     {
-        slideId, positionToMove, 
+        slideId, positionToMove,
     }: { slideId: string; positionToMove: number },
 ): EditorType {
     const newEditor = {...editor}
@@ -66,8 +66,12 @@ function changeSlideIndex(
 function changeSlidePosition(
     editor: EditorType,
     {
-        id, position, 
-    }: { id: string; position: PositionType | null },
+        id,
+        position,
+    }: {
+        id: string;
+        position: PositionType | null
+    },
 ) {
     const newEditor = { ...editor }
     findSlideById(newEditor, id).position = position
@@ -135,7 +139,7 @@ function deleteObjects(editor: EditorType): EditorType {
 function changeObjectPosition(
     editor: EditorType,
     {
-        id, position, 
+        id, position,
     }: { id: string; position: PositionType },
 ): EditorType {
     const newEditor = {...editor}
@@ -170,7 +174,7 @@ function findSlideIdByObjId(
 function changeObjectSize(
     editor: EditorType,
     {
-        slideId, objId, size, 
+        slideId, objId, size,
     }: { slideId: string; objId: string; size: SizeType },
 ): EditorType {
     const newEditor = {...editor}
@@ -197,7 +201,7 @@ function setObjectSize<T extends SlideObjectType>(
 function changeTextValue(
     editor: EditorType,
     {
-        slideId, objId, value, 
+        slideId, objId, value,
     }: { slideId: string; objId: string; value: string },
 ): EditorType {
     const newEditor = {...editor}
@@ -216,7 +220,7 @@ function setTextValue(
 ): TextType | PictureType {
     return obj.type === 'text' ? {
         ...obj,
-        value: newText, 
+        value: newText,
     } : { ...obj }
 }
 
@@ -245,7 +249,7 @@ function setTextFontSize(
 ): TextType | PictureType {
     return obj.type === 'text' ? {
         ...obj,
-        fontSize: newSize, 
+        fontSize: newSize,
     } : { ...obj }
 }
 
@@ -275,7 +279,7 @@ function setTextFontFamily(
     return obj.type === 'text'
         ? {
             ...obj,
-            fontFamily: newFontFamily, 
+            fontFamily: newFontFamily,
         }
         : { ...obj }
 }
@@ -304,7 +308,7 @@ function setTextColor(
 ): TextType | PictureType {
     return obj.type === 'text' ? {
         ...obj,
-        hexColor: newColor, 
+        hexColor: newColor,
     } : { ...obj }
 }
 
@@ -312,7 +316,7 @@ function setTextColor(
 function changeSlideBackground(
     editor: EditorType,
     {
-        value, type, 
+        value, type,
     }: { value: string; type: string },
 ): EditorType {
     const newEditor = {...editor}
