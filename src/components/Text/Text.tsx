@@ -26,7 +26,6 @@ function Text({
     scale,
 }: TextProps) {
     const textRef = useRef<HTMLDivElement>(null)
-    const [position, setPosition] = useState<PositionType>(text.position)
 
     const dispatchFn = useCallback(
         (position: PositionType) => {
@@ -44,17 +43,15 @@ function Text({
         onMouseUp: dispatchFn,
     })
 
-    const boundedPosition = useBoundedPosition(updatedPosition || position, parentRef, textRef)
-
-    useEffect(() => {
-        if (updatedPosition) {
-            setPosition(updatedPosition)
-        }
-    }, [updatedPosition])
+    const boundedPosition = useBoundedPosition({
+        x: updatedPosition ? updatedPosition.x * scale : text.position.x * scale,
+        y: updatedPosition ? updatedPosition.y * scale : text.position.y * scale,
+    }, parentRef, textRef)
+    console.log(boundedPosition.x, boundedPosition.y)
 
     const style = {
-        top: boundedPosition.y * scale,
-        left: boundedPosition.x * scale,
+        top: boundedPosition.y,
+        left: boundedPosition.x,
         color: text.hexColor,
         fontSize: text.fontSize * scale,
         width: text.size.width * scale,
