@@ -1,10 +1,11 @@
 import {
-    CSSProperties, useRef,
+    CSSProperties, useCallback, useRef,
 } from 'react'
 import {
     BackgroundType,
     EditorType,
     PictureType,
+    SizeType,
     SlideType,
     TextType,
 } from '../../store/types'
@@ -12,6 +13,8 @@ import { Text } from '../Text/Text'
 import { Picture } from '../Picture/Picture'
 
 import styles from './Slide.module.css'
+import { dispatch } from '../../store/editor'
+import { changeObjectSize } from '../../store/methods'
 
 type SlideProps = {
 	editor: EditorType
@@ -21,7 +24,10 @@ type SlideProps = {
 }
 
 function Slide({
-    slide, isSelected, editor, scale = 1,
+    slide,
+    isSelected,
+    editor,
+    scale = 1,
 }: SlideProps) {
     const parentRef = useRef<HTMLDivElement>(null)
 
@@ -38,6 +44,14 @@ function Slide({
         style.border = '3px solid #0b57d0'
     }
 
+    const onResize = useCallback((objId: string, size: SizeType) => {
+        dispatch(changeObjectSize, {
+            slideId: slide.id,
+            objId,
+            size,
+        })
+    }, [slide.id])
+
     return (
         <div className={styles.slide} style={style} ref={parentRef}>
             {slide.id}
@@ -49,6 +63,7 @@ function Slide({
                             scale={scale}
                             parentRef={parentRef}
                             text={obj}
+                            onResize={onResize}
                             isSelected={!!editor.selection.selectedObjIds.includes(obj.id)}
                         />
                     )

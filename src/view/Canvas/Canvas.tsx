@@ -1,6 +1,6 @@
 import { Slide } from '../../components/Slide/Slide'
 import {
-    EditorType, SlideType, 
+    EditorType, SlideType,
 } from '../../store/types'
 
 import styles from './Canvas.module.css'
@@ -11,7 +11,7 @@ type CanvasProps = {
 }
 
 function Canvas({
-    editor, slide, 
+    editor, slide,
 }: CanvasProps) {
     return (
         <div className={styles.canvas}>

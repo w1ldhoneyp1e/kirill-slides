@@ -1,0 +1,37 @@
+.resizeFrame {
+    border: 2px dashed rgba(0, 0, 0, 0.5);
+    pointer-events: none; /* Чтобы текст можно было перемещать */
+    box-sizing: border-box;
+}
+
+.corner {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: rgba(0, 0, 0, 0.8);
+    pointer-events: all; /* Активируем перетаскивание */
+}
+
+.topLeft {
+    top: -5px;
+    left: -5px;
+    cursor: nwse-resize;
+}
+
+.topRight {
+    top: -5px;
+    right: -5px;
+    cursor: nesw-resize;
+}
+
+.bottomLeft {
+    bottom: -5px;
+    left: -5px;
+    cursor: nesw-resize;
+}
+
+.bottomRight {
+    bottom: -5px;
+    right: -5px;
+    cursor: nwse-resize;
+}
