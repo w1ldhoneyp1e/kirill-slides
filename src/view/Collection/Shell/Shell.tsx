@@ -94,6 +94,20 @@ function Shell({
         }
     }, [targetIndex, editor.presentation.slides.length, slide.id, editor.presentation.slides])
 
+    useEffect(() => {
+        if (!slideRef.current || !parentRef.current || !delta) return
+        const slideRect = slideRef.current.getBoundingClientRect()
+        const parentRect = parentRef.current.getBoundingClientRect()
+
+        if (slideRect.width + delta.x > parentRect.width) {
+            slideRef.current.style.left = `${parentRect.width - slideRect.width}px`
+        }
+
+        if (delta.x < parentRect.x) {
+            slideRef.current.style.left = `${parentRect.x}px`
+        }
+    }, [delta, parentRef])
+
     const style = onDrag && !!delta
         ? {
             cursor: 'pointer',
