@@ -1,8 +1,8 @@
-import { dispatch } from '../../store/editor'
+import { dispatch } from '../../../store/editor'
 import {
     addSlide, addText, deleteSlide, getUID, 
-} from '../../store/methods'
-import { ButtonType } from '../../store/types'
+} from '../../../store/methods'
+import { ButtonType } from '../../../store/types'
 
 const buttons: ButtonType[] = [
     {

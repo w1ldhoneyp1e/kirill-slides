@@ -12,8 +12,19 @@ type EditorSpaceProps = {
 function EditorSpace({ editor }: EditorSpaceProps) {
     const slide = editor.presentation.slides.find((slide) => slide.id === editor.selection.selectedSlideId)!
     return slide ? (
-        <div className={styles.space} onMouseDown={() => dispatch(deselectObjects)}>
-            <Canvas editor={editor} slide={slide}></Canvas>
+        <div
+            className={styles.space}
+            onClick={
+                (e) => {
+                    if (e.defaultPrevented) return
+                    dispatch(deselectObjects)
+                    e.preventDefault()
+                }}
+        >
+            <Canvas
+                editor={editor}
+                slide={slide}
+            />
         </div>
     ) : (
         <div className={styles.space}></div>

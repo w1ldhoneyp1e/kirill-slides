@@ -1,8 +1,6 @@
 import { useRef } from 'react'
 import { dispatch } from '../../store/editor'
-import {
-    deselectSlide, setSlideAsSelected,
-} from '../../store/methods'
+import {setSlideAsSelected} from '../../store/methods'
 import { EditorType } from '../../store/types'
 
 import styles from './Collection.module.css'
@@ -17,7 +15,6 @@ function Collection({ editor }: CollectionProps) {
     return (
         <div
             className={styles.collection}
-            onMouseDown={() => dispatch(deselectSlide)}
             ref={parentRef}
         >
             {editor.presentation.slides.map((slide) => (

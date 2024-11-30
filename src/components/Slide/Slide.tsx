@@ -25,7 +25,6 @@ type SlideProps = {
 
 function Slide({
     slide,
-    isSelected,
     editor,
     scale = 1,
 }: SlideProps) {
@@ -40,10 +39,6 @@ function Slide({
 
     const style: CSSProperties = {background: setBackground(slide.background)}
 
-    if (isSelected) {
-        style.border = '3px solid #0b57d0'
-    }
-
     const onResize = useCallback((objId: string, size: SizeType) => {
         dispatch(changeObjectSize, {
             slideId: slide.id,
@@ -53,7 +48,11 @@ function Slide({
     }, [slide.id])
 
     return (
-        <div className={styles.slide} style={style} ref={parentRef}>
+        <div
+            className={styles.slide}
+            style={style}
+            ref={parentRef}
+        >
             {slide.id}
             {slide.contentObjects.map((obj: TextType | PictureType) => {
                 if (obj.type === 'text') {

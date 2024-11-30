@@ -1,7 +1,7 @@
-import { dispatch } from '../../store/editor'
-import { changePresentationName } from '../../store/methods'
+import { dispatch } from '../../../store/editor'
+import { changePresentationName } from '../../../store/methods'
 
-import styles from './name.module.css'
+import styles from './Name.module.css'
 
 type NameProps = {
 	text: string

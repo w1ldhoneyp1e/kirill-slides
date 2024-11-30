@@ -1,7 +1,7 @@
 import './App.css'
-import { LowerContainer } from './view/LowerContainer/LowerContainer'
+import { WorkSpace } from './view/WorkSpace/WorkSpace'
 import { EditorType } from './store/types'
-import { UpperContainer } from './view/UpperContainer/UpperContainer'
+import { TopPanel } from './view/TopPanel/TopPanel'
 
 type AppProps = {
 	editor: EditorType
@@ -10,8 +10,8 @@ type AppProps = {
 function App({ editor }: AppProps) {
     return (
         <div>
-            <UpperContainer editor={editor} />
-            <LowerContainer editor={editor} />
+            <TopPanel editor={editor} />
+            <WorkSpace editor={editor} />
         </div>
     )
 }

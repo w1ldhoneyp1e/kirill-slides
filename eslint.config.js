@@ -73,6 +73,42 @@ export default [
             'react-hooks/exhaustive-deps': 'warn', // Проверка зависимостей в useEffect
             'no-trailing-spaces': 'error', // Убирает пробелы в конце строки
             'no-mixed-spaces-and-tabs': 'error', // Предотвращает смешивание пробелов и табуляций
+
+            // Переносить каждый атрибут JSX на новую строку, если больше одного
+            'react/jsx-max-props-per-line': [
+                'error',
+                {
+                    when: 'always', // Всегда переносить атрибуты
+                    maximum: 1,    // Один атрибут на строку
+                },
+            ],
+            // Переносить содержимое (children) на новую строку, если тег многострочный
+            'react/jsx-first-prop-new-line': ['error', 'multiline'], // Первый атрибут на новой строке
+            'react/jsx-indent': ['error', 4], // Отступ для JSX-контента (4 пробела)
+            'react/jsx-indent-props': ['error', 4], // Отступы для атрибутов
+            'react/jsx-closing-bracket-location': ['error', 'line-aligned'], // Закрывающая скобка на новой строке
+            'react/jsx-wrap-multilines': [
+                'error',
+                {
+                    declaration: 'parens-new-line',
+                    assignment: 'parens-new-line',
+                    return: 'parens-new-line',
+                    arrow: 'parens-new-line',
+                    condition: 'ignore',
+                    logical: 'ignore',
+                    prop: 'ignore',
+                },
+            ],
+            // Убирать лишние пробелы внутри JSX
+            'react/jsx-tag-spacing': [
+                'error',
+                {
+                    closingSlash: 'never', // Нет пробела перед />
+                    beforeSelfClosing: 'always', // Пробел перед /> обязателен
+                    afterOpening: 'never', // Нет пробела после <Tag
+                    beforeClosing: 'never', // Нет пробела перед </Tag>
+                },
+            ],
         },
     },
 ]

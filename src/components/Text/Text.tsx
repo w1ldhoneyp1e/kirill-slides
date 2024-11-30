@@ -1,5 +1,6 @@
 import {
     useRef, useCallback,
+    useState,
 } from 'react'
 import { dispatch } from '../../store/editor'
 import {
@@ -30,16 +31,29 @@ function Text({
     onResize,
 }: TextProps) {
     const textRef = useRef<HTMLDivElement>(null)
+    const [isResizing, setIsResizing] = useState(false) // Состояние для отслеживания изменения размера
 
     const dispatchFn = useCallback(
         (position: PositionType) => {
-            dispatch(changeObjectPosition, {
-                id: text.id,
-                position,
-            })
+            if (!isResizing) { // Если не в процессе изменения размера, обновляем позицию
+                dispatch(changeObjectPosition, {
+                    id: text.id,
+                    position,
+                })
+            }
         },
-        [text.id],
+        [text.id, isResizing],
     )
+
+    // const dispatchFn = useCallback(
+    //     (position: PositionType) => {
+    //         dispatch(changeObjectPosition, {
+    //             id: text.id,
+    //             position,
+    //         })
+    //     },
+    //     [text.id],
+    // )
 
     const updatedPosition = useDragAndDrop({
         ref: textRef,
@@ -48,8 +62,14 @@ function Text({
     })
 
     const boundedPosition = useBoundedPosition({
-        x: updatedPosition ? updatedPosition.x * scale : text.position.x * scale,
-        y: updatedPosition ? updatedPosition.y * scale : text.position.y * scale,
+        x: updatedPosition
+        && !isResizing
+            ? updatedPosition.x * scale
+            : text.position.x * scale,
+        y: updatedPosition
+        && !isResizing
+            ? updatedPosition.y * scale
+            : text.position.y * scale,
     }, parentRef, textRef)
 
     const style = {
@@ -59,7 +79,6 @@ function Text({
         fontSize: text.fontSize * scale,
         width: text.size.width * scale,
         height: text.size.height * scale,
-        border: isSelected ? '2px solid black' : '',
     }
 
     return (
@@ -68,16 +87,24 @@ function Text({
                 ref={textRef}
                 className={styles.text}
                 style={style}
-                onClick={() => dispatch(setObjectAsSelected, { id: text.id })}
+                onClick={(e) => {
+                    if (e.defaultPrevented) return
+                    dispatch(setObjectAsSelected, { id: text.id })
+                    e.preventDefault()
+                }}
             >
                 {text.value}
-                {isSelected && (
+                {isSelected
+                && scale === 1
+                && (
                     <ResizeFrame
                         textRef={textRef}
                         parentRef={parentRef}
                         objId={text.id}
                         onResize={onResize}
                         scale={scale}
+                        onStartResize={() => setIsResizing(true)}
+                        onStopResize={() => setIsResizing(false)}
                     />
                 )}
             </div>

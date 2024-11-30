@@ -1,11 +1,11 @@
 .collection {
+	padding-block: 45px;
 	position: relative;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	height: 100%;
+	height: calc(100% - 90px);
 	width: var(--left-part-width);
-	border-right: 1px solid rgb(76, 76, 76);
 	overflow-y: auto;
 	overflow-x: hidden;
 	gap: 30px;

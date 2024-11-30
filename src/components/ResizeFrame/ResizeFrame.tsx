@@ -8,6 +8,8 @@ type ResizeFrameProps = {
     objId: string;
     onResize: (objId: string, size: { width: number; height: number }) => void;
     scale: number;
+    onStartResize: () => void;
+    onStopResize: () => void;
 };
 
 export const ResizeFrame: React.FC<ResizeFrameProps> = ({
@@ -16,6 +18,8 @@ export const ResizeFrame: React.FC<ResizeFrameProps> = ({
     objId,
     onResize,
     scale,
+    onStartResize,
+    onStopResize,
 }) => {
     const resizeRefs = {
         topLeft: useRef<HTMLDivElement>(null),
@@ -62,8 +66,8 @@ export const ResizeFrame: React.FC<ResizeFrameProps> = ({
         return {
             top: 0,
             left: 0,
-            width: (textRect.width) * scale,
-            height: (textRect.height) * scale,
+            width: (textRect.width),
+            height: (textRect.height),
         }
     }
 
@@ -106,6 +110,11 @@ export const ResizeFrame: React.FC<ResizeFrameProps> = ({
 
     const framePosition = updateFramePosition()
 
+    const style = {
+        width: 10 * scale,
+        height: 10 * scale,
+    }
+
     return (
         <div
             className={styles.resizeFrame}
@@ -118,10 +127,34 @@ export const ResizeFrame: React.FC<ResizeFrameProps> = ({
             }}
         >
             {/* Углы */}
-            <div ref={resizeRefs.topLeft} className={`${styles.corner} ${styles.topLeft}`} />
-            <div ref={resizeRefs.topRight} className={`${styles.corner} ${styles.topRight}`} />
-            <div ref={resizeRefs.bottomLeft} className={`${styles.corner} ${styles.bottomLeft}`} />
-            <div ref={resizeRefs.bottomRight} className={`${styles.corner} ${styles.bottomRight}`} />
+            <div
+                ref={resizeRefs.topLeft}
+                className={`${styles.corner} ${styles.topLeft}`}
+                onMouseDown={onStartResize}
+                onMouseUp={onStopResize}
+                style={style}
+            />
+            <div
+                ref={resizeRefs.topRight}
+                className={`${styles.corner} ${styles.topRight}`}
+                onMouseDown={onStartResize}
+                onMouseUp={onStopResize}
+                style={style}
+            />
+            <div
+                ref={resizeRefs.bottomLeft}
+                className={`${styles.corner} ${styles.bottomLeft}`}
+                onMouseDown={onStartResize}
+                onMouseUp={onStopResize}
+                style={style}
+            />
+            <div
+                ref={resizeRefs.bottomRight}
+                className={`${styles.corner} ${styles.bottomRight}`}
+                onMouseDown={onStartResize}
+                onMouseUp={onStopResize}
+                style={style}
+            />
         </div>
     )
 }

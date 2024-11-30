@@ -1,0 +1,6 @@
+.buttonGroup {
+	display: flex;
+	flex-direction: row;
+	gap: 7px;
+	border: 1px red;
+}

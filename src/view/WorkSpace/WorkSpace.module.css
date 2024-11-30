@@ -1,8 +1,9 @@
 .container {
-	height: calc(100vh - var(--top-bar-height));
+	height: calc(100vh - var(--top-bar-height) - 2px);
 	display: flex;
 	flex-direction: row;
 	justify-content: left;
+	align-items: center;
 	background-color: rgb(245, 245, 245);
 	color: rgb(76, 76, 76);
 }

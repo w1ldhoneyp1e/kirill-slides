@@ -3,6 +3,7 @@ import {
     useCallback,
     useState,
     useEffect,
+    useMemo,
 } from 'react'
 import { Slide } from '../../../components/Slide/Slide'
 import {
@@ -13,7 +14,7 @@ import { dispatch } from '../../../store/editor'
 import { changeSlideIndex } from '../../../store/methods'
 import styles from './Shell.module.css'
 
-const SLIDE_SCALE = 1 / 3
+const SLIDE_SCALE = 0.2
 
 type ShellProps = {
     editor: EditorType
@@ -108,6 +109,11 @@ function Shell({
         }
     }, [delta, parentRef])
 
+    const isSelected = useMemo(
+        () => slide.id === editor.selection.selectedSlideId,
+        [editor.selection.selectedSlideId, slide.id],
+    )
+
     const style = onDrag && !!delta
         ? {
             cursor: 'pointer',
@@ -115,8 +121,15 @@ function Shell({
             top: delta ? delta.y : 0,
             left: delta ? delta.x : 0,
             height: heightRef.current,
+            border: isSelected
+                ? '3px solid var(--color-gray-dark)'
+                : '1px solid var(--color-gray-dark)',
         }
-        : {}
+        : {
+            border: isSelected
+                ? '3px solid var(--color-gray-dark)'
+                : '1px solid var(--color-gray-dark)',
+        }
 
     return (
         <>
@@ -141,7 +154,6 @@ function Shell({
                 <Slide
                     editor={editor}
                     slide={slide}
-                    isSelected={slide.id === editor.selection.selectedSlideId}
                     scale={SLIDE_SCALE}
                 />
             </div>
