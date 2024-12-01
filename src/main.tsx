@@ -8,7 +8,7 @@ import {
     getEditor,
     setEditor,
 } from './store/editor'
-import { loadFromLocalStorage } from './store/localStorage/methods'
+import { loadFromLocalStorage } from './store/localStorage/loadFromLocalStorage'
 
 const getEditorFromLocalStorage = () => {
     const savedEditor = loadFromLocalStorage()
