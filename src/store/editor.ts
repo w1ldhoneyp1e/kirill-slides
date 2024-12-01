@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unsafe-function-type */
 import {
-    getDefaultBackground, getUID, 
+    getDefaultBackground, getUID,
 } from './methods'
 import {
-    EditorType, PresentationType, SlideType, 
+    EditorType, PresentationType, SlideType,
 } from './types'
 
 const slides: SlideType[] = [
@@ -63,5 +63,5 @@ function dispatch(modifyFn: Function, payload?: object) {
 }
 
 export {
-    getEditor, setEditor, dispatch, addEditorChangeHandler, 
+    getEditor, setEditor, dispatch, addEditorChangeHandler,
 }

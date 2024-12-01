@@ -1,7 +1,8 @@
-import { ChevronDown24px } from '../../assets/ChevronDown24px'
 import { Logo } from '../../assets/Logo'
 import { Button } from '../../components/Button/Button'
 import { EditorType } from '../../store/types'
+import { handleExport } from './model/handleExport'
+import { handleImport } from './model/handleImport'
 import { Name } from './Name/Name'
 import { Toolbar } from './Toolbar/Toolbar'
 import styles from './TopPanel.module.css'
@@ -17,11 +18,14 @@ function TopPanel({ editor }: TopPanelProps) {
             <Name text={editor.presentation.name} />
             <Toolbar editor={editor} />
             <Button
-                type="text-icon"
+                type="text"
                 text={'Export'}
-                icon={ChevronDown24px}
-                onClick={() => {}}
-                onIconClick={() => {}}
+                onClick={() => handleExport(editor)}
+            />
+            <Button
+                type="text"
+                text={'Import'}
+                onClick={handleImport}
             />
         </div>
     )
