@@ -1,6 +1,6 @@
-import { validateDocument } from '../../../store/localStorage/validateEditor'
+import { validateDocument } from './validateEditor'
 import { EditorType } from '../../../store/types'
-import { store } from '../../../store/redux/store' // Импортируйте ваш store, если нужен прямой доступ к dispatch
+import { store } from '../../../store/redux/store'
 import { setEditor } from '../../../store/redux/editorActionCreators'
 
 const handleImport = () => {
@@ -16,14 +16,12 @@ const handleImport = () => {
                 try {
                     const importedEditor: EditorType = JSON.parse(e.target!.result as string)
 
-                    // Валидируем импортированные данные
                     const isValid = validateDocument(importedEditor)
                     if (!isValid) {
                         alert('Ошибка: данные не прошли валидацию.')
                         return
                     }
 
-                    // Используем dispatch для обновления состояния
                     store.dispatch(setEditor(importedEditor))
 
                     alert('Импорт завершен успешно.')
