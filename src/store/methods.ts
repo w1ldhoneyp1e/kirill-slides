@@ -138,7 +138,6 @@ function addPicture(editor: EditorType): EditorType {
     return newEditor
 }
 
-
 function deleteObjects(editor: EditorType): EditorType {
     const newPresentation = {
         id: editor.presentation.id,
@@ -158,6 +157,7 @@ function deleteObjects(editor: EditorType): EditorType {
         },
     }
 }
+
 // изменение позиции текста/картинки
 function changeObjectPosition(
     editor: EditorType,
@@ -171,15 +171,6 @@ function changeObjectPosition(
     const thisSlide = newEditor.presentation.slides.find((s) => s.id === slideId)!
 	thisSlide.contentObjects.find((o) => o.id === action.payload.id)!.position = action.payload.position
 	return newEditor
-}
-function setObjectPosition<T extends SlideObjectType>(
-    object: T,
-    position: PositionType,
-): T {
-    return {
-        ...object,
-        position,
-    }
 }
 
 function findSlideIdByObjId(
@@ -233,6 +224,7 @@ function changeTextValue(
     newEditor.presentation.slides[indexOfSlide] = thisSlide
     return newEditor
 }
+
 function setTextValue(
     obj: TextType | PictureType,
     newText: string,
@@ -262,6 +254,7 @@ function changeTextFontSize(
     newEditor.presentation.slides[indexOfSlide] = thisSlide
     return newEditor
 }
+
 function setTextFontSize(
     obj: TextType | PictureType,
     newSize: number,
@@ -291,6 +284,7 @@ function changeTextFontFamily(
     newEditor.presentation.slides[indexOfSlide] = thisSlide
     return newEditor
 }
+
 function setTextFontFamily(
     obj: TextType | PictureType,
     newFontFamily: string,
@@ -302,6 +296,7 @@ function setTextFontFamily(
         }
         : { ...obj }
 }
+
 // изменение цвета текста
 function changeTextColor(
     editor: EditorType,
@@ -321,6 +316,7 @@ function changeTextColor(
     newEditor.presentation.slides[indexOfSlide] = thisSlide
     return newEditor
 }
+
 function setTextColor(
     obj: TextType | PictureType,
     newColor: string,
@@ -346,6 +342,7 @@ function changeSlideBackground(
     newEditor.presentation.slides[indexOfSlide] = thisSlide
     return newEditor
 }
+
 function setSlideBackground(
     slide: SlideType,
     value: string,
@@ -462,24 +459,9 @@ function getDefaultText() {
     return defaultText
 }
 
-// function findPresentationById(presentations: EditorType[], id: string): EditorType {
-//     return presentations.find(s => s.id === id)!;
-// }
-
 function findSlideById(editor: EditorType, id: string): SlideType {
     return editor.presentation.slides.find((s) => s.id === id)!
 }
-// function updatePresentation(editor: Editor, editor: EditorType): Editor {
-//     const newEditor = {
-//         ...editor
-//     }
-//     const presentationToUpdate = newEditor.presentations.find(p => p.id === editor.id)!;
-//     const index = newEditor.presentations.indexOf(presentationToUpdate);
-
-//     newEditor.presentations.splice(index, 1, editor);
-
-//     return newEditor;
-// }
 
 export {
     changePresentationName,
