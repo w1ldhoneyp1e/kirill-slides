@@ -7,34 +7,34 @@ import {
 } from 'react'
 import { Slide } from '../../../components/Slide/Slide'
 import {
-    EditorType, PositionType, SlideType,
+    PositionType, SlideType,
 } from '../../../store/types'
 import { useDragAndDrop } from '../../hooks/useDragAndDrop'
-import { dispatch } from '../../../store/editor'
-import { changeSlideIndex } from '../../../store/methods'
 import styles from './Shell.module.css'
+import { useAppActions } from '../../hooks/useAppActions'
+import { useAppSelector } from '../../hooks/useAppSelector'
 
 const SLIDE_SCALE = 0.2
 
 type ShellProps = {
-    editor: EditorType
     onClick: () => void
     slide: SlideType
     parentRef: React.RefObject<HTMLDivElement>
 }
 
 function Shell({
-    editor,
     slide,
     onClick,
     parentRef,
 }: ShellProps) {
     const [onDrag, setOnDrag] = useState(false)
-    const [targetIndex, setTargetIndex] = useState(editor.presentation.slides.findIndex((s) => s.id === slide.id))
+    const slides = useAppSelector((editor => editor.presentation.slides))
+    const [targetIndex, setTargetIndex] = useState(slides.findIndex((s) => s.id === slide.id))
     const slideRef = useRef<HTMLDivElement>(null)
     const gap = 30
     const heightRef = useRef(0)
 
+    const {setSlideIndex} = useAppActions()
 
     const onMouseUp = useCallback(() => {
         setOnDrag(false)
@@ -60,10 +60,10 @@ function Shell({
     useEffect(() => {
         const calculateTargetIndex = (delta: PositionType | null): number => {
             if (!delta || !heightRef.current) {
-                return editor.presentation.slides.findIndex((s) => s.id === slide.id) // Return current index if no delta or height
+                return slides.findIndex((s) => s.id === slide.id) // Return current index if no delta or height
             }
 
-            const currentIndex = editor.presentation.slides.findIndex((s) => s.id === slide.id)
+            const currentIndex = slides.findIndex((s) => s.id === slide.id)
             const indexPositionY = (heightRef.current + gap) * currentIndex
             let newTargetIndex = currentIndex
 
@@ -79,21 +79,21 @@ function Shell({
         if (newTargetIndex !== targetIndex) {
             setTargetIndex(newTargetIndex)
         }
-    }, [delta, editor.presentation.slides, slide.id, targetIndex])
+    }, [delta, slide.id, slides, targetIndex])
 
 
     useEffect(() => {
         if (
-            targetIndex !== editor.presentation.slides.findIndex((s) => s.id === slide.id)
+            targetIndex !== slides.findIndex((s) => s.id === slide.id)
             && targetIndex >= 0
-            && targetIndex < editor.presentation.slides.length
+            && targetIndex < slides.length
         ) {
-            dispatch(changeSlideIndex, {
-                slideId: slide.id,
-                positionToMove: targetIndex,
+            setSlideIndex({
+                id: slide.id,
+                index: targetIndex,
             })
         }
-    }, [targetIndex, editor.presentation.slides.length, slide.id, editor.presentation.slides])
+    }, [targetIndex, slide.id, setSlideIndex, slides])
 
     useEffect(() => {
         if (!slideRef.current || !parentRef.current || !delta) return
@@ -109,9 +109,10 @@ function Shell({
         }
     }, [delta, parentRef])
 
+    const selectedSlideId = useAppSelector(editor => editor.selection.selectedSlideId)
     const isSelected = useMemo(
-        () => slide.id === editor.selection.selectedSlideId,
-        [editor.selection.selectedSlideId, slide.id],
+        () => slide.id === selectedSlideId,
+        [selectedSlideId, slide.id],
     )
 
     const style = onDrag && !!delta
@@ -134,7 +135,7 @@ function Shell({
     return (
         <>
             {onDrag
-            && (targetIndex === editor.presentation.slides.findIndex((s) => s.id === slide.id))
+            && (targetIndex === slides.findIndex((s) => s.id === slide.id))
             && (
                 <div
                     className={styles.placeholder}
@@ -152,8 +153,7 @@ function Shell({
                 style={style}
             >
                 <Slide
-                    editor={editor}
-                    slide={slide}
+                    slideId={slide.id}
                     scale={SLIDE_SCALE}
                 />
             </div>

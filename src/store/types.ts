@@ -42,7 +42,8 @@ type ObjectsSelectionType = {
 }
 type SlideObjectType = {
 	id: string
-	size: SizeType
+	size: SizeType,
+	position: PositionType,
 }
 type TextType = SlideObjectType & {
 	value: string

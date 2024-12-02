@@ -1,14 +1,15 @@
+import { defaultEditor } from '../data'
 import { EditorType } from '../types'
 
 const LOCAL_STORAGE_KEY = 'editor'
 
-const loadFromLocalStorage = (): EditorType | undefined => {
+const loadFromLocalStorage = (): EditorType => {
     try {
         const serializedValue = localStorage.getItem(LOCAL_STORAGE_KEY)
-        return serializedValue ? JSON.parse(serializedValue) as EditorType : undefined
+        return serializedValue ? JSON.parse(serializedValue) as EditorType : defaultEditor
     } catch (error) {
         console.error('Ошибка при загрузке из localStorage:', error)
-        return undefined
+        return defaultEditor
     }
 }
 

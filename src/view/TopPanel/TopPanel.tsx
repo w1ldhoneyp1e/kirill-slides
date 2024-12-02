@@ -1,22 +1,19 @@
 import { Logo } from '../../assets/Logo'
 import { Button } from '../../components/Button/Button'
-import { EditorType } from '../../store/types'
 import { handleExport } from './model/handleExport'
 import { handleImport } from './model/handleImport'
 import { Name } from './Name/Name'
 import { Toolbar } from './Toolbar/Toolbar'
 import styles from './TopPanel.module.css'
+import { useAppSelector } from '../hooks/useAppSelector'
 
-type TopPanelProps = {
-	editor: EditorType
-}
-
-function TopPanel({ editor }: TopPanelProps) {
+function TopPanel() {
+    const editor = useAppSelector((editor => editor))
     return (
         <div className={styles.topPanel}>
             {Logo}
-            <Name text={editor.presentation.name} />
-            <Toolbar editor={editor} />
+            <Name />
+            <Toolbar />
             <Button
                 type="text"
                 text={'Export'}

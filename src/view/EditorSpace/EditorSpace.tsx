@@ -1,30 +1,25 @@
-import { dispatch } from '../../store/editor'
-import { deselectObjects } from '../../store/methods'
-import { EditorType } from '../../store/types'
 import { Canvas } from '../Canvas/Canvas'
+import { useAppActions } from '../hooks/useAppActions'
+import { useAppSelector } from '../hooks/useAppSelector'
 
 import styles from './EditorSpace.module.css'
 
-type EditorSpaceProps = {
-	editor: EditorType
-}
-
-function EditorSpace({ editor }: EditorSpaceProps) {
-    const slide = editor.presentation.slides.find((slide) => slide.id === editor.selection.selectedSlideId)!
+function EditorSpace() {
+    const slides = useAppSelector((editor => editor.presentation.slides))
+    const selectedSlideId = useAppSelector((editor => editor.selection.selectedSlideId))
+    const {deselect} = useAppActions()
+    const slide = slides.find((slide) => slide.id === selectedSlideId)!
     return slide ? (
         <div
             className={styles.space}
             onClick={
                 (e) => {
                     if (e.defaultPrevented) return
-                    dispatch(deselectObjects)
+                    deselect({type: 'object'})
                     e.preventDefault()
                 }}
         >
-            <Canvas
-                editor={editor}
-                slide={slide}
-            />
+            <Canvas />
         </div>
     ) : (
         <div className={styles.space}></div>

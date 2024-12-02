@@ -1,21 +1,18 @@
 import { Slide } from '../../components/Slide/Slide'
-import {
-    EditorType, SlideType,
-} from '../../store/types'
-
+import { useAppSelector } from '../hooks/useAppSelector'
 import styles from './Canvas.module.css'
 
-type CanvasProps = {
-	editor: EditorType
-	slide: SlideType
-}
-
-function Canvas({
-    editor, slide,
-}: CanvasProps) {
+function Canvas() {
+    const slides = useAppSelector((editor => editor.presentation.slides))
+    const slideId = useAppSelector((editor => editor.selection.selectedSlideId))
+    const slide = slideId
+        ? slides.find(s => s.id === slideId)
+        : undefined
     return (
         <div className={styles.canvas}>
-            <Slide editor={editor} slide={slide} />
+            {slide
+                ? <Slide slideId={slide.id} />
+                : ''}
         </div>
     )
 }

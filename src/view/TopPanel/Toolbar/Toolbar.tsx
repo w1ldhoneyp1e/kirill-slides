@@ -7,26 +7,18 @@ import { Undo24px } from '../../../assets/Undo24px.tsx'
 import {ButtonProps} from '../../../components/Button/Button.tsx'
 import { ButtonGroup } from '../../../components/ButtonGroup/ButtonGroup.tsx'
 import { Divider } from '../../../components/Divider/Divider.tsx'
-import { dispatch } from '../../../store/editor.ts'
-import {
-    addPicture,
-    addSlide,
-    addText,
-    changeSlideBackground,
-    deleteObjects,
-    deleteSlide,
-    getUID,
-} from '../../../store/methods.ts'
-import { EditorType } from '../../../store/types.ts'
+import { useAppActions } from '../../hooks/useAppActions.ts'
+import { useAppSelector } from '../../hooks/useAppSelector.ts'
 
 import styles from './Toolbar.module.css'
 
-type ToolbarProps = {
-	editor: EditorType
-}
-
-function Toolbar({ editor }: ToolbarProps) {
-    const thisSlide = editor.presentation.slides.find((slide) => slide.id === editor.selection.selectedSlideId)!
+function Toolbar() {
+    const slides = useAppSelector((editor => editor.presentation.slides))
+    const selectedSlideId = useAppSelector((editor => editor.selection.selectedSlideId))
+    const {
+        addSlide, addText, addPicture,
+    } = useAppActions()
+    const thisSlide = slides.find((slide) => slide.id === selectedSlideId)!
     const background = thisSlide ? thisSlide.background : null
     const value =
 		background?.type === 'solid' ? background?.hexColor : background?.src
@@ -34,7 +26,7 @@ function Toolbar({ editor }: ToolbarProps) {
     const addButton: ButtonProps = {
         type: 'icon',
         icon: Plus24px,
-        onClick: () => dispatch(addSlide),
+        onClick: addSlide,
     }
 
     const undoRedoButton: ButtonProps = {
@@ -54,13 +46,13 @@ function Toolbar({ editor }: ToolbarProps) {
     const addTextButton: ButtonProps = {
         type: 'icon',
         icon: AddText24px,
-        onClick: () => dispatch(addText),
+        onClick: addText,
     }
 
     const addImageButton: ButtonProps = {
         type: 'icon',
         icon: AddPicture24px,
-        onClick: () => dispatch(addPicture),
+        onClick: addPicture,
     }
 
     const backgroundButton: ButtonProps = {

@@ -1,20 +1,18 @@
-import { dispatch } from '../../../store/editor'
-import { changePresentationName } from '../../../store/methods'
+import { useAppActions } from '../../hooks/useAppActions'
+import { useAppSelector } from '../../hooks/useAppSelector'
 
 import styles from './Name.module.css'
 
-type NameProps = {
-	text: string
-}
-
-function Name({ text }: NameProps) {
+function Name() {
+    const {changePresentationName} = useAppActions()
     function onTitleChange(e: React.ChangeEvent<HTMLInputElement>) {
         const value = e.target.value
-        dispatch(changePresentationName, { newName: value })
+        changePresentationName(value)
     }
+    const name = useAppSelector((editor => editor.presentation.name))
     return (
         <input
-            value={text ?? 'Название презентации'}
+            value={name ?? 'Название презентации'}
             onChange={(e) => onTitleChange(e)}
             className={styles.name}
         />

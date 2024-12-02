@@ -1,14 +1,12 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-
+import { Provider } from 'react-redux'
+import { store } from './store/redux/store.ts'
 import App from './App'
 import './index.css'
-import {
-    addEditorChangeHandler,
-    getEditor,
-    setEditor,
-} from './store/editor'
 import { loadFromLocalStorage } from './store/localStorage/loadFromLocalStorage'
+import { setEditor } from './store/redux/editorActionCreators.ts'
+
 
 const getEditorFromLocalStorage = () => {
     const savedEditor = loadFromLocalStorage()
@@ -21,10 +19,11 @@ const root = createRoot(document.getElementById('root')!)
 
 const render = () => {
     root.render(<StrictMode>
-        <App editor={getEditor()} />
+        <Provider store={store}>
+            <App />
+        </Provider>
     </StrictMode>)
 }
 
 getEditorFromLocalStorage()
-addEditorChangeHandler(render)
 render()

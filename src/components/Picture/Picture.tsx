@@ -1,18 +1,26 @@
-import { dispatch } from '../../store/editor'
-import { setObjectAsSelected } from '../../store/methods'
-import { PictureType } from '../../store/types'
-
+import { useMemo } from 'react'
 import styles from './Picture.module.css'
+import { useAppSelector } from '../../view/hooks/useAppSelector'
+import { useAppActions } from '../../view/hooks/useAppActions'
+import { PictureType } from '../../store/types'
 
 type PictureProps = {
 	pictureObj: PictureType
-	isSelected: boolean
 	scale: number
 }
 
 function Picture({
-    pictureObj, isSelected, scale, 
+    pictureObj,
+    scale,
 }: PictureProps) {
+    const selectedSlideId = useAppSelector((editor => editor.selection.selectedSlideId))
+    const {setSelection} = useAppActions()
+
+    const isSelected = useMemo(
+        () => selectedSlideId.includes(pictureObj.id),
+        [selectedSlideId, pictureObj.id],
+    )
+
     const style = {
         width: pictureObj.size.width * scale,
         height: pictureObj.size.height * scale,
@@ -25,7 +33,10 @@ function Picture({
         <div
             className={styles.pictureObj}
             style={style}
-            onClick={() => dispatch(setObjectAsSelected, { id: pictureObj.id })}
+            onClick={() => setSelection({
+                type: 'object',
+                id: pictureObj.id,
+            })}
         ></div>
     )
 }

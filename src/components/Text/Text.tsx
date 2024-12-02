@@ -1,11 +1,8 @@
 import {
     useRef, useCallback,
     useState,
+    useMemo,
 } from 'react'
-import { dispatch } from '../../store/editor'
-import {
-    changeObjectPosition, setObjectAsSelected,
-} from '../../store/methods'
 import {
     TextType, PositionType,
     SizeType,
@@ -14,18 +11,18 @@ import { useDragAndDrop } from '../../view/hooks/useDragAndDrop'
 import { useBoundedPosition } from '../../view/hooks/useBoundedPosition'  // Импортируем кастомный хук
 import styles from './Text.module.css'
 import { ResizeFrame } from '../ResizeFrame/ResizeFrame'
+import { useAppSelector } from '../../view/hooks/useAppSelector'
+import { useAppActions } from '../../view/hooks/useAppActions'
 
 type TextProps = {
     text: TextType
     parentRef: React.RefObject<HTMLDivElement>
-    isSelected: boolean
     scale: number
     onResize: (objId: string, size: SizeType) => void
 }
 
 function Text({
     text,
-    isSelected,
     parentRef,
     scale,
     onResize,
@@ -33,27 +30,27 @@ function Text({
     const textRef = useRef<HTMLDivElement>(null)
     const [isResizing, setIsResizing] = useState(false) // Состояние для отслеживания изменения размера
 
+    const selectedObjIds = useAppSelector((editor => editor.selection.selectedObjIds))
+    const {
+        setSelection, changeObjectPosition,
+    } = useAppActions()
+
+    const isSelected = useMemo(
+        () => selectedObjIds.includes(text.id),
+        [selectedObjIds, text.id],
+    )
+
     const dispatchFn = useCallback(
         (position: PositionType) => {
             if (!isResizing) { // Если не в процессе изменения размера, обновляем позицию
-                dispatch(changeObjectPosition, {
+                changeObjectPosition({
                     id: text.id,
-                    position,
+                    position: position,
                 })
             }
         },
-        [text.id, isResizing],
+        [isResizing, changeObjectPosition, text.id],
     )
-
-    // const dispatchFn = useCallback(
-    //     (position: PositionType) => {
-    //         dispatch(changeObjectPosition, {
-    //             id: text.id,
-    //             position,
-    //         })
-    //     },
-    //     [text.id],
-    // )
 
     const updatedPosition = useDragAndDrop({
         ref: textRef,
@@ -89,7 +86,10 @@ function Text({
                 style={style}
                 onClick={(e) => {
                     if (e.defaultPrevented) return
-                    dispatch(setObjectAsSelected, { id: text.id })
+                    setSelection({
+                        type: 'object',
+                        id: text.id,
+                    })
                     e.preventDefault()
                 }}
             >

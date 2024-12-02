@@ -1,6 +1,6 @@
-import { setEditor } from '../../../store/editor'
 import { saveToLocalStorage } from '../../../store/localStorage/saveToLocalStorage'
 import { validateDocument } from '../../../store/localStorage/validateEditor'
+import { setEditor } from '../../../store/redux/editorActionCreators'
 import { EditorType } from '../../../store/types'
 
 const handleImport = () => {

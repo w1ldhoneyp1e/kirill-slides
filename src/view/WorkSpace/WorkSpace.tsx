@@ -1,18 +1,13 @@
-import { EditorType } from '../../store/types'
 import { Collection } from '../Collection/Collection'
 import { EditorSpace } from '../EditorSpace/EditorSpace'
 
 import styles from './WorkSpace.module.css'
 
-type WorkSpaceProps = {
-	editor: EditorType
-}
-
-function WorkSpace({ editor }: WorkSpaceProps) {
+function WorkSpace() {
     return (
         <div className={styles.container}>
-            <Collection editor={editor} />
-            <EditorSpace editor={editor} />
+            <Collection />
+            <EditorSpace />
         </div>
     )
 }

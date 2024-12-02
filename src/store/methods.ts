@@ -1,4 +1,10 @@
 import {
+    ChangeObjectPositionAction,
+    ChangePresentationNameAction,
+    DeselectAction, SetSelectionAction,
+    SetSlideIndexAction,
+} from './redux/actions.js'
+import {
     BackgroundType,
     PictureType,
     PositionType,
@@ -12,13 +18,13 @@ import {
 // изменение названия презентации
 function changePresentationName(
     editor: EditorType,
-    { newName }: { newName: string },
+    action: ChangePresentationNameAction,
 ): EditorType {
     return {
         ...editor,
         presentation: {
             ...editor.presentation,
-            name: newName,
+            name: action.payload.name,
         },
     }
 }
@@ -45,19 +51,17 @@ function deleteSlide(editor: EditorType): EditorType {
 }
 
 // изменение позиции слайда в списке
-function changeSlideIndex(
+function setSlideIndex(
     editor: EditorType,
-    {
-        slideId, positionToMove,
-    }: { slideId: string; positionToMove: number },
+    action: SetSlideIndexAction,
 ): EditorType {
     const newEditor = {...editor}
     const collection: SlideType[] = newEditor.presentation.slides
-    const slideToMove = collection.find((s) => s.id === slideId)!
+    const slideToMove = collection.find((s) => s.id === action.payload.id)!
     const baseIndex = collection.indexOf(slideToMove)
 
     newEditor.presentation.slides.splice(baseIndex, 1)
-    newEditor.presentation.slides.splice(positionToMove, 0, slideToMove)
+    newEditor.presentation.slides.splice(action.payload.index, 0, slideToMove)
 
     return newEditor
 }
@@ -138,17 +142,15 @@ function deleteObjects(editor: EditorType): EditorType {
 // изменение позиции текста/картинки
 function changeObjectPosition(
     editor: EditorType,
-    {
-        id, position,
-    }: { id: string; position: PositionType },
+    action: ChangeObjectPositionAction,
 ): EditorType {
     const newEditor = {...editor}
-    if (position === null) {
+    if (action.payload.position === null) {
         return newEditor
     }
-    const slideId = findSlideIdByObjId(editor, id)
+    const slideId = findSlideIdByObjId(editor, action.payload.id)
     const thisSlide = newEditor.presentation.slides.find((s) => s.id === slideId)!
-	thisSlide.contentObjects.find((o) => o.id === id)!.position = position
+	thisSlide.contentObjects.find((o) => o.id === action.payload.id)!.position = action.payload.position
 	return newEditor
 }
 function setObjectPosition<T extends SlideObjectType>(
@@ -356,46 +358,55 @@ function setSlideBackground(
     return {...slide}
 }
 
-function setSlideAsSelected(
+function setSelection(
     editor: EditorType,
-    { slideId }: { slideId: string },
+    action: SetSelectionAction,
+): EditorType {
+    switch (action.payload.type) {
+    case 'slide':
+        return {
+            ...editor,
+            selection: {
+                ...editor.selection,
+                selectedSlideId: action.payload.id,
+            },
+        }
+    case 'object':
+        return {
+            ...editor,
+            selection: {
+                ...editor.selection,
+                selectedObjIds: [...editor.selection.selectedObjIds, action.payload.id],
+            },
+        }
+    default:
+        return {...editor}
+    }
+}
+
+function deselect(
+    editor: EditorType,
+    action: DeselectAction,
 ) {
-    return {
-        ...editor,
-        selection: {
-            ...editor.selection,
-            selectedSlideId: slideId,
-        },
-    }
-}
-
-function setObjectAsSelected(editor: EditorType, { id }: { id: string }) {
-    return {
-        ...editor,
-        selection: {
-            ...editor.selection,
-            selectedObjIds: [...editor.selection.selectedObjIds, id],
-        },
-    }
-}
-
-function deselectObjects(editor: EditorType) {
-    return {
-        ...editor,
-        selection: {
-            ...editor.selection,
-            selectedObjIds: [],
-        },
-    }
-}
-
-function deselectSlide(editor: EditorType) {
-    return {
-        ...editor,
-        selection: {
-            ...editor.selection,
-            selectedSlideId: '',
-        },
+    switch (action.payload.type) {
+    case 'slide':
+        return {
+            ...editor,
+            selection: {
+                selectedSlideId: '',
+                selectedObjIds: [],
+            },
+        }
+    case 'object':
+        return {
+            ...editor,
+            selection: {
+                ...editor.selection,
+                selectedObjIds: [],
+            },
+        }
+    default:
+        return {...editor}
     }
 }
 
@@ -414,18 +425,17 @@ function getDefaultBackground(): BackgroundType {
     return defaultSolid
 }
 function getDefaultText() {
-    const defaultPosition: PositionType = {
-        x: 0,
-        y: 0,
-    }
     const defaultSize: SizeType = {
         width: 200,
         height: 100,
     }
     const defaultText: TextType = {
         id: getUID(),
-        position: defaultPosition,
         size: defaultSize,
+        position: {
+            x: 0,
+            y: 0,
+        },
         value: 'Default text',
         fontSize: 11,
         fontFamily: 'TimesNewRoman',
@@ -468,7 +478,7 @@ export {
     addSlide,
     deleteSlide,
     changeSlidePosition,
-    changeSlideIndex,
+    setSlideIndex,
     addText,
     addPicture,
     changeObjectPosition,
@@ -480,11 +490,9 @@ export {
     changeSlideBackground,
     getUID,
     getDefaultBackground,
-    setSlideAsSelected,
-    setObjectAsSelected,
-    deselectObjects,
-    deselectSlide,
     deleteObjects,
+    setSelection,
+    deselect,
 }
 
 function getB64Pic() {
