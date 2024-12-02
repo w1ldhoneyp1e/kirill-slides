@@ -1,7 +1,9 @@
 import { EditorType } from '../types'
-import { ActionType } from './actions'
+import {
+    ActionType, EditorAction,
+} from './actions'
 
-function setEditor(newEditor: EditorType) {
+function setEditor(newEditor: EditorType): EditorAction {
     return {
         type: ActionType.SET_EDITOR,
         payload: newEditor,
@@ -10,7 +12,7 @@ function setEditor(newEditor: EditorType) {
 
 function changePresentationName(name: string) {
     return {
-        type: ActionType.SET_EDITOR,
+        type: ActionType.CHANGE_NAME,
         payload: {name: name},
     }
 }

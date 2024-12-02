@@ -11,6 +11,7 @@ enum ActionType {
     ADD_TEXT = 'addText',
     ADD_PICTURE = 'addPicture',
     CHANGE_OBJECT_POSITION = 'changeObjectPosition',
+    CHANGE_OBJECT_SIZE = 'changeObjectSize',
 
     SET_EDITOR = 'setEditor',
     CHANGE_NAME = 'changePresentationName'
@@ -65,6 +66,11 @@ type ChangeObjectPositionAction = {
     payload: {id: string, position: {x: number, y: number}}
 }
 
+type ChangeObjectSizeAction = {
+    type: ActionType.CHANGE_OBJECT_SIZE,
+    payload: { slideId: string; objId: string; size: {width: number, height: number} }
+}
+
 type EditorAction =
     AddSlideAction
     | RemoveSlideAction
@@ -76,6 +82,7 @@ type EditorAction =
     | AddPictureAction
     | ChangePresentationNameAction
     | ChangeObjectPositionAction
+    | ChangeObjectSizeAction
 
 export {ActionType}
 export type {
@@ -85,4 +92,5 @@ export type {
     SetSlideIndexAction,
     ChangePresentationNameAction,
     ChangeObjectPositionAction,
+    ChangeObjectSizeAction,
 }

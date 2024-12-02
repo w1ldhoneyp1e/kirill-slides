@@ -1,5 +1,6 @@
 import {
     ChangeObjectPositionAction,
+    ChangeObjectSizeAction,
     ChangePresentationNameAction,
     DeselectAction, SetSelectionAction,
     SetSlideIndexAction,
@@ -85,21 +86,26 @@ function changeSlidePosition(
 // добавление/удаление текста и картинки
 function addText(editor: EditorType): EditorType {
     const newText = getDefaultText()
-    let newEditor = {...editor}
-    const wantedSlide = findSlideById(editor, editor.selection.selectedSlideId)
-    wantedSlide.contentObjects.push(newText)
 
-    newEditor = updateSlide(newEditor, wantedSlide)
+    const newEditor = {
+        ...editor,
+        presentation: {
+            ...editor.presentation,
+            slides: editor.presentation.slides.map(slide =>
+                slide.id === editor.selection.selectedSlideId
+                    ? {
+                        ...slide,
+                        contentObjects: [...slide.contentObjects, newText],
+                    }
+                    : slide),
+        },
+    }
 
     return newEditor
 }
 
+
 function addPicture(editor: EditorType): EditorType {
-    let newEditor = {...editor}
-    const wantedSlide: SlideType = findSlideById(
-        newEditor,
-        editor.selection.selectedSlideId,
-    )
     const newPic: PictureType = {
         id: getUID(),
         position: {
@@ -113,12 +119,25 @@ function addPicture(editor: EditorType): EditorType {
         type: 'picture',
         src: getB64Pic(),
     }
-    wantedSlide.contentObjects.push(newPic)
 
-    newEditor = updateSlide(newEditor, wantedSlide)
+    // Создаем новый редактор, слайд и обновленный массив слайдов
+    const newEditor = {
+        ...editor,
+        presentation: {
+            ...editor.presentation,
+            slides: editor.presentation.slides.map(slide =>
+                slide.id === editor.selection.selectedSlideId
+                    ? {
+                        ...slide,
+                        contentObjects: [...slide.contentObjects, newPic], // Новый массив с новым объектом
+                    }
+                    : slide),
+        },
+    }
 
     return newEditor
 }
+
 
 function deleteObjects(editor: EditorType): EditorType {
     const newPresentation = {
@@ -175,16 +194,14 @@ function findSlideIdByObjId(
 // изменение размера текста/картинки
 function changeObjectSize(
     editor: EditorType,
-    {
-        slideId, objId, size,
-    }: { slideId: string; objId: string; size: SizeType },
+    action: ChangeObjectSizeAction,
 ): EditorType {
     const newEditor = {...editor}
-    const thisSlide = newEditor.presentation.slides.find((s) => s.id === slideId)!
+    const thisSlide = newEditor.presentation.slides.find((s) => s.id === action.payload.slideId)!
     const indexOfSlide = newEditor.presentation.slides.indexOf(thisSlide)
-    let obj = thisSlide.contentObjects.find((o) => o.id === objId)!
+    let obj = thisSlide.contentObjects.find((o) => o.id === action.payload.objId)!
     const indexOfObj = thisSlide.contentObjects.indexOf(obj)
-    obj = setObjectSize(obj, size)
+    obj = setObjectSize(obj, action.payload.size)
     thisSlide.contentObjects[indexOfObj] = obj
     newEditor.presentation.slides[indexOfSlide] = thisSlide
     return newEditor
@@ -463,15 +480,6 @@ function findSlideById(editor: EditorType, id: string): SlideType {
 
 //     return newEditor;
 // }
-function updateSlide(editor: EditorType, slide: SlideType): EditorType {
-    const newEditor = {...editor}
-    const slideToUpdate = newEditor.presentation.slides.find((s) => s.id === slide.id)!
-    const index = newEditor.presentation.slides.indexOf(slideToUpdate)
-
-    newEditor.presentation.slides.splice(index, 1, slide)
-
-    return newEditor
-}
 
 export {
     changePresentationName,

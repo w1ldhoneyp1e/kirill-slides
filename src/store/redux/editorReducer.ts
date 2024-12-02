@@ -9,6 +9,7 @@ import {
     addPicture,
     changePresentationName,
     changeObjectPosition,
+    changeObjectSize,
 } from '../methods'
 import { EditorType } from '../types'
 import {
@@ -37,6 +38,8 @@ function editorReducer(editor: EditorType = defaultEditor, action: EditorAction)
         return changePresentationName(editor, action)
     case ActionType.CHANGE_OBJECT_POSITION:
         return changeObjectPosition(editor, action)
+    case ActionType.CHANGE_OBJECT_SIZE:
+        return changeObjectSize(editor, action)
     default:
         return editor
     }

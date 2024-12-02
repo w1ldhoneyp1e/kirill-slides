@@ -1,6 +1,7 @@
-import { EditorType } from '../../../store/types'
+import { store } from '../../../store/redux/store'
 
-const handleExport = (editor: EditorType) => {
+const handleExport = () => {
+    const editor = store.getState()
     const jsonEditor = JSON.stringify(editor)
     const blob = new Blob([jsonEditor], { type: 'application/json' })
     const url = URL.createObjectURL(blob)

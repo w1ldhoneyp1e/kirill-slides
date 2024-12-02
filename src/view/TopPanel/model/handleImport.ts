@@ -1,7 +1,7 @@
-import { saveToLocalStorage } from '../../../store/localStorage/saveToLocalStorage'
 import { validateDocument } from '../../../store/localStorage/validateEditor'
-import { setEditor } from '../../../store/redux/editorActionCreators'
 import { EditorType } from '../../../store/types'
+import { store } from '../../../store/redux/store' // Импортируйте ваш store, если нужен прямой доступ к dispatch
+import { setEditor } from '../../../store/redux/editorActionCreators'
 
 const handleImport = () => {
     const input = document.createElement('input')
@@ -23,8 +23,9 @@ const handleImport = () => {
                         return
                     }
 
-                    saveToLocalStorage(importedEditor)
-                    setEditor(importedEditor)
+                    // Используем dispatch для обновления состояния
+                    store.dispatch(setEditor(importedEditor))
+
                     alert('Импорт завершен успешно.')
                 } catch (error) {
                     alert('Ошибка при импорте данных.')

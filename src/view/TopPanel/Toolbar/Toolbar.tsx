@@ -87,36 +87,6 @@ function Toolbar() {
                 items={[backgroundButton]}
             />
         </div>
-        // <div className={styles.bar}>
-        //     <ToolbarButton
-        //         text={'Создать слайд'}
-        //         onClick={() => dispatch(addSlide)}
-        //         key={getUID()}
-        //     />
-        //     <ToolbarButton
-        //         isDisabled={!editor.selection.selectedSlideId}
-        //         text={'Удалить слайд'}
-        //         onClick={() => dispatch(deleteSlide)}
-        //         key={getUID()}
-        //     />
-        //     <ToolbarButton
-        //         isDisabled={!editor.selection.selectedSlideId}
-        //         text={'Создать текст'}
-        //         onClick={() => dispatch(addText)}
-        //         key={getUID()}
-        //     />
-        //     <ToolbarButton
-        //         isDisabled={!editor.selection.selectedSlideId}
-        //         text={'Создать картинку'}
-        //         onClick={() => dispatch(addText)}
-        //         key={getUID()}
-        //     />
-        //     <ToolbarButton
-        //         isDisabled={editor.selection.selectedObjIds.length === 0}
-        //         text={'Удалить'}
-        //         onClick={() => dispatch(deleteObjects)}
-        //         key={getUID()}
-        //     />
         //     <input
         //         type="color"
         //         value={value ?? '#FFFFFF'}
@@ -128,7 +98,6 @@ function Toolbar() {
         //         }
         //         className={styles.colorpicker}
         //     />
-        // </div>
     )
 }
 export { Toolbar }

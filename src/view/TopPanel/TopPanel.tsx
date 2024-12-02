@@ -5,10 +5,8 @@ import { handleImport } from './model/handleImport'
 import { Name } from './Name/Name'
 import { Toolbar } from './Toolbar/Toolbar'
 import styles from './TopPanel.module.css'
-import { useAppSelector } from '../hooks/useAppSelector'
 
 function TopPanel() {
-    const editor = useAppSelector((editor => editor))
     return (
         <div className={styles.topPanel}>
             {Logo}
@@ -17,7 +15,7 @@ function TopPanel() {
             <Button
                 type="text"
                 text={'Export'}
-                onClick={() => handleExport(editor)}
+                onClick={handleExport}
             />
             <Button
                 type="text"

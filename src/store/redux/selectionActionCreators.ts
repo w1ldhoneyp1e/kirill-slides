@@ -11,7 +11,6 @@ function setSelection({
     type,
     id,
 }: SelectionProps): SetSelectionAction {
-    console.log('selection')
     return {
         type: ActionType.SET_SELECTION,
         payload: {

@@ -30,8 +30,34 @@ function changeObjectPosition({
     }
 }
 
+function changeObjectSize({
+    slideId,
+    objId,
+    size,
+}: {
+    slideId: string,
+    objId: string,
+    size: {
+        width: number,
+        height: number,
+    }
+}) {
+    return {
+        type: ActionType.CHANGE_OBJECT_SIZE,
+        payload: {
+            slideId: slideId,
+            objId: objId,
+            size: {
+                width: size.width,
+                height: size.height,
+            },
+        },
+    }
+}
+
 export {
     addText,
     addPicture,
     changeObjectPosition,
+    changeObjectSize,
 }
