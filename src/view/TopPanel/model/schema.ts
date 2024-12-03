@@ -90,19 +90,7 @@ const SLIDE_TYPE = {
     required: ['id', 'contentObjects', 'background'],
 }
 
-const SELECTION_TYPE = {
-    type: 'object',
-    properties: {
-        selectedSlideId: { type: 'string' },
-        selectedObjIds: {
-            type: 'array',
-            items: { type: 'string' },
-        },
-    },
-    required: ['selectedSlideId', 'selectedObjIds'],
-}
-
-const PRESENTATION_TYPE = {
+const SCHEMA = {
     type: 'object',
     properties: {
         id: { type: 'string' },
@@ -113,15 +101,6 @@ const PRESENTATION_TYPE = {
         },
     },
     required: ['id', 'name', 'slides'],
-}
-
-const SCHEMA = {
-    type: 'object',
-    properties: {
-        presentation: PRESENTATION_TYPE,
-        selection: SELECTION_TYPE,
-    },
-    required: ['presentation', 'selection'],
 }
 
 export {SCHEMA}

@@ -1,5 +1,7 @@
 import { validateDocument } from './validateEditor'
-import { EditorType } from '../../../store/types'
+import {
+    EditorType, PresentationType,
+} from '../../../store/types'
 import { store } from '../../../store/redux/store'
 import { setEditor } from '../../../store/redux/editorActionCreators'
 
@@ -14,15 +16,23 @@ const handleImport = () => {
             const reader = new FileReader()
             reader.onload = (e) => {
                 try {
-                    const importedEditor: EditorType = JSON.parse(e.target!.result as string)
+                    const importedPresentation: PresentationType = JSON.parse(e.target!.result as string)
 
-                    const isValid = validateDocument(importedEditor)
+                    const isValid = validateDocument(importedPresentation)
                     if (!isValid) {
                         alert('Ошибка: данные не прошли валидацию.')
                         return
                     }
 
-                    store.dispatch(setEditor(importedEditor))
+                    const editor: EditorType = {
+                        presentation: importedPresentation,
+                        selection: {
+                            selectedObjIds: [],
+                            selectedSlideId: '',
+                        },
+                    }
+
+                    store.dispatch(setEditor(editor))
 
                     alert('Импорт завершен успешно.')
                 } catch (error) {
