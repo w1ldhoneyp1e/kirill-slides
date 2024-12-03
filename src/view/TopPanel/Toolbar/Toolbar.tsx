@@ -31,10 +31,14 @@ function Toolbar() {
 
     const undoRedoButton: ButtonProps = {
         type: 'icon-icon',
-        iconFirst: Undo24px,
-        iconSecond: Redo24px,
-        onClick: () => {},
-        onIconClick: () => {},
+        firstIcon: {
+            icon: Undo24px,
+            onClick: () => {},
+        },
+        secondIcon: {
+            icon: Redo24px,
+            onClick: () => {},
+        },
     }
 
     const cursorButton: ButtonProps = {
