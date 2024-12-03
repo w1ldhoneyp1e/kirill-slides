@@ -29,23 +29,25 @@ type ButtonProps =
     }
   | {
       type: 'icon-icon';
-      onClick: () => void;
-      onIconClick?: () => void;
-      iconFirst: ReactNode;
-      iconSecond: ReactNode;
+      firstIcon: {
+        icon: ReactNode;
+        onClick: () => void;
+      }
+      secondIcon: {
+        icon: ReactNode;
+        onClick: () => void;
+      }
     }
 
 const Button = (props: ButtonProps) => {
-    const {
-        type, onClick,
-    } = props
+    const {type} = props
 
     switch (type) {
     case 'icon':
         return (
             <button
                 className={styles.button}
-                onClick={onClick}
+                onClick={props.onClick}
             >
                 {props.icon}
             </button>
@@ -55,7 +57,7 @@ const Button = (props: ButtonProps) => {
         return (
             <button
                 className={styles.button}
-                onClick={onClick}
+                onClick={props.onClick}
             >
                 {props.icon}
                 <span>{props.text}</span>
@@ -66,7 +68,7 @@ const Button = (props: ButtonProps) => {
         return (
             <button
                 className={styles.button}
-                onClick={onClick}
+                onClick={props.onClick}
             >
                 <span>{props.text}</span>
                 <span
@@ -84,7 +86,7 @@ const Button = (props: ButtonProps) => {
         return (
             <button
                 className={styles.button}
-                onClick={onClick}
+                onClick={props.onClick}
             >
                 {props.text}
             </button>
@@ -94,25 +96,24 @@ const Button = (props: ButtonProps) => {
         return (
             <div
                 className={styles.buttonIconIcon}
-                onClick={onClick}
             >
                 <span
                     className={styles.icon}
                     onClick={(e) => {
                         e.stopPropagation()
-                        props.onIconClick?.()
+                        props.firstIcon.onClick()
                     }}
                 >
-                    {props.iconFirst}
+                    {props.firstIcon.icon}
                 </span>
                 <span
                     className={styles.icon}
                     onClick={(e) => {
                         e.stopPropagation()
-                        props.onIconClick?.()
+                        props.secondIcon.onClick()
                     }}
                 >
-                    {props.iconSecond}
+                    {props.secondIcon.icon}
                 </span>
             </div>
         )

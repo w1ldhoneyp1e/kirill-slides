@@ -1,3 +1,8 @@
 .pictureObj {
 	position: absolute;
+	background-size: 'cover',
+}
+
+.selected {
+	border: 2px solid black;
 }

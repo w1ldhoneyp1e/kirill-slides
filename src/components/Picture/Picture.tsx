@@ -25,13 +25,17 @@ function Picture({
         width: pictureObj.size.width * scale,
         height: pictureObj.size.height * scale,
         backgroundImage: `url(${pictureObj.src})`,
-        backgroundSize: 'cover',
-        border: isSelected ? '2px solid black' : '',
     }
 
     return (
         <div
-            className={styles.pictureObj}
+            className={
+                styles.pictureObj +
+                `${isSelected
+                    ? styles.selected
+                    : ''
+                }`
+            }
             style={style}
             onClick={() => setSelection({
                 type: 'object',
