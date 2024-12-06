@@ -1,12 +1,14 @@
 import { Logo } from '../../assets/Logo'
 import { Button } from '../../components/Button/Button'
-import { handleExport } from './model/handleExport'
-import { handleImport } from './model/handleImport'
+import { useHandleExport } from './model/useHandleExport'
+import { useHandleImport } from './model/useHandleImport'
 import { Name } from './Name/Name'
 import { Toolbar } from './Toolbar/Toolbar'
 import styles from './TopPanel.module.css'
 
 function TopPanel() {
+    const handleExport = useHandleExport()
+    const handleImport = useHandleImport()
     return (
         <div className={styles.topPanel}>
             {Logo}
@@ -15,12 +17,12 @@ function TopPanel() {
             <Button
                 type="text"
                 text={'Export'}
-                onClick={handleExport}
+                onClick={() => handleExport()}
             />
             <Button
                 type="text"
                 text={'Import'}
-                onClick={handleImport}
+                onClick={() => handleImport()}
             />
         </div>
     )

@@ -84,24 +84,24 @@ function Toolbar() {
                 items={[cursorButton, addTextButton, addImageButton]}
             />
             <Divider
-                type="vertical"
-                size="half"
+                size='half'
+                type='vertical'
             />
             <ButtonGroup
                 items={[backgroundButton]}
             />
         </div>
-        //     <input
-        //         type="color"
-        //         value={value ?? '#FFFFFF'}
-        //         onChange={(e) =>
-        //             dispatch(changeSlideBackground, {
-        //                 value: e.target.value,
-        //                 type: 'solid',
-        //             })
-        //         }
-        //         className={styles.colorpicker}
-        //     />
+    // <input
+    //     type="color"
+    //     value={value ?? '#FFFFFF'}
+    //     onChange={(e) =>
+    //         dispatch(changeSlideBackground, {
+    //             value: e.target.value,
+    //             type: 'solid',
+    //         })
+    //     }
+    //     className={styles.colorpicker}
+    // />
     )
 }
 export { Toolbar }
