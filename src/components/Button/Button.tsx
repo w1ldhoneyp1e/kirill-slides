@@ -1,53 +1,60 @@
 import { ReactNode } from 'react'
 import styles from './Button.module.css'
 
-type ButtonType = 'icon' | 'icon-text' | 'text' | 'text-icon' | 'icon-icon'
+type ButtonType = 'icon' | 'icon-text' | 'text' | 'text-icon' | 'icon-icon';
 
 type ButtonProps =
-  | {
-      type: 'icon';
-      onClick: () => void;
-      icon: ReactNode;
-    }
-  | {
-      type: 'icon-text';
-      onClick: () => void;
-      icon: ReactNode;
-      text: string;
-    }
-  | {
-      type: 'text-icon';
-      onClick: () => void;
-      onIconClick?: () => void;
-      icon: ReactNode;
-      text: string;
-    }
-  | {
-      type: 'text';
-      onClick: () => void;
-      text: string;
-    }
-  | {
-      type: 'icon-icon';
-      firstIcon: {
-        icon: ReactNode;
-        onClick: () => void;
-      }
-      secondIcon: {
-        icon: ReactNode;
-        onClick: () => void;
-      }
-    }
+    {
+        disable?: boolean; // Флаг отключения
+    } & (
+        | {
+              type: 'icon';
+              onClick: () => void;
+              icon: ReactNode;
+          }
+        | {
+              type: 'icon-text';
+              onClick: () => void;
+              icon: ReactNode;
+              text: string;
+          }
+        | {
+              type: 'text-icon';
+              onClick: () => void;
+              onIconClick?: () => void;
+              icon: ReactNode;
+              text: string;
+          }
+        | {
+              type: 'text';
+              onClick: () => void;
+              text: string;
+          }
+        | {
+              type: 'icon-icon';
+              firstIcon: {
+                  icon: ReactNode;
+                  onClick: () => void;
+              };
+              secondIcon: {
+                  icon: ReactNode;
+                  onClick: () => void;
+              };
+          }
+    );
 
 const Button = (props: ButtonProps) => {
-    const {type} = props
+    const {
+        type, disable = false,
+    } = props
 
     switch (type) {
     case 'icon':
         return (
             <button
                 className={styles.button}
-                onClick={props.onClick}
+                onClick={!disable ? props.onClick : undefined}
+                disabled={disable}
             >
                 {props.icon}
             </button>
@@ -57,7 +64,8 @@ const Button = (props: ButtonProps) => {
         return (
             <button
                 className={styles.button}
-                onClick={props.onClick}
+                onClick={!disable ? props.onClick : undefined}
+                disabled={disable}
             >
                 {props.icon}
                 <span>{props.text}</span>
@@ -68,13 +76,16 @@ const Button = (props: ButtonProps) => {
         return (
             <button
                 className={styles.button}
-                onClick={props.onClick}
+                onClick={!disable ? props.onClick : undefined}
+                disabled={disable}
             >
                 <span>{props.text}</span>
                 <span
                     onClick={(e) => {
-                        e.stopPropagation()
-                        props.onIconClick?.()
+                        if (!disable) {
+                            e.stopPropagation()
+                            props.onIconClick?.()
+                        }
                     }}
                 >
                     {props.icon}
@@ -86,7 +97,8 @@ const Button = (props: ButtonProps) => {
         return (
             <button
                 className={styles.button}
-                onClick={props.onClick}
+                onClick={!disable ? props.onClick : undefined}
+                disabled={disable}
             >
                 {props.text}
             </button>
@@ -94,14 +106,14 @@ const Button = (props: ButtonProps) => {
 
     case 'icon-icon':
         return (
-            <div
-                className={styles.buttonIconIcon}
-            >
+            <div className={`${styles.buttonIconIcon} ${disable ? styles.disabled : ''}`}>
                 <span
                     className={styles.icon}
                     onClick={(e) => {
-                        e.stopPropagation()
-                        props.firstIcon.onClick()
+                        if (!disable) {
+                            e.stopPropagation()
+                            props.firstIcon.onClick()
+                        }
                     }}
                 >
                     {props.firstIcon.icon}
@@ -109,8 +121,10 @@ const Button = (props: ButtonProps) => {
                 <span
                     className={styles.icon}
                     onClick={(e) => {
-                        e.stopPropagation()
-                        props.secondIcon.onClick()
+                        if (!disable) {
+                            e.stopPropagation()
+                            props.secondIcon.onClick()
+                        }
                     }}
                 >
                     {props.secondIcon.icon}

@@ -6,7 +6,6 @@ type ResizeFrameProps = {
     parentRef: React.RefObject<HTMLDivElement>;
     textRef: React.RefObject<HTMLDivElement>;
     objId: string;
-    onResize: (objId: string, size: { width: number; height: number }) => void;
     scale: number;
     onStartResize: () => void;
     onStopResize: () => void;
@@ -16,7 +15,6 @@ export const ResizeFrame: React.FC<ResizeFrameProps> = ({
     parentRef,
     textRef,
     objId,
-    onResize,
     scale,
     onStartResize,
     onStopResize,
@@ -27,6 +25,8 @@ export const ResizeFrame: React.FC<ResizeFrameProps> = ({
         bottomLeft: useRef<HTMLDivElement>(null),
         bottomRight: useRef<HTMLDivElement>(null),
     }
+
+    const onResize = () => {}
 
     // Используем хуки useDragAndDrop только для вызова onMouseUp
     useDragAndDrop({

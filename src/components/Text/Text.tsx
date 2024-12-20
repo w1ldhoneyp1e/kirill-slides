@@ -1,11 +1,9 @@
 import {
     useRef, useCallback,
-    useState,
     useMemo,
 } from 'react'
 import {
     TextType, PositionType,
-    SizeType,
 } from '../../store/types'
 import { useDragAndDrop } from '../../view/hooks/useDragAndDrop'
 import { useBoundedPosition } from '../../view/hooks/useBoundedPosition'  // Импортируем кастомный хук
@@ -18,17 +16,14 @@ type TextProps = {
     text: TextType
     parentRef: React.RefObject<HTMLDivElement>
     scale: number
-    onResize: (objId: string, size: SizeType) => void
 }
 
 function Text({
     text,
     parentRef,
     scale,
-    onResize,
 }: TextProps) {
     const textRef = useRef<HTMLDivElement>(null)
-    const [isResizing, setIsResizing] = useState(false) // Состояние для отслеживания изменения размера
 
     const selectedObjIds = useAppSelector((editor => editor.selection.selectedObjIds))
     const {
@@ -42,14 +37,12 @@ function Text({
 
     const dispatchFn = useCallback(
         (position: PositionType) => {
-            if (!isResizing) { // Если не в процессе изменения размера, обновляем позицию
-                changeObjectPosition({
-                    id: text.id,
-                    position: position,
-                })
-            }
+            changeObjectPosition({
+                id: text.id,
+                position: position,
+            })
         },
-        [isResizing, changeObjectPosition, text.id],
+        [changeObjectPosition, text.id],
     )
 
     const updatedPosition = useDragAndDrop({
@@ -60,11 +53,9 @@ function Text({
 
     const boundedPosition = useBoundedPosition({
         x: updatedPosition
-        && !isResizing
             ? updatedPosition.x * scale
             : text.position.x * scale,
         y: updatedPosition
-        && !isResizing
             ? updatedPosition.y * scale
             : text.position.y * scale,
     }, parentRef, textRef)
@@ -101,10 +92,9 @@ function Text({
                         textRef={textRef}
                         parentRef={parentRef}
                         objId={text.id}
-                        onResize={onResize}
                         scale={scale}
-                        onStartResize={() => setIsResizing(true)}
-                        onStopResize={() => setIsResizing(false)}
+                        onStartResize={() => {}}
+                        onStopResize={() => {}}
                     />
                 )}
             </div>

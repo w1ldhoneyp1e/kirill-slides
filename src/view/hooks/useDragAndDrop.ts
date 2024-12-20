@@ -13,8 +13,8 @@ type useDragAndDropProps = {
 function useDragAndDrop({
     ref,
     parentRef,
-    onMouseDown = () => {},
-    onMouseUp = () => {},
+    onMouseDown,
+    onMouseUp,
 }: useDragAndDropProps): PositionType | null {
     const [delta, setDelta] = useState<PositionType | null>(null)
     const deltaRef = useRef<PositionType | null>(null)
@@ -46,12 +46,14 @@ function useDragAndDrop({
             document.removeEventListener('mousemove', handleMouseMove)
             document.removeEventListener('mouseup', handleMouseUp)
 
-            if (deltaRef.current !== null) {
+            if (onMouseUp && deltaRef.current !== null) {
                 onMouseUp(deltaRef.current)
             }
         }
         const handleMouseDown = (e: MouseEvent): void => {
-            onMouseDown()
+            if (onMouseDown) {
+                onMouseDown()
+            }
             startPos.current = {
                 x: e.pageX,
                 y: e.pageY,

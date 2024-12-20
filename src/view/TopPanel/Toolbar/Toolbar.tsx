@@ -1,3 +1,4 @@
+import React from 'react'
 import { AddPicture24px } from '../../../assets/AddPicture24px.tsx'
 import { AddText24px } from '../../../assets/AddText24px.tsx'
 import { Cursor24px } from '../../../assets/Cursor24px.tsx'
@@ -7,6 +8,7 @@ import { Undo24px } from '../../../assets/Undo24px.tsx'
 import {ButtonProps} from '../../../components/Button/Button.tsx'
 import { ButtonGroup } from '../../../components/ButtonGroup/ButtonGroup.tsx'
 import { Divider } from '../../../components/Divider/Divider.tsx'
+import { HistoryContext } from '../../hooks/heistoryContext.ts'
 import { useAppActions } from '../../hooks/useAppActions.ts'
 import { useAppSelector } from '../../hooks/useAppSelector.ts'
 
@@ -16,12 +18,29 @@ function Toolbar() {
     const slides = useAppSelector((editor => editor.presentation.slides))
     const selectedSlideId = useAppSelector((editor => editor.selection.selectedSlideId))
     const {
-        addSlide, addText, addPicture,
+        addSlide, addText, addPicture, setEditor,
     } = useAppActions()
     const thisSlide = slides.find((slide) => slide.id === selectedSlideId)!
     const background = thisSlide ? thisSlide.background : null
     const value =
 		background?.type === 'solid' ? background?.hexColor : background?.src
+
+    const history = React.useContext(HistoryContext)
+
+    function onUndo() {
+        const newEditor = history.undo()
+        console.log(newEditor)
+        if (newEditor) {
+            setEditor(newEditor)
+        }
+    }
+
+    function onRedo() {
+        const newEditor = history.redo()
+        if (newEditor) {
+            setEditor(newEditor)
+        }
+    }
 
     const addButton: ButtonProps = {
         type: 'icon',
@@ -29,16 +48,18 @@ function Toolbar() {
         onClick: addSlide,
     }
 
-    const undoRedoButton: ButtonProps = {
-        type: 'icon-icon',
-        firstIcon: {
-            icon: Undo24px,
-            onClick: () => {},
-        },
-        secondIcon: {
-            icon: Redo24px,
-            onClick: () => {},
-        },
+    const undoButton: ButtonProps = {
+        type: 'icon',
+        icon: Undo24px,
+        onClick: onUndo,
+        disable: !history.undo(),
+    }
+
+    const redoButton: ButtonProps = {
+        type: 'icon',
+        icon: Redo24px,
+        onClick: onRedo,
+        disable: !history.redo(),
     }
 
     const cursorButton: ButtonProps = {
@@ -74,7 +95,9 @@ function Toolbar() {
                 size="half"
             />
             <ButtonGroup
-                items={[undoRedoButton]}
+                items={[
+                    undoButton, redoButton,
+                ]}
             />
             <Divider
                 type="vertical"

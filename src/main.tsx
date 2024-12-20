@@ -6,7 +6,7 @@ import App from './App'
 import './index.css'
 import { loadFromLocalStorage } from './store/localStorage/loadFromLocalStorage'
 import { setEditor } from './store/redux/editorActionCreators.ts'
-
+import { initHistory } from './utils/history.ts'
 
 const getEditorFromLocalStorage = () => {
     const savedEditor = loadFromLocalStorage()
@@ -20,7 +20,7 @@ const root = createRoot(document.getElementById('root')!)
 const render = () => {
     root.render(<StrictMode>
         <Provider store={store}>
-            <App />
+            <App history={initHistory(store)} />
         </Provider>
     </StrictMode>)
 }

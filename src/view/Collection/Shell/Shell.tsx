@@ -153,7 +153,7 @@ function Shell({
                 style={style}
             >
                 <Slide
-                    slideId={slide.id}
+                    slide={slide}
                     scale={SLIDE_SCALE}
                 />
             </div>

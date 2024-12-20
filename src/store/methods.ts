@@ -32,23 +32,37 @@ function changePresentationName(
 
 // добавление/удаление слайда
 function addSlide(editor: EditorType): EditorType {
-    const newEditor = {...editor}
-    const newSlide: SlideType = {
-        id: getUID(),
-        contentObjects: [],
-        background: getDefaultBackground(),
-        position: null,
+    const newEditor = {
+        ...editor,
+        presentation: {
+            ...editor.presentation,
+            slides: [
+                ...editor.presentation.slides,
+                {
+                    id: getUID(),
+                    contentObjects: [],
+                    background: getDefaultBackground(),
+                    position: null,
+                },
+            ],
+        },
     }
-    newEditor.presentation.slides = [...editor.presentation.slides, newSlide]
     return newEditor
 }
 
 function deleteSlide(editor: EditorType): EditorType {
-    const newEditor: EditorType = {...editor}
-    const slideId = newEditor.selection.selectedSlideId
-    newEditor.presentation.slides = newEditor.presentation.slides.filter((slide) => slide.id !== slideId)
-    newEditor.selection.selectedSlideId = ''
-    return newEditor
+    const slideId = editor.selection.selectedSlideId
+    return {
+        ...editor,
+        presentation: {
+            ...editor.presentation,
+            slides: editor.presentation.slides.filter((slide) => slide.id !== slideId),
+        },
+        selection: {
+            ...editor.selection,
+            selectedSlideId: '',
+        },
+    }
 }
 
 // изменение позиции слайда в списке
@@ -56,15 +70,21 @@ function setSlideIndex(
     editor: EditorType,
     action: SetSlideIndexAction,
 ): EditorType {
-    const newEditor = {...editor}
-    const collection: SlideType[] = newEditor.presentation.slides
-    const slideToMove = collection.find((s) => s.id === action.payload.id)!
-    const baseIndex = collection.indexOf(slideToMove)
+    const { slides } = editor.presentation
+    const slideToMove = slides.find((s) => s.id === action.payload.id)!
+    const baseIndex = slides.indexOf(slideToMove)
 
-    newEditor.presentation.slides.splice(baseIndex, 1)
-    newEditor.presentation.slides.splice(action.payload.index, 0, slideToMove)
+    const newSlides = [...slides]
+    newSlides.splice(baseIndex, 1)
+    newSlides.splice(action.payload.index, 0, slideToMove)
 
-    return newEditor
+    return {
+        ...editor,
+        presentation: {
+            ...editor.presentation,
+            slides: newSlides,
+        },
+    }
 }
 
 // изменение позиции слайда (координат)
@@ -77,33 +97,46 @@ function changeSlidePosition(
         id: string;
         position: PositionType | null
     },
-) {
-    const newEditor = { ...editor }
-    findSlideById(newEditor, id).position = position
-    return {...newEditor}
+): EditorType {
+    const newSlides = editor.presentation.slides.map(slide => {
+        if (slide.id === id) {
+            return {
+                ...slide,
+                position,
+            }
+        }
+        return slide
+    })
+
+    return {
+        ...editor,
+        presentation: {
+            ...editor.presentation,
+            slides: newSlides,
+        },
+    }
 }
 
 // добавление/удаление текста и картинки
 function addText(editor: EditorType): EditorType {
     const newText = getDefaultText()
 
-    const newEditor = {
+    const newSlides = editor.presentation.slides.map(slide =>
+        slide.id === editor.selection.selectedSlideId
+            ? {
+                ...slide,
+                contentObjects: [...slide.contentObjects, newText],
+            }
+            : slide)
+
+    return {
         ...editor,
         presentation: {
             ...editor.presentation,
-            slides: editor.presentation.slides.map(slide =>
-                slide.id === editor.selection.selectedSlideId
-                    ? {
-                        ...slide,
-                        contentObjects: [...slide.contentObjects, newText],
-                    }
-                    : slide),
+            slides: newSlides,
         },
     }
-
-    return newEditor
 }
-
 
 function addPicture(editor: EditorType): EditorType {
     const newPic: PictureType = {
@@ -120,37 +153,39 @@ function addPicture(editor: EditorType): EditorType {
         src: getB64Pic(),
     }
 
-    // Создаем новый редактор, слайд и обновленный массив слайдов
-    const newEditor = {
+    const newSlides = editor.presentation.slides.map(slide =>
+        slide.id === editor.selection.selectedSlideId
+            ? {
+                ...slide,
+                contentObjects: [...slide.contentObjects, newPic],
+            }
+            : slide)
+
+    return {
         ...editor,
         presentation: {
             ...editor.presentation,
-            slides: editor.presentation.slides.map(slide =>
-                slide.id === editor.selection.selectedSlideId
-                    ? {
-                        ...slide,
-                        contentObjects: [...slide.contentObjects, newPic], // Новый массив с новым объектом
-                    }
-                    : slide),
+            slides: newSlides,
         },
     }
-
-    return newEditor
 }
 
 function deleteObjects(editor: EditorType): EditorType {
-    const newPresentation = {
-        id: editor.presentation.id,
-        name: editor.presentation.name,
-        slides: editor.presentation.slides,
-    }
     const slide = findSlideById(editor, editor.selection.selectedSlideId)
-    editor.selection.selectedObjIds.forEach((id) => {
-        slide.contentObjects = slide.contentObjects.filter((obj) => obj.id !== id)
-    })
+    const newSlide = {
+        ...slide,
+        contentObjects: slide.contentObjects.filter((obj) =>
+            !editor.selection.selectedObjIds.includes(obj.id)),
+    }
+
+    const newSlides = editor.presentation.slides.map(s => s.id === slide.id ? newSlide : s)
+
     return {
         ...editor,
-        presentation: newPresentation,
+        presentation: {
+            ...editor.presentation,
+            slides: newSlides,
+        },
         selection: {
             ...editor.selection,
             selectedObjIds: [],
@@ -163,44 +198,67 @@ function changeObjectPosition(
     editor: EditorType,
     action: ChangeObjectPositionAction,
 ): EditorType {
-    const newEditor = {...editor}
-    if (action.payload.position === null) {
-        return newEditor
+    const newSlides = editor.presentation.slides.map(slide => {
+        const hasTargetObject = slide.contentObjects.some(obj => obj.id === action.payload.id)
+
+        if (hasTargetObject) {
+            const newContentObjects = slide.contentObjects.map(obj =>
+                obj.id === action.payload.id
+                    ? {
+                        ...obj,
+                        position: action.payload.position,
+                    }
+                    : obj)
+
+            return {
+                ...slide,
+                contentObjects: newContentObjects,
+            }
+        }
+
+        return slide
+    })
+
+    return {
+        ...editor,
+        presentation: {
+            ...editor.presentation,
+            slides: newSlides,
+        },
     }
-    const slideId = findSlideIdByObjId(editor, action.payload.id)
-    const thisSlide = newEditor.presentation.slides.find((s) => s.id === slideId)!
-	thisSlide.contentObjects.find((o) => o.id === action.payload.id)!.position = action.payload.position
-	return newEditor
 }
 
-function findSlideIdByObjId(
-    editor: EditorType,
-    id: string,
-): string | undefined {
-    return editor.presentation.slides.find((s) => {
-        return !!s.contentObjects.find((o) => o.id === id)
-    })?.id
-}
 
 // изменение размера текста/картинки
 function changeObjectSize(
     editor: EditorType,
     action: ChangeObjectSizeAction,
 ): EditorType {
-    const newEditor = {...editor}
-    const thisSlide = newEditor.presentation.slides.find((s) => s.id === action.payload.slideId)!
-    const indexOfSlide = newEditor.presentation.slides.indexOf(thisSlide)
-    let obj = thisSlide.contentObjects.find((o) => o.id === action.payload.objId)!
-    const indexOfObj = thisSlide.contentObjects.indexOf(obj)
-    obj = setObjectSize(obj, action.payload.size)
-    thisSlide.contentObjects[indexOfObj] = obj
-    newEditor.presentation.slides[indexOfSlide] = thisSlide
-    return newEditor
+    const newSlides = editor.presentation.slides.map(slide => {
+        if (slide.id === action.payload.slideId) {
+            const newContentObjects = slide.contentObjects.map(obj =>
+                obj.id === action.payload.objId
+                    ? setObjectSize(obj, action.payload.size)
+                    : obj)
+
+            return {
+                ...slide,
+                contentObjects: newContentObjects,
+            }
+        }
+        return slide
+    })
+
+    return {
+        ...editor,
+        presentation: {
+            ...editor.presentation,
+            slides: newSlides,
+        },
+    }
 }
-function setObjectSize<T extends SlideObjectType>(
-    object: T,
-    size: SizeType,
-): T {
+
+function setObjectSize<T extends SlideObjectType>(object: T, size: SizeType): T {
     return {
         ...object,
         size,
@@ -214,21 +272,31 @@ function changeTextValue(
         slideId, objId, value,
     }: { slideId: string; objId: string; value: string },
 ): EditorType {
-    const newEditor = {...editor}
-    const thisSlide = newEditor.presentation.slides.find((s) => s.id === slideId)!
-    const indexOfSlide = newEditor.presentation.slides.indexOf(thisSlide)
-    let obj = thisSlide.contentObjects.find((o) => o.id === objId)!
-    const indexOfObj = thisSlide.contentObjects.indexOf(obj)
-    obj = setTextValue(obj, value)
-    thisSlide.contentObjects[indexOfObj] = obj
-    newEditor.presentation.slides[indexOfSlide] = thisSlide
-    return newEditor
+    const newSlides = editor.presentation.slides.map(slide => {
+        if (slide.id === slideId) {
+            const newContentObjects = slide.contentObjects.map(obj =>
+                obj.id === objId
+                    ? setTextValue(obj, value)
+                    : obj)
+
+            return {
+                ...slide,
+                contentObjects: newContentObjects,
+            }
+        }
+        return slide
+    })
+
+    return {
+        ...editor,
+        presentation: {
+            ...editor.presentation,
+            slides: newSlides,
+        },
+    }
 }
 
-function setTextValue(
-    obj: TextType | PictureType,
-    newText: string,
-): TextType | PictureType {
+function setTextValue(obj: TextType | PictureType, newText: string): TextType | PictureType {
     return obj.type === 'text' ? {
         ...obj,
         value: newText,
@@ -239,26 +307,34 @@ function setTextValue(
 function changeTextFontSize(
     editor: EditorType,
     {
-        slideId,
-        objId,
-        fontSize,
+        slideId, objId, fontSize,
     }: { slideId: string; objId: string; fontSize: number },
 ): EditorType {
-    const newEditor = {...editor}
-    const thisSlide = newEditor.presentation.slides.find((s) => s.id === slideId)!
-    const indexOfSlide = newEditor.presentation.slides.indexOf(thisSlide)
-    let obj = thisSlide.contentObjects.find((o) => o.id === objId)!
-    const indexOfObj = thisSlide.contentObjects.indexOf(obj)
-    obj = setTextFontSize(obj, fontSize)
-    thisSlide.contentObjects[indexOfObj] = obj
-    newEditor.presentation.slides[indexOfSlide] = thisSlide
-    return newEditor
+    const newSlides = editor.presentation.slides.map(slide => {
+        if (slide.id === slideId) {
+            const newContentObjects = slide.contentObjects.map(obj =>
+                obj.id === objId
+                    ? setTextFontSize(obj, fontSize)
+                    : obj)
+
+            return {
+                ...slide,
+                contentObjects: newContentObjects,
+            }
+        }
+        return slide
+    })
+
+    return {
+        ...editor,
+        presentation: {
+            ...editor.presentation,
+            slides: newSlides,
+        },
+    }
 }
 
-function setTextFontSize(
-    obj: TextType | PictureType,
-    newSize: number,
-): TextType | PictureType {
+function setTextFontSize(obj: TextType | PictureType, newSize: number): TextType | PictureType {
     return obj.type === 'text' ? {
         ...obj,
         fontSize: newSize,
@@ -269,26 +345,34 @@ function setTextFontSize(
 function changeTextFontFamily(
     editor: EditorType,
     {
-        slideId,
-        objId,
-        fontFamily,
+        slideId, objId, fontFamily,
     }: { slideId: string; objId: string; fontFamily: string },
 ): EditorType {
-    const newEditor = {...editor}
-    const thisSlide = newEditor.presentation.slides.find((s) => s.id === slideId)!
-    const indexOfSlide = newEditor.presentation.slides.indexOf(thisSlide)
-    let obj = thisSlide.contentObjects.find((o) => o.id === objId)!
-    const indexOfObj = thisSlide.contentObjects.indexOf(obj)
-    obj = setTextFontFamily(obj, fontFamily)
-    thisSlide.contentObjects[indexOfObj] = obj
-    newEditor.presentation.slides[indexOfSlide] = thisSlide
-    return newEditor
+    const newSlides = editor.presentation.slides.map(slide => {
+        if (slide.id === slideId) {
+            const newContentObjects = slide.contentObjects.map(obj =>
+                obj.id === objId
+                    ? setTextFontFamily(obj, fontFamily)
+                    : obj)
+
+            return {
+                ...slide,
+                contentObjects: newContentObjects,
+            }
+        }
+        return slide
+    })
+
+    return {
+        ...editor,
+        presentation: {
+            ...editor.presentation,
+            slides: newSlides,
+        },
+    }
 }
 
-function setTextFontFamily(
-    obj: TextType | PictureType,
-    newFontFamily: string,
-): TextType | PictureType {
+function setTextFontFamily(obj: TextType | PictureType, newFontFamily: string): TextType | PictureType {
     return obj.type === 'text'
         ? {
             ...obj,
@@ -301,26 +385,34 @@ function setTextFontFamily(
 function changeTextColor(
     editor: EditorType,
     {
-        slideId,
-        objId,
-        newColor,
+        slideId, objId, newColor,
     }: { slideId: string; objId: string; newColor: string },
 ): EditorType {
-    const newEditor = {...editor}
-    const thisSlide = newEditor.presentation.slides.find((s) => s.id === slideId)!
-    const indexOfSlide = newEditor.presentation.slides.indexOf(thisSlide)
-    let obj = thisSlide.contentObjects.find((o) => o.id === objId)!
-    const indexOfObj = thisSlide.contentObjects.indexOf(obj)
-    obj = setTextColor(obj, newColor)
-    thisSlide.contentObjects[indexOfObj] = obj
-    newEditor.presentation.slides[indexOfSlide] = thisSlide
-    return newEditor
+    const newSlides = editor.presentation.slides.map(slide => {
+        if (slide.id === slideId) {
+            const newContentObjects = slide.contentObjects.map(obj =>
+                obj.id === objId
+                    ? setTextColor(obj, newColor)
+                    : obj)
+
+            return {
+                ...slide,
+                contentObjects: newContentObjects,
+            }
+        }
+        return slide
+    })
+
+    return {
+        ...editor,
+        presentation: {
+            ...editor.presentation,
+            slides: newSlides,
+        },
+    }
 }
 
-function setTextColor(
-    obj: TextType | PictureType,
-    newColor: string,
-): TextType | PictureType {
+function setTextColor(obj: TextType | PictureType, newColor: string): TextType | PictureType {
     return obj.type === 'text' ? {
         ...obj,
         hexColor: newColor,
@@ -334,44 +426,46 @@ function changeSlideBackground(
         value, type,
     }: { value: string; type: string },
 ): EditorType {
-    const newEditor = {...editor}
     const slideId = editor.selection.selectedSlideId
-    let thisSlide = newEditor.presentation.slides.find((s) => s.id === slideId)!
-    const indexOfSlide = newEditor.presentation.slides.indexOf(thisSlide)
-    thisSlide = setSlideBackground(thisSlide, value, type)
-    newEditor.presentation.slides[indexOfSlide] = thisSlide
-    return newEditor
+    const newSlides = editor.presentation.slides.map(slide => {
+        if (slide.id === slideId) {
+            return setSlideBackground(slide, value, type)
+        }
+        return slide
+    })
+
+    return {
+        ...editor,
+        presentation: {
+            ...editor.presentation,
+            slides: newSlides,
+        },
+    }
 }
 
-function setSlideBackground(
-    slide: SlideType,
-    value: string,
-    type: string,
-): SlideType {
+function setSlideBackground(slide: SlideType, value: string, type: string): SlideType {
     let newBackground: BackgroundType
     if (type === 'solid') {
         newBackground = {
             hexColor: value,
             type: 'solid',
         }
-        return {
-            ...slide,
-            background: newBackground,
-        }
-    }
-    if (type === 'image') {
+    } else if (type === 'image') {
         newBackground = {
             src: value,
             type: 'image',
         }
-        return {
-            ...slide,
-            background: newBackground,
-        }
+    } else {
+        return slide
     }
-    return {...slide}
+
+    return {
+        ...slide,
+        background: newBackground,
+    }
 }
 
+// выбор объекта или слайда
 function setSelection(
     editor: EditorType,
     action: SetSelectionAction,
@@ -394,21 +488,21 @@ function setSelection(
             },
         }
     default:
-        return {...editor}
+        return { ...editor }
     }
 }
 
 function deselect(
     editor: EditorType,
     action: DeselectAction,
-) {
+): EditorType {
     switch (action.payload.type) {
     case 'slide':
         return {
             ...editor,
             selection: {
+                ...editor.selection,
                 selectedSlideId: '',
-                selectedObjIds: [],
             },
         }
     case 'object':
@@ -420,8 +514,12 @@ function deselect(
             },
         }
     default:
-        return {...editor}
+        return { ...editor }
     }
+}
+
+function findSlideById(editor: EditorType, id: string): SlideType {
+    return editor.presentation.slides.find((s) => s.id === id)!
 }
 
 function getUID(): string {
@@ -459,9 +557,6 @@ function getDefaultText() {
     return defaultText
 }
 
-function findSlideById(editor: EditorType, id: string): SlideType {
-    return editor.presentation.slides.find((s) => s.id === id)!
-}
 
 export {
     changePresentationName,

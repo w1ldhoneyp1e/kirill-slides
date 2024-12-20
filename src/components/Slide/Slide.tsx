@@ -1,33 +1,29 @@
 import {
-    CSSProperties, useCallback, useRef,
+    CSSProperties, useRef,
 } from 'react'
 import {
     BackgroundType,
     PictureType,
-    SizeType,
+    SlideType,
     TextType,
 } from '../../store/types'
 import { Text } from '../Text/Text'
 import { Picture } from '../Picture/Picture'
 
 import styles from './Slide.module.css'
-import { useAppSelector } from '../../view/hooks/useAppSelector'
-import { useAppActions } from '../../view/hooks/useAppActions'
 
 type SlideProps = {
-	slideId: string
+	slide: SlideType
 	scale?: number
 }
 
 function Slide({
-    slideId,
+    slide,
     scale = 1,
 }: SlideProps) {
     const parentRef = useRef<HTMLDivElement>(null)
 
-    const contentObjects = useAppSelector(editor => editor.presentation.slides.find(s => s.id === slideId)?.contentObjects)
-    const slide = useAppSelector(editor => editor.presentation.slides.find(s => s.id === slideId))
-    const {changeObjectSize} = useAppActions()
+    const contentObjects = slide.contentObjects
 
     function setBackground(background: BackgroundType): string {
         let value: string = ''
@@ -39,14 +35,6 @@ function Slide({
     const style: CSSProperties = slide
         ? {background: setBackground(slide.background)}
         : {}
-
-    const onResize = useCallback((objId: string, size: SizeType) => {
-        changeObjectSize({
-            slideId: slide?.id ?? '',
-            objId:objId,
-            size:size,
-        })
-    }, [changeObjectSize, slide?.id])
 
     return (
         <div
@@ -63,7 +51,6 @@ function Slide({
                                 scale={scale}
                                 parentRef={parentRef}
                                 text={obj}
-                                onResize={onResize}
                             />
                         )
                     } else if (obj.type === 'picture') {
