@@ -45,14 +45,17 @@ type ButtonProps =
 
 const Button = (props: ButtonProps) => {
     const {
-        type, disable = false,
+        type, disable,
     } = props
+
+    if (disable)
+        console.log('disabled')
 
     switch (type) {
     case 'icon':
         return (
             <button
-                className={styles.button}
+                className={`${styles.button} ${disable ? styles.disabled : ''}`}
                 onClick={!disable ? props.onClick : undefined}
                 disabled={disable}
             >
@@ -63,7 +66,7 @@ const Button = (props: ButtonProps) => {
     case 'icon-text':
         return (
             <button
-                className={styles.button}
+                className={`${styles.button} ${disable ? styles.disabled : ''}`}
                 onClick={!disable ? props.onClick : undefined}
                 disabled={disable}
             >
@@ -75,7 +78,7 @@ const Button = (props: ButtonProps) => {
     case 'text-icon':
         return (
             <button
-                className={styles.button}
+                className={`${styles.button} ${disable ? styles.disabled : ''}`}
                 onClick={!disable ? props.onClick : undefined}
                 disabled={disable}
             >
@@ -96,7 +99,7 @@ const Button = (props: ButtonProps) => {
     case 'text':
         return (
             <button
-                className={styles.button}
+                className={`${styles.button} ${disable ? styles.disabled : ''}`}
                 onClick={!disable ? props.onClick : undefined}
                 disabled={disable}
             >

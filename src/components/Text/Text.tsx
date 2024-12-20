@@ -1,6 +1,7 @@
 import {
     useRef, useCallback,
     useMemo,
+    useState,
 } from 'react'
 import {
     TextType, PositionType,
@@ -24,7 +25,7 @@ function Text({
     scale,
 }: TextProps) {
     const textRef = useRef<HTMLDivElement>(null)
-
+    const [isDrag, setIsDrag] = useState(false)
     const selectedObjIds = useAppSelector((editor => editor.selection.selectedObjIds))
     const {
         setSelection, changeObjectPosition,
@@ -48,14 +49,18 @@ function Text({
     const updatedPosition = useDragAndDrop({
         ref: textRef,
         parentRef,
-        onMouseUp: dispatchFn,
+        onMouseDown: () => setIsDrag(true),
+        onMouseUp: (position: PositionType) => {
+            dispatchFn(position)
+            setIsDrag(false)
+        },
     })
 
     const boundedPosition = useBoundedPosition({
-        x: updatedPosition
+        x: updatedPosition && isDrag
             ? updatedPosition.x * scale
             : text.position.x * scale,
-        y: updatedPosition
+        y: updatedPosition && isDrag
             ? updatedPosition.y * scale
             : text.position.y * scale,
     }, parentRef, textRef)

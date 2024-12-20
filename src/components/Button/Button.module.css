@@ -22,10 +22,12 @@
     box-shadow: -1px 1px 0 var(--color-gray-dark);
 }
 
-.button.disabled {
+button:disabled {
+    background-color: var(--color-soft-blue);
+    border-color: var(--color-soft-blue);
     pointer-events: none;
-    opacity: 0.5;
-    box-shadow: -1px 1px 0 var(--color-gray-dark); /* Зафиксированная тень */
+    opacity: 0.8;
+    box-shadow: -1px 1px 0 var(--color-gray-dark);
 }
 
 .buttonIconIcon {
