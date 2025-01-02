@@ -29,7 +29,6 @@ function Toolbar() {
 
     function onUndo() {
         const newEditor = history.undo()
-        console.log(newEditor)
         if (newEditor) {
             setEditor(newEditor)
         }
