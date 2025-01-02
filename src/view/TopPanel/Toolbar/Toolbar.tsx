@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useCallback} from 'react'
 import {AddPicture24px} from '../../../assets/AddPicture24px.tsx'
 import {AddText24px} from '../../../assets/AddText24px.tsx'
 import {Cursor24px} from '../../../assets/Cursor24px.tsx'
@@ -19,7 +19,7 @@ function Toolbar() {
 	const {
 		addSlide, addText, addPicture, setEditor,
 	} = useAppActions()
-	const thisSlide = slides.find(slide => slide.id === selectedSlideId)
+	const thisSlide = slides.find(slide => slide.id === selectedSlideId)!
 	const background = thisSlide
 		? thisSlide.background
 		: null
@@ -29,19 +29,19 @@ function Toolbar() {
 
 	const history = React.useContext(HistoryContext)
 
-	function onUndo() {
+	const onUndo = useCallback(() => {
 		const newEditor = history.undo()
 		if (newEditor) {
 			setEditor(newEditor)
 		}
-	}
+	}, [history, setEditor])
 
-	function onRedo() {
+	const onRedo = useCallback(() => {
 		const newEditor = history.redo()
 		if (newEditor) {
 			setEditor(newEditor)
 		}
-	}
+	}, [history, setEditor])
 
 	const addButton: ButtonProps = {
 		type: 'icon',

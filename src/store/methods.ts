@@ -72,7 +72,6 @@ function setSlideIndex(
 	action: SetSlideIndexAction,
 ): EditorType {
 	const {slides} = editor.presentation
-	// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 	const slideToMove = slides.find(s => s.id === action.payload.id)!
 	const baseIndex = slides.indexOf(slideToMove)
 
@@ -550,7 +549,6 @@ function deselect(
 }
 
 function findSlideById(editor: EditorType, id: string): SlideType {
-	// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 	return editor.presentation.slides.find(s => s.id === id)!
 }
 

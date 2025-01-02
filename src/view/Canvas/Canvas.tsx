@@ -5,7 +5,7 @@ import styles from './Canvas.module.css'
 function Canvas() {
 	const slides = useAppSelector((editor => editor.presentation.slides))
 	const slideId = useAppSelector((editor => editor.selection.selectedSlideId))
-	const slide = slides.find(s => s.id === slideId)
+	const slide = slides.find(s => s.id === slideId)!
 	return (
 		<div className={styles.canvas}>
 			{slide

@@ -277,7 +277,6 @@ export default [
 			'@stylistic/jsx-quotes': 'error',
 			'@stylistic/key-spacing': 'error',
 			'@stylistic/keyword-spacing': 'error',
-			'@stylistic/linebreak-style': ['error', 'unix'],
 			// @see max-len
 			'@stylistic/max-len': ['error', {
 				'code': 120,
@@ -497,7 +496,6 @@ export default [
 			}],
 			'@typescript-eslint/no-misused-new': 'error',
 			'@typescript-eslint/no-namespace': 'error',
-			'@typescript-eslint/no-non-null-assertion': 'error',
 			'@typescript-eslint/no-require-imports': 'error',
 			'@typescript-eslint/prefer-as-const': 'error',
 			'@typescript-eslint/prefer-function-type': 'error',

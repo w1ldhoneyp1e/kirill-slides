@@ -10,6 +10,7 @@ import {type PositionType, type SlideType} from '../../../store/types'
 import {useAppActions} from '../../hooks/useAppActions'
 import {useAppSelector} from '../../hooks/useAppSelector'
 import {useDragAndDrop} from '../../hooks/useDragAndDrop'
+import {useTargetIndex} from './hooks/useGetTargetIndex'
 import styles from './Shell.module.css'
 
 const SLIDE_SCALE = 0.2
@@ -27,7 +28,6 @@ function Shell({
 }: ShellProps) {
 	const [onDrag, setOnDrag] = useState(false)
 	const slides = useAppSelector((editor => editor.presentation.slides))
-	const [targetIndex, setTargetIndex] = useState(slides.findIndex(s => s.id === slide.id))
 	const slideRef = useRef<HTMLDivElement>(null)
 	const gap = 30
 	const heightRef = useRef(0)
@@ -47,6 +47,14 @@ function Shell({
 		parentRef,
 		onMouseDown,
 		onMouseUp,
+	})!
+
+	const targetIndex = useTargetIndex({
+		delta,
+		slide,
+		slides,
+		heightRef,
+		gap,
 	})
 
 	useEffect(() => {
@@ -54,32 +62,6 @@ function Shell({
 			heightRef.current = slideRef.current.getBoundingClientRect().height
 		}
 	}, [slideRef])
-
-	useEffect(() => {
-		const calculateTargetIndex = (_delta: PositionType | null): number => {
-			if (!_delta || !heightRef.current) {
-				return slides.findIndex(s => s.id === slide.id)
-			}
-
-			const currentIndex = slides.findIndex(s => s.id === slide.id)
-			const indexPositionY = (heightRef.current + gap) * currentIndex
-			let newTargetIndex = currentIndex
-
-			if (_delta.y - indexPositionY > heightRef.current + gap) {
-				newTargetIndex = currentIndex + 1
-			}
-			else if (_delta.y - indexPositionY < -(heightRef.current + gap)) {
-				newTargetIndex = currentIndex - 1
-			}
-
-			return newTargetIndex
-		}
-		const newTargetIndex = calculateTargetIndex(delta)
-		if (newTargetIndex !== targetIndex) {
-			setTargetIndex(newTargetIndex)
-		}
-	}, [delta, slide.id, slides, targetIndex])
-
 
 	useEffect(() => {
 		if (
