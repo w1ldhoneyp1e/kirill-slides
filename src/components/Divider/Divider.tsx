@@ -13,8 +13,6 @@ const Divider = ({
 	)
 }
 
-export {Divider}
-
 function getStyle(type: 'horizontal' | 'vertical', size: 'full' | 'half' | '3/4') {
 	const sizeMapping = {
 		full: '100%',
@@ -43,3 +41,5 @@ function getStyle(type: 'horizontal' | 'vertical', size: 'full' | 'half' | '3/4'
 			return null
 	}
 }
+
+export {Divider}

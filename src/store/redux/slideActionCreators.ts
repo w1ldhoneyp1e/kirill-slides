@@ -1,11 +1,11 @@
-import {ActionType} from './actions'
+import {ACTION_TYPE} from './actions'
 
 function addSlide() {
-	return {type: ActionType.ADD_SLIDE}
+	return {type: ACTION_TYPE.addSlide}
 }
 
 function removeSlide() {
-	return {type: ActionType.REMOVE_SLIDE}
+	return {type: ACTION_TYPE.removeSlide}
 }
 
 function setSlideIndex(payload: {
@@ -13,7 +13,7 @@ function setSlideIndex(payload: {
 	index: number,
 }) {
 	return {
-		type: ActionType.SET_SLIDE_INDEX,
+		type: ACTION_TYPE.setSlideIndex,
 		payload,
 	}
 }

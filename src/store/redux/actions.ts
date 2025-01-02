@@ -1,32 +1,32 @@
 import {type EditorType} from '../types'
 
-enum ActionType {
-	ADD_SLIDE = 'addSlide',
-	REMOVE_SLIDE = 'removeSlide',
-	SET_SLIDE_INDEX = 'setSlideIndex',
+enum ACTION_TYPE {
+	addSlide = 'addSlide',
+	removeSlide = 'removeSlide',
+	setSlideIndex = 'setSlideIndex',
 
-	SET_SELECTION = 'setSelection',
-	DESELECT = 'deselect',
+	setSelection = 'setSelection',
+	deselect = 'deselect',
 
-	ADD_TEXT = 'addText',
-	ADD_PICTURE = 'addPicture',
-	CHANGE_OBJECT_POSITION = 'changeObjectPosition',
-	CHANGE_OBJECT_SIZE = 'changeObjectSize',
+	addText = 'addText',
+	addPicture = 'addPicture',
+	changeObjectPosition = 'changeObjectPosition',
+	changeObjectSize = 'changeObjectSize',
 
-	SET_EDITOR = 'setEditor',
-	CHANGE_NAME = 'changePresentationName',
+	setEditor = 'setEditor',
+	changeName = 'changePresentationName',
 }
 
 type AddSlideAction = {
-	type: ActionType.ADD_SLIDE,
+	type: ACTION_TYPE.addSlide,
 }
 
 type RemoveSlideAction = {
-	type: ActionType.REMOVE_SLIDE,
+	type: ACTION_TYPE.removeSlide,
 }
 
 type SetSlideIndexAction = {
-	type: ActionType.SET_SLIDE_INDEX,
+	type: ACTION_TYPE.setSlideIndex,
 	payload: {
 		id: string,
 		index: number,
@@ -34,7 +34,7 @@ type SetSlideIndexAction = {
 }
 
 type SetSelectionAction = {
-	type: ActionType.SET_SELECTION,
+	type: ACTION_TYPE.setSelection,
 	payload: {
 		type: 'slide' | 'object',
 		id: string,
@@ -42,30 +42,30 @@ type SetSelectionAction = {
 }
 
 type SetEditorAction = {
-	type: ActionType.SET_EDITOR,
+	type: ACTION_TYPE.setEditor,
 	payload: EditorType,
 }
 
 type DeselectAction = {
-	type: ActionType.DESELECT,
+	type: ACTION_TYPE.deselect,
 	payload: {type: 'slide' | 'object'},
 }
 
 type AddTextAction = {
-	type: ActionType.ADD_TEXT,
+	type: ACTION_TYPE.addText,
 }
 
 type AddPictureAction = {
-	type: ActionType.ADD_PICTURE,
+	type: ACTION_TYPE.addPicture,
 }
 
 type ChangePresentationNameAction = {
-	type: ActionType.CHANGE_NAME,
+	type: ACTION_TYPE.changeName,
 	payload: {name: string},
 }
 
 type ChangeObjectPositionAction = {
-	type: ActionType.CHANGE_OBJECT_POSITION,
+	type: ACTION_TYPE.changeObjectPosition,
 	payload: {
 		id: string,
 		position: {
@@ -76,7 +76,7 @@ type ChangeObjectPositionAction = {
 }
 
 type ChangeObjectSizeAction = {
-	type: ActionType.CHANGE_OBJECT_SIZE,
+	type: ACTION_TYPE.changeObjectSize,
 	payload: {
 		slideId: string,
 		objId: string,
@@ -100,7 +100,7 @@ type EditorAction =
     | ChangeObjectPositionAction
     | ChangeObjectSizeAction
 
-export {ActionType}
+export {ACTION_TYPE}
 export type {
 	SetSelectionAction,
 	DeselectAction,

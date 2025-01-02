@@ -21,12 +21,12 @@ function initHistory(store: Store<EditorType>): HistoryType {
 		if (editor.presentation === previousEditor.presentation) {
 			return
 		}
-		if (!undoStack.length || previousEditor.presentation != editor.presentation) {
-			if (editor == getLastItem(undoStack)) {
+		if (!undoStack.length || previousEditor.presentation !== editor.presentation) {
+			if (editor === getLastItem(undoStack)) {
 				undoStack.pop()
 				redoStack.push(previousEditor)
 			}
-			else if (editor == getLastItem(redoStack)) {
+			else if (editor === getLastItem(redoStack)) {
 				redoStack.pop()
 				undoStack.push(previousEditor)
 			}

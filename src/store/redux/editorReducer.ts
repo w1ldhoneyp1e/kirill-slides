@@ -12,31 +12,32 @@ import {
 	setSlideIndex,
 } from '../methods'
 import {type EditorType} from '../types'
-import {type EditorAction, ActionType} from './actions'
+import {type EditorAction, ACTION_TYPE} from './actions'
 
+// eslint-disable-next-line @typescript-eslint/default-param-last
 function editorReducer(editor: EditorType = defaultEditor, action: EditorAction): EditorType {
 	switch (action.type) {
-		case ActionType.ADD_SLIDE:
+		case ACTION_TYPE.addSlide:
 			return addSlide(editor)
-		case ActionType.REMOVE_SLIDE:
+		case ACTION_TYPE.removeSlide:
 			return deleteSlide(editor)
-		case ActionType.SET_SLIDE_INDEX:
+		case ACTION_TYPE.setSlideIndex:
 			return setSlideIndex(editor, action)
-		case ActionType.SET_SELECTION:
+		case ACTION_TYPE.setSelection:
 			return setSelection(editor, action)
-		case ActionType.SET_EDITOR:
+		case ACTION_TYPE.setEditor:
 			return action.payload
-		case ActionType.DESELECT:
+		case ACTION_TYPE.deselect:
 			return deselect(editor, action)
-		case ActionType.ADD_TEXT:
+		case ACTION_TYPE.addText:
 			return addText(editor)
-		case ActionType.ADD_PICTURE:
+		case ACTION_TYPE.addPicture:
 			return addPicture(editor)
-		case ActionType.CHANGE_NAME:
+		case ACTION_TYPE.changeName:
 			return changePresentationName(editor, action)
-		case ActionType.CHANGE_OBJECT_POSITION:
+		case ACTION_TYPE.changeObjectPosition:
 			return changeObjectPosition(editor, action)
-		case ActionType.CHANGE_OBJECT_SIZE:
+		case ACTION_TYPE.changeObjectSize:
 			return changeObjectSize(editor, action)
 		default:
 			return editor

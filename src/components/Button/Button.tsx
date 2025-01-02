@@ -3,44 +3,38 @@ import styles from './Button.module.css'
 
 type ButtonType = 'icon' | 'icon-text' | 'text' | 'text-icon' | 'icon-icon'
 
-type ButtonProps =
-    {
-    	disable?: boolean,
-    } & (
-        | {
-        	type: 'icon',
-        	onClick: () => void,
-        	icon: ReactNode,
-        }
-        | {
-        	type: 'icon-text',
-        	onClick: () => void,
-        	icon: ReactNode,
-        	text: string,
-        }
-        | {
-        	type: 'text-icon',
-        	onClick: () => void,
-        	onIconClick?: () => void,
-        	icon: ReactNode,
-        	text: string,
-        }
-        | {
-        	type: 'text',
-        	onClick: () => void,
-        	text: string,
-        }
-        | {
-        	type: 'icon-icon',
-        	firstIcon: {
-        		icon: ReactNode,
-        		onClick: () => void,
-        	},
-        	secondIcon: {
-        		icon: ReactNode,
-        		onClick: () => void,
-        	},
-        }
+type ButtonProps = {
+	disable?: boolean,
+} & ({
+	type: 'icon',
+	onClick: () => void,
+	icon: ReactNode,
+} | {
+	type: 'icon-text',
+	onClick: () => void,
+	icon: ReactNode,
+	text: string,
+} | {
+	type: 'text-icon',
+	onClick: () => void,
+	onIconClick?: () => void,
+	icon: ReactNode,
+	text: string,
+} | {
+	type: 'text',
+	onClick: () => void,
+	text: string,
+} | {
+	type: 'icon-icon',
+	firstIcon: {
+		icon: ReactNode,
+		onClick: () => void,
+	},
+	secondIcon: {
+		icon: ReactNode,
+		onClick: () => void,
+	},
+}
     )
 
 const Button = (props: ButtonProps) => {

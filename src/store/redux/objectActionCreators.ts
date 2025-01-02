@@ -1,11 +1,11 @@
-import {ActionType} from './actions'
+import {ACTION_TYPE} from './actions'
 
 function addText() {
-	return {type: ActionType.ADD_TEXT}
+	return {type: ACTION_TYPE.addText}
 }
 
 function addPicture() {
-	return {type: ActionType.ADD_PICTURE}
+	return {type: ACTION_TYPE.addPicture}
 }
 
 function changeObjectPosition({
@@ -19,7 +19,7 @@ function changeObjectPosition({
 	},
 }) {
 	return {
-		type: ActionType.CHANGE_OBJECT_POSITION,
+		type: ACTION_TYPE.changeObjectPosition,
 		payload: {
 			id,
 			position: {
@@ -43,7 +43,7 @@ function changeObjectSize({
 	},
 }) {
 	return {
-		type: ActionType.CHANGE_OBJECT_SIZE,
+		type: ACTION_TYPE.changeObjectSize,
 		payload: {
 			slideId,
 			objId,

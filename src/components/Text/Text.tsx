@@ -93,16 +93,16 @@ function Text({
 				{text.value}
 				{isSelected
                 && scale === 1
-                && (
-                	<ResizeFrame
-                		textRef={textRef}
-                		parentRef={parentRef}
-                		objId={text.id}
-                		scale={scale}
-                		onStartResize={() => {}}
-                		onStopResize={() => {}}
-                	/>
-                )}
+				&& (
+					<ResizeFrame
+						textRef={textRef}
+						parentRef={parentRef}
+						objId={text.id}
+						scale={scale}
+						onStartResize={() => {}}
+						onStopResize={() => {}}
+					/>
+				)}
 			</div>
 		</>
 

@@ -1,7 +1,7 @@
 import {useAppSelector} from '../../hooks/useAppSelector'
 
 const useHandleExport = () => {
-	const editor = useAppSelector(editor => editor)
+	const editor = useAppSelector(_editor => _editor)
 	return () => {
 		const jsonEditor = JSON.stringify(editor.presentation)
 		const blob = new Blob([jsonEditor], {type: 'application/json'})

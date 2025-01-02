@@ -6,7 +6,7 @@ import {
 } from 'react'
 import {type PositionType} from '../../store/types'
 
-type useDragAndDropProps = {
+type UseDragAndDropProps = {
 	ref: RefObject<HTMLDivElement>,
 	parentRef: RefObject<HTMLDivElement>,
 	onMouseDown?: () => void,
@@ -18,7 +18,7 @@ function useDragAndDrop({
 	parentRef,
 	onMouseDown,
 	onMouseUp,
-}: useDragAndDropProps): PositionType | null {
+}: UseDragAndDropProps): PositionType | null {
 	const [delta, setDelta] = useState<PositionType | null>(null)
 	const deltaRef = useRef<PositionType | null>(null)
 	const startPos = useRef<PositionType | null>(null)
@@ -32,14 +32,14 @@ function useDragAndDrop({
 
 			const parentRect = parentRef.current.getBoundingClientRect()
 
-			const delta = {
+			const _delta = {
 				x: e.pageX - startPos.current.x,
 				y: e.pageY - startPos.current.y,
 			}
 
 			const newDelta = {
-				x: modelStartPos.current.x + delta.x - parentRect.left,
-				y: modelStartPos.current.y + delta.y - parentRect.top,
+				x: modelStartPos.current.x + _delta.x - parentRect.left,
+				y: modelStartPos.current.y + _delta.y - parentRect.top,
 			}
 
 			deltaRef.current = newDelta

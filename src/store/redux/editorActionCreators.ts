@@ -1,16 +1,16 @@
 import {type EditorType} from '../types'
-import {type EditorAction, ActionType} from './actions'
+import {type EditorAction, ACTION_TYPE} from './actions'
 
 function setEditor(newEditor: EditorType): EditorAction {
 	return {
-		type: ActionType.SET_EDITOR,
+		type: ACTION_TYPE.setEditor,
 		payload: newEditor,
 	}
 }
 
 function changePresentationName(name: string) {
 	return {
-		type: ActionType.CHANGE_NAME,
+		type: ACTION_TYPE.changeName,
 		payload: {name},
 	}
 }

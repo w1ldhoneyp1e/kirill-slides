@@ -14,11 +14,12 @@ const useHandleImport = () => {
 				const reader = new FileReader()
 				reader.onload = e => {
 					try {
-						const importedPresentation: PresentationType = JSON.parse(e.target!.result as string)
+						const importedPresentation: PresentationType = e.target
+							? JSON.parse(e.target.result as string)
+							: null
 
 						const isValid = validateDocument(importedPresentation)
 						if (!isValid) {
-							alert('Ошибка: данные не прошли валидацию.')
 							return
 						}
 
@@ -31,11 +32,8 @@ const useHandleImport = () => {
 						}
 
 						setEditor(editor)
-
-						alert('Импорт завершен успешно.')
 					}
 					catch (error) {
-						alert('Ошибка при импорте данных.')
 						console.error(error)
 					}
 				}

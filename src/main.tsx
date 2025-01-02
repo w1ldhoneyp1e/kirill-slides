@@ -1,11 +1,10 @@
 import {StrictMode} from 'react'
 import {createRoot} from 'react-dom/client'
 import {Provider} from 'react-redux'
-import {store} from './store/redux/store.ts'
 import App from './App'
-import './index.css'
 import {loadFromLocalStorage} from './store/localStorage/loadFromLocalStorage'
 import {setEditor} from './store/redux/editorActionCreators.ts'
+import {store} from './store/redux/store.ts'
 import {initHistory} from './utils/history.ts'
 
 const getEditorFromLocalStorage = () => {
@@ -15,6 +14,7 @@ const getEditorFromLocalStorage = () => {
 	}
 }
 
+// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const root = createRoot(document.getElementById('root')!)
 
 const render = () => {

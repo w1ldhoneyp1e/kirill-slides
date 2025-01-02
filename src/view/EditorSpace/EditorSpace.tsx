@@ -7,7 +7,7 @@ function EditorSpace() {
 	const slides = useAppSelector((editor => editor.presentation.slides))
 	const selectedSlideId = useAppSelector((editor => editor.selection.selectedSlideId))
 	const {deselect} = useAppActions()
-	const slide = slides.find(slide => slide.id === selectedSlideId)!
+	const slide = slides.find(_slide => _slide.id === selectedSlideId)
 	return slide
 		? (
 			<div

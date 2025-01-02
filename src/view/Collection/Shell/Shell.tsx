@@ -56,8 +56,8 @@ function Shell({
 	}, [slideRef])
 
 	useEffect(() => {
-		const calculateTargetIndex = (delta: PositionType | null): number => {
-			if (!delta || !heightRef.current) {
+		const calculateTargetIndex = (_delta: PositionType | null): number => {
+			if (!_delta || !heightRef.current) {
 				return slides.findIndex(s => s.id === slide.id)
 			}
 
@@ -65,10 +65,10 @@ function Shell({
 			const indexPositionY = (heightRef.current + gap) * currentIndex
 			let newTargetIndex = currentIndex
 
-			if (delta.y - indexPositionY > heightRef.current + gap) {
+			if (_delta.y - indexPositionY > heightRef.current + gap) {
 				newTargetIndex = currentIndex + 1
 			}
-			else if (delta.y - indexPositionY < -(heightRef.current + gap)) {
+			else if (_delta.y - indexPositionY < -(heightRef.current + gap)) {
 				newTargetIndex = currentIndex - 1
 			}
 
@@ -141,16 +141,16 @@ function Shell({
 		<>
 			{onDrag
             && (targetIndex === slides.findIndex(s => s.id === slide.id))
-            && (
-            	<div
-            		className={styles.placeholder}
-            		style={{
-            			height: heightRef.current,
-            			width: '100%',
-            			background: 'transparent',
-            		}}
-            	/>
-            )}
+			&& (
+				<div
+					className={styles.placeholder}
+					style={{
+						height: heightRef.current,
+						width: '100%',
+						background: 'transparent',
+					}}
+				/>
+			)}
 			<div
 				className={styles.shell}
 				ref={slideRef}

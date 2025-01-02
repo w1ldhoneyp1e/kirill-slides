@@ -19,14 +19,13 @@ function Toolbar() {
 	const {
 		addSlide, addText, addPicture, setEditor,
 	} = useAppActions()
-	const thisSlide = slides.find(slide => slide.id === selectedSlideId)!
+	const thisSlide = slides.find(slide => slide.id === selectedSlideId)
 	const background = thisSlide
 		? thisSlide.background
 		: null
-	const value
-		= background?.type === 'solid'
-			? background?.hexColor
-			: background?.src
+	const value = background?.type === 'solid'
+		? background?.hexColor
+		: background?.src
 
 	const history = React.useContext(HistoryContext)
 
