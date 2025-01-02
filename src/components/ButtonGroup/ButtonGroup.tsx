@@ -4,7 +4,7 @@ import {
 import styles from './ButtonGroup.module.css'
 
 type ButtonGroupProps = {
-    items: ButtonProps[]; // Массив объектов с пропсами для Button
+    items: ButtonProps[]
 }
 
 const ButtonGroup = ({ items }: ButtonGroupProps) => {

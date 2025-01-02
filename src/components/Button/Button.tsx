@@ -5,7 +5,7 @@ type ButtonType = 'icon' | 'icon-text' | 'text' | 'text-icon' | 'icon-icon';
 
 type ButtonProps =
     {
-        disable?: boolean; // Флаг отключения
+        disable?: boolean,
     } & (
         | {
               type: 'icon';
@@ -47,9 +47,6 @@ const Button = (props: ButtonProps) => {
     const {
         type, disable,
     } = props
-
-    if (disable)
-        console.log('disabled')
 
     switch (type) {
     case 'icon':

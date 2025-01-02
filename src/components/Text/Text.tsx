@@ -7,7 +7,7 @@ import {
     TextType, PositionType,
 } from '../../store/types'
 import { useDragAndDrop } from '../../view/hooks/useDragAndDrop'
-import { useBoundedPosition } from '../../view/hooks/useBoundedPosition'  // Импортируем кастомный хук
+import { useBoundedPosition } from '../../view/hooks/useBoundedPosition'
 import styles from './Text.module.css'
 import { ResizeFrame } from '../ResizeFrame/ResizeFrame'
 import { useAppSelector } from '../../view/hooks/useAppSelector'

@@ -7,7 +7,7 @@ import { useAppActions } from '../hooks/useAppActions'
 function Collection() {
     const slides = useAppSelector((editor => editor.presentation.slides))
     const {setSelection} = useAppActions()
-    const parentRef = useRef<HTMLDivElement>(null) // Ссылка на родительский контейнер
+    const parentRef = useRef<HTMLDivElement>(null)
     return (
         <div
             className={styles.collection}

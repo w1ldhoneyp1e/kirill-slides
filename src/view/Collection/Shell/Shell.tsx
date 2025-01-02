@@ -60,7 +60,7 @@ function Shell({
     useEffect(() => {
         const calculateTargetIndex = (delta: PositionType | null): number => {
             if (!delta || !heightRef.current) {
-                return slides.findIndex((s) => s.id === slide.id) // Return current index if no delta or height
+                return slides.findIndex((s) => s.id === slide.id)
             }
 
             const currentIndex = slides.findIndex((s) => s.id === slide.id)
