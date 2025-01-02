@@ -1,22 +1,18 @@
-import {
-    Button, ButtonProps,
-} from '../Button/Button'
+import {type ButtonProps, Button} from '../Button/Button'
 import styles from './ButtonGroup.module.css'
 
 type ButtonGroupProps = {
-    items: ButtonProps[]
+	items: ButtonProps[],
 }
 
-const ButtonGroup = ({ items }: ButtonGroupProps) => {
-    return (
-        <div className={styles.buttonGroup}>
-            {items.map((itemProps, index) => (
-                <div key={index}>
-                    <Button {...itemProps} /> {/* Передаем пропсы для Button */}
-                </div>
-            ))}
-        </div>
-    )
-}
+const ButtonGroup = ({items}: ButtonGroupProps) => (
+	<div className={styles.buttonGroup}>
+		{items.map((itemProps, index) => (
+			<div key={index}>
+				<Button {...itemProps} /> {/* Передаем пропсы для Button */}
+			</div>
+		))}
+	</div>
+)
 
-export { ButtonGroup }
+export {ButtonGroup}

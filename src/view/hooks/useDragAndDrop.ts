@@ -1,90 +1,95 @@
 import {
-    RefObject, useEffect, useRef, useState,
+	type RefObject,
+	useEffect,
+	useRef,
+	useState,
 } from 'react'
-import { PositionType } from '../../store/types'
+import {type PositionType} from '../../store/types'
 
 type useDragAndDropProps = {
-    ref: RefObject<HTMLDivElement>,
-    parentRef: RefObject<HTMLDivElement>,
-    onMouseDown?: () => void,
-    onMouseUp?: (delta: PositionType) => void,
+	ref: RefObject<HTMLDivElement>,
+	parentRef: RefObject<HTMLDivElement>,
+	onMouseDown?: () => void,
+	onMouseUp?: (delta: PositionType) => void,
 }
 
 function useDragAndDrop({
-    ref,
-    parentRef,
-    onMouseDown,
-    onMouseUp,
+	ref,
+	parentRef,
+	onMouseDown,
+	onMouseUp,
 }: useDragAndDropProps): PositionType | null {
-    const [delta, setDelta] = useState<PositionType | null>(null)
-    const deltaRef = useRef<PositionType | null>(null)
-    const startPos = useRef<PositionType | null>(null)
-    const modelStartPos = useRef<PositionType | null>(null)
+	const [delta, setDelta] = useState<PositionType | null>(null)
+	const deltaRef = useRef<PositionType | null>(null)
+	const startPos = useRef<PositionType | null>(null)
+	const modelStartPos = useRef<PositionType | null>(null)
 
-    useEffect(() => {
-        const handleMouseMove = (e: MouseEvent) => {
-            if (!startPos.current || !modelStartPos.current || !parentRef.current) return
+	useEffect(() => {
+		const handleMouseMove = (e: MouseEvent) => {
+			if (!startPos.current || !modelStartPos.current || !parentRef.current) {
+				return
+			}
 
-            const parentRect = parentRef.current.getBoundingClientRect()
+			const parentRect = parentRef.current.getBoundingClientRect()
 
-            const delta = {
-                x: e.pageX - startPos.current.x,
-                y: e.pageY - startPos.current.y,
-            }
+			const delta = {
+				x: e.pageX - startPos.current.x,
+				y: e.pageY - startPos.current.y,
+			}
 
-            const newDelta = {
-                x: modelStartPos.current.x + delta.x - parentRect.left,
-                y: modelStartPos.current.y + delta.y - parentRect.top,
-            }
+			const newDelta = {
+				x: modelStartPos.current.x + delta.x - parentRect.left,
+				y: modelStartPos.current.y + delta.y - parentRect.top,
+			}
 
-            deltaRef.current = newDelta
-            setDelta(newDelta)
-            e.preventDefault()
-        }
+			deltaRef.current = newDelta
+			setDelta(newDelta)
+			e.preventDefault()
+		}
 
-        const handleMouseUp = () => {
-            document.removeEventListener('mousemove', handleMouseMove)
-            document.removeEventListener('mouseup', handleMouseUp)
+		const handleMouseUp = () => {
+			document.removeEventListener('mousemove', handleMouseMove)
+			document.removeEventListener('mouseup', handleMouseUp)
 
-            if (onMouseUp && deltaRef.current !== null) {
-                onMouseUp(deltaRef.current)
-            }
-        }
-        const handleMouseDown = (e: MouseEvent): void => {
-            if (onMouseDown) {
-                onMouseDown()
-            }
-            startPos.current = {
-                x: e.pageX,
-                y: e.pageY,
-            }
-            modelStartPos.current = ref.current
-                ? {
-                    x: ref.current.getBoundingClientRect().left,
-                    y: ref.current.getBoundingClientRect().top,
-                }
-                : {
-                    x: 0,
-                    y: 0,
-                }
+			if (onMouseUp && deltaRef.current !== null) {
+				onMouseUp(deltaRef.current)
+			}
+		}
+		const handleMouseDown = (e: MouseEvent): void => {
+			if (onMouseDown) {
+				onMouseDown()
+			}
+			startPos.current = {
+				x: e.pageX,
+				y: e.pageY,
+			}
+			modelStartPos.current = ref.current
+				? {
+					x: ref.current.getBoundingClientRect().left,
+					y: ref.current.getBoundingClientRect().top,
+				}
+				: {
+					x: 0,
+					y: 0,
+				}
 
-            document.addEventListener('mousemove', handleMouseMove)
-            document.addEventListener('mouseup', handleMouseUp)
-            e.preventDefault()
-        }
+			document.addEventListener('mousemove', handleMouseMove)
+			document.addEventListener('mouseup', handleMouseUp)
+			e.preventDefault()
+		}
 
-        const element = ref.current
-        if (element) {
-            element.addEventListener('mousedown', handleMouseDown)
-        }
-        return () => {
-            if (element) {
-                element.removeEventListener('mousedown', handleMouseDown)
-            }
-        }
-    }, [onMouseDown, onMouseUp, parentRef, ref])
+		const element = ref.current
+		if (element) {
+			element.addEventListener('mousedown', handleMouseDown)
+		}
+		return () => {
+			if (element) {
+				element.removeEventListener('mousedown', handleMouseDown)
+			}
+		}
+	}, [onMouseDown, onMouseUp, parentRef, ref])
 
-    return delta
+	return delta
 }
 
-export { useDragAndDrop }
+export {useDragAndDrop}

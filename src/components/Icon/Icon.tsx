@@ -1,4 +1,4 @@
-import { ReactNode } from 'react'
+import {type ReactNode} from 'react'
 import styles from './Icon.module.css'
 
 type IconProps = {
@@ -8,21 +8,19 @@ type IconProps = {
 }
 
 const Icon = ({
-    width,
-    height,
-    children,
-}: IconProps) => {
-    return (
-        <svg
-            className={styles.svgElement}
-            width={width}
-            height={height}
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-        >
-            {children}
-        </svg>
-    )
-}
+	width,
+	height,
+	children,
+}: IconProps) => (
+	<svg
+		className={styles.svgElement}
+		width={width}
+		height={height}
+		viewBox="0 0 24 24"
+		xmlns="http://www.w3.org/2000/svg"
+	>
+		{children}
+	</svg>
+)
 
 export {Icon}

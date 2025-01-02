@@ -1,14 +1,14 @@
-import { Middleware } from 'redux'
+import {type Middleware} from 'redux'
 
 const LOCAL_STORAGE_KEY = 'editor'
 
 const saveToLocalStorage: Middleware = store => next => action => {
-    const result = next(action)
+	const result = next(action)
 
-    const stateToSave = store.getState()
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(stateToSave))
+	const stateToSave = store.getState()
+	localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(stateToSave))
 
-    return result
+	return result
 }
 
 export {saveToLocalStorage}

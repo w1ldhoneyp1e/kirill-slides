@@ -1,7 +1,5 @@
-import {
-    TypedUseSelectorHook, useSelector,
-} from 'react-redux'
-import { editorReducer } from '../../store/redux/editorReducer'
+import {type TypedUseSelectorHook, useSelector} from 'react-redux'
+import {type editorReducer} from '../../store/redux/editorReducer'
 
 // Выведение типа `RootState` из хранилища
 type RootState = ReturnType<typeof editorReducer>

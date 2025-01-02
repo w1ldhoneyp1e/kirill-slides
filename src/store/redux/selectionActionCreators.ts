@@ -1,32 +1,34 @@
 import {
-    ActionType, DeselectAction, SetSelectionAction,
+	type DeselectAction,
+	type SetSelectionAction,
+	ActionType,
 } from './actions'
 
 type SelectionProps = {
-    type: 'slide' | 'object',
-    id: string,
+	type: 'slide' | 'object',
+	id: string,
 }
 
 function setSelection({
-    type,
-    id,
+	type,
+	id,
 }: SelectionProps): SetSelectionAction {
-    return {
-        type: ActionType.SET_SELECTION,
-        payload: {
-            type: type,
-            id: id,
-        },
-    }
+	return {
+		type: ActionType.SET_SELECTION,
+		payload: {
+			type,
+			id,
+		},
+	}
 }
 
 function deselect({type}: {type: 'slide' | 'object'}): DeselectAction {
-    return {
-        type: ActionType.DESELECT,
-        payload: {type: type},
-    }
+	return {
+		type: ActionType.DESELECT,
+		payload: {type},
+	}
 }
 
 export {
-    setSelection, deselect,
+	setSelection, deselect,
 }

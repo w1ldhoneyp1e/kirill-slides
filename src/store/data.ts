@@ -1,43 +1,43 @@
+import {getDefaultBackground, getUID} from './methods'
 import {
-    getUID, getDefaultBackground,
-} from './methods'
-import {
-    SlideType, PresentationType, EditorType,
+	type EditorType,
+	type PresentationType,
+	type SlideType,
 } from './types'
 
 const slides: SlideType[] = [
-    {
-        id: getUID(),
-        contentObjects: [],
-        background: getDefaultBackground(),
-        position: null,
-    },
-    {
-        id: getUID(),
-        contentObjects: [],
-        background: getDefaultBackground(),
-        position: null,
-    },
-    {
-        id: getUID(),
-        contentObjects: [],
-        background: getDefaultBackground(),
-        position: null,
-    },
+	{
+		id: getUID(),
+		contentObjects: [],
+		background: getDefaultBackground(),
+		position: null,
+	},
+	{
+		id: getUID(),
+		contentObjects: [],
+		background: getDefaultBackground(),
+		position: null,
+	},
+	{
+		id: getUID(),
+		contentObjects: [],
+		background: getDefaultBackground(),
+		position: null,
+	},
 ]
 
 const presentation: PresentationType = {
-    id: getUID(),
-    name: 'Новая презентация',
-    slides: slides,
+	id: getUID(),
+	name: 'Новая презентация',
+	slides,
 }
 
 const defaultEditor: EditorType = {
-    presentation: presentation,
-    selection: {
-        selectedSlideId: '',
-        selectedObjIds: [],
-    },
+	presentation,
+	selection: {
+		selectedSlideId: '',
+		selectedObjIds: [],
+	},
 }
 
 export {defaultEditor}
