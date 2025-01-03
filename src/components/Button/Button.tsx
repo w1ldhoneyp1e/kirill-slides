@@ -1,16 +1,18 @@
-import React, {
+import {
 	type ReactNode,
 	type Ref,
 	forwardRef,
 } from 'react'
 import {joinStyles} from '../../utils/joinStyles'
+import Preloader from '../Preloader/Preloader' // Импортируем компонент прелоадера
 import styles from './Button.module.css'
 
-type ButtonType = 'icon' | 'icon-text' | 'text' | 'text-icon' | 'icon-icon'
+  type ButtonType = 'icon' | 'icon-text' | 'text' | 'text-icon' | 'icon-icon'
 
 type ButtonProps = {
-	disable?: boolean,
+	state: 'default' | 'disabled' | 'loading', // Теперь state обязательный
 	ref?: Ref<HTMLButtonElement>,
+	className?: string, // Добавляем возможность передавать className
 } & ({
 	type: 'icon',
 	onClick: () => void,
@@ -43,22 +45,28 @@ type ButtonProps = {
 })
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
-	const {type, disable} = props
+	const {
+		type, state, className,
+	} = props // теперь className передается через props
 
-	const buttonClass = joinStyles(styles.button, disable && styles.disabled)
+	// Основной класс кнопки с учетом состояния и className
+	const buttonClass = joinStyles(styles.button, state === 'disabled' && styles.disabled, className)
 
+	// Визуализация кнопки в зависимости от типа и состояния
 	switch (type) {
 		case 'icon':
 			return (
 				<button
 					ref={ref}
 					className={joinStyles(buttonClass, styles.buttonIcon)}
-					onClick={!disable
-						? props.onClick
-						: undefined}
-					disabled={disable}
+					onClick={state === 'loading' || state === 'disabled'
+						? undefined
+						: props.onClick}
+					disabled={state === 'disabled'}
 				>
-					{props.icon}
+					{state === 'loading'
+						? <Preloader />
+						: props.icon}
 				</button>
 			)
 
@@ -67,12 +75,14 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
 				<button
 					ref={ref}
 					className={buttonClass}
-					onClick={!disable
-						? props.onClick
-						: undefined}
-					disabled={disable}
+					onClick={state === 'loading' || state === 'disabled'
+						? undefined
+						: props.onClick}
+					disabled={state === 'disabled'}
 				>
-					{props.icon}
+					{state === 'loading'
+						? <Preloader />
+						: props.icon}
 					<span>{props.text}</span>
 				</button>
 			)
@@ -82,15 +92,15 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
 				<button
 					ref={ref}
 					className={buttonClass}
-					onClick={!disable
-						? props.onClick
-						: undefined}
-					disabled={disable}
+					onClick={state === 'loading' || state === 'disabled'
+						? undefined
+						: props.onClick}
+					disabled={state === 'disabled'}
 				>
 					<span>{props.text}</span>
 					<span
 						onClick={e => {
-							if (!disable) {
+							if (state !== 'loading' && state !== 'disabled') {
 								e.stopPropagation()
 								props.onIconClick?.()
 							}
@@ -106,22 +116,24 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
 				<button
 					ref={ref}
 					className={joinStyles(buttonClass, styles.buttonText)}
-					onClick={!disable
-						? props.onClick
-						: undefined}
-					disabled={disable}
+					onClick={state === 'loading' || state === 'disabled'
+						? undefined
+						: props.onClick}
+					disabled={state === 'disabled'}
 				>
-					{props.text}
+					{state === 'loading'
+						? <Preloader />
+						: props.text}
 				</button>
 			)
 
 		case 'icon-icon':
 			return (
-				<div className={joinStyles(styles.buttonIconIcon, disable && styles.disabled)}>
+				<div className={joinStyles(styles.buttonIconIcon, state === 'disabled' && styles.disabled)}>
 					<span
 						className={styles.icon}
 						onClick={e => {
-							if (!disable) {
+							if (state !== 'loading' && state !== 'disabled') {
 								e.stopPropagation()
 								props.firstIcon.onClick()
 							}
@@ -132,7 +144,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
 					<span
 						className={styles.icon}
 						onClick={e => {
-							if (!disable) {
+							if (state !== 'loading' && state !== 'disabled') {
 								e.stopPropagation()
 								props.secondIcon.onClick()
 							}

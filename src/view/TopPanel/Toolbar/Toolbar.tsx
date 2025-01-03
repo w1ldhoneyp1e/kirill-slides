@@ -35,6 +35,7 @@ function Toolbar() {
 	const addImageButton: ButtonProps = {
 		ref: buttonRef,
 		type: 'icon',
+		state: 'default',
 		icon: AddPicture24px,
 		onClick: () => setPopoverOpened(true),
 	}

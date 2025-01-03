@@ -31,6 +31,14 @@ button:disabled {
     box-shadow: -1px 1px 0 var(--color-gray-dark);
 }
 
+.buttonIcon {
+    justify-content: center;
+}
+
+.buttonText {
+    padding-inline: 8px;
+}
+
 .buttonIconIcon {
     display: flex;
     flex-direction: row;
@@ -66,10 +74,42 @@ button:disabled {
     justify-content: center;
 }
 
-.buttonIcon {
-    justify-content: center;
+.disabled {
+    background-color: var(--color-gray-light);
+    border-color: var(--color-gray-light);
+    opacity: 0.5;
+    pointer-events: none;
 }
 
-.buttonText {
-    padding-inline: 8px;
+.button.loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0.7;
+}
+
+.button.loading svg {
+    animation: rotate 1.5s linear infinite;
+}
+
+@keyframes rotate {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.button.loading span {
+    visibility: hidden;
+}
+
+.preloader {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--color-gray-darker);
+    border-top: 2px solid var(--color-soft-blue);
+    border-radius: 50%;
+    animation: rotate 1.5s linear infinite;
 }

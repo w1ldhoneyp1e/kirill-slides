@@ -1,24 +1,22 @@
 import React, {useEffect, useRef} from 'react'
 import {Cross24px} from '../../assets/Cross24px'
-import {RoundedCross24px} from '../../assets/RoundedCross24px'
 import {getUID} from '../../store/methods'
+import {joinStyles} from '../../utils/joinStyles'
 import {Button} from '../Button/Button'
-import Preloader from '../Preloader/Preloader'
-import styles from './PopUp.module.css' // Здесь будут стили для попапа
+import styles from './PopUp.module.css'
 
-// Типы для кнопок
 type ButtonProps = {
 	text: string,
 	onClick: () => void,
-	state?: 'default' | 'disable' | 'loading', // Статус кнопки
+	state?: 'default' | 'disabled' | 'loading',
 }
 
 type PopUpProps = {
-	onClose: () => void, // Функция для закрытия попапа
-	title: string, // Заголовок попапа
-	footer?: ButtonProps[], // Кнопки внизу попапа
-	children: React.ReactNode, // Дочерние элементы
-	className?: string, // Классы для стилизации попапа
+	onClose: () => void,
+	title: string,
+	footer?: ButtonProps[],
+	children: React.ReactNode,
+	className?: string,
 }
 
 const Popup: React.FC<PopUpProps> = ({
@@ -26,7 +24,6 @@ const Popup: React.FC<PopUpProps> = ({
 }) => {
 	const popUpRef = useRef<HTMLDivElement>(null)
 
-	// Закрытие попапа при клике вне его области
 	useEffect(() => {
 		const handleClickOutside = (event: MouseEvent) => {
 			if (popUpRef.current && !popUpRef.current.contains(event.target as Node)) {
@@ -42,33 +39,30 @@ const Popup: React.FC<PopUpProps> = ({
 	}, [onClose])
 
 	return (
-		<div className={`${styles.overlay} ${className}`}>
+		<div className={joinStyles(styles.overlay, className)}>
 			<div
 				className={styles.popup}
 				ref={popUpRef}
 			>
-				<div className={styles.header}>
-					<h2>{title}</h2>
-					<Button
-						type="icon"
-						icon={Cross24px}
-						onClick={onClose}
-					/>
-				</div>
+				<h2 className={styles.title}>{title}</h2>
+				<Button
+					type="icon"
+					icon={Cross24px}
+					state="default"
+					onClick={onClose}
+					className={styles.closeButtonOutside}
+				/>
 				<div className={styles.body}>{children}</div>
 				{footer && (
 					<div className={styles.footer}>
 						{footer.map(button => (
-							<button
+							<Button
 								key={getUID()}
-								className={styles[`button-${button.state || 'default'}`]}
+								type="text"
+								text={button.text}
+								state={button.state || 'default'}
 								onClick={button.onClick}
-								disabled={button.state === 'disable'}
-							>
-								{button.state === 'loading'
-									? <Preloader />
-									: button.text}
-							</button>
+							/>
 						))}
 					</div>
 				)}

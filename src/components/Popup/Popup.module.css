@@ -9,9 +9,9 @@
 	justify-content: center;
 	align-items: center;
 	z-index: 1000;
-}
+  }
   
-.popup {
+  .popup {
 	background-color: white;
 	width: 400px;
 	max-width: 90%;
@@ -19,56 +19,31 @@
 	border-radius: 8px;
 	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 	position: relative;
-	color: var(--color-gray-darker)
-}
+	color: var(--color-gray-darker);
+  }
   
-.header {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-}
+  .title {
+	margin: 0;
+	margin-block-end: 20px;
+  }
   
-.closeButton {
-	background: none;
-	border: none;
-	font-size: 20px;
-	cursor: pointer;
-}
-  
-.body {
+  .body {
 	margin-top: 20px;
-}
+  }
   
-.footer {
+  .footer {
 	margin-top: 20px;
+	gap: 15px;
 	display: flex;
 	justify-content: flex-end;
-}
+  }
   
-button {
-	padding: 10px 15px;
-	margin-left: 10px;
-	border: none;
-	border-radius: 5px;
+  .closeButtonOutside {
+	position: absolute;
+	top: 0; /* Расстояние от верхнего края */
+	right: -40px; /* Расстояние от правого края */
 	cursor: pointer;
-}
-  
-button:disabled {
-	background-color: #ccc;
-}
-  
-button.default {
-	background-color: #007bff;
-	color: white;
-}
-  
-button.loading {
-	background-color: #f0ad4e;
-	color: white;
-}
-  
-button.disable {
-	background-color: #ccc;
-	color: #666;
-}
+	box-shadow: none;
+	z-index: 1;
+  }
   

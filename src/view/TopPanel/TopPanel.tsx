@@ -20,16 +20,19 @@ function TopPanel() {
 			<Button
 				type="text"
 				text="Export"
+				state="default"
 				onClick={() => handleExport()}
 			/>
 			<Button
 				type="text"
 				text="Import"
+				state="default"
 				onClick={() => handleImport()}
 			/>
 			<Button
 				type="text"
 				text="Export to PDF"
+				state="default"
 				onClick={() => exportToPDF(presentation)}
 			/>
 		</div>

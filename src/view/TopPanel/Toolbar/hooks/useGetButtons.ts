@@ -30,6 +30,7 @@ function useGetButtons() {
 
 	const addButton: ButtonProps = {
 		type: 'icon',
+		state: 'default',
 		icon: Plus24px,
 		onClick: addSlide,
 	}
@@ -37,26 +38,32 @@ function useGetButtons() {
 	const undoButton: ButtonProps = {
 		type: 'icon',
 		icon: Undo24px,
+		state: history.undo()
+			? 'default'
+			: 'disabled',
 		onClick: onUndo,
-		disable: !history.undo(),
 	}
 
 	const redoButton: ButtonProps = {
 		type: 'icon',
 		icon: Redo24px,
+		state: history.redo()
+			? 'default'
+			: 'disabled',
 		onClick: onRedo,
-		disable: !history.redo(),
 	}
 
 	const cursorButton: ButtonProps = {
 		type: 'icon',
 		icon: Cursor24px,
+		state: 'default',
 		onClick: () => {},
 	}
 
 	const addTextButton: ButtonProps = {
 		type: 'icon',
 		icon: AddText24px,
+		state: 'default',
 		onClick: addText,
 	}
 
@@ -64,6 +71,7 @@ function useGetButtons() {
 	const backgroundButton: ButtonProps = {
 		type: 'text',
 		text: 'Background',
+		state: 'default',
 		onClick: () => {},
 	}
 
