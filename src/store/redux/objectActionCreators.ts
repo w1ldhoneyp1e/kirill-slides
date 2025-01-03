@@ -4,8 +4,23 @@ function addText() {
 	return {type: ACTION_TYPE.addText}
 }
 
-function addPicture() {
-	return {type: ACTION_TYPE.addPicture}
+function addPicture({
+	src,
+	width,
+	height,
+}: {
+	src: string,
+	width: number,
+	height: number,
+}) {
+	return {
+		type: ACTION_TYPE.addPicture,
+		payload: {
+			src,
+			width,
+			height,
+		},
+	}
 }
 
 function changeObjectPosition({

@@ -1,5 +1,6 @@
 import {useMemo} from 'react'
 import {type PictureType} from '../../store/types'
+import {joinStyles} from '../../utils/joinStyles'
 import {useAppActions} from '../../view/hooks/useAppActions'
 import {useAppSelector} from '../../view/hooks/useAppSelector'
 import styles from './Picture.module.css'
@@ -24,18 +25,14 @@ function Picture({
 	const style = {
 		width: pictureObj.size.width * scale,
 		height: pictureObj.size.height * scale,
-		backgroundImage: `url(${pictureObj.src})`,
 	}
 
 	return (
-		<div
-			className={
-				styles.pictureObj
-                + `${isSelected
-                    ? styles.selected
-                    : ''
-                }`
-			}
+		<img
+			className={joinStyles(styles.picture, isSelected
+				? styles.selected
+				: '')}
+			src={pictureObj.src}
 			style={style}
 			onClick={() => setSelection({
 				type: 'object',

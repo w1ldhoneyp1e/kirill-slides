@@ -1,10 +1,16 @@
-import {type ReactNode} from 'react'
+import React, {
+	type ReactNode,
+	type Ref,
+	forwardRef,
+} from 'react'
+import {joinStyles} from '../../utils/joinStyles'
 import styles from './Button.module.css'
 
 type ButtonType = 'icon' | 'icon-text' | 'text' | 'text-icon' | 'icon-icon'
 
 type ButtonProps = {
 	disable?: boolean,
+	ref?: Ref<HTMLButtonElement>,
 } & ({
 	type: 'icon',
 	onClick: () => void,
@@ -34,21 +40,19 @@ type ButtonProps = {
 		icon: ReactNode,
 		onClick: () => void,
 	},
-}
-    )
+})
 
-const Button = (props: ButtonProps) => {
-	const {
-		type, disable,
-	} = props
+const Button = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
+	const {type, disable} = props
+
+	const buttonClass = joinStyles(styles.button, disable && styles.disabled)
 
 	switch (type) {
 		case 'icon':
 			return (
 				<button
-					className={`${styles.button} ${disable
-? styles.disabled
-: ''}`}
+					ref={ref}
+					className={joinStyles(buttonClass, styles.buttonIcon)}
 					onClick={!disable
 						? props.onClick
 						: undefined}
@@ -61,9 +65,8 @@ const Button = (props: ButtonProps) => {
 		case 'icon-text':
 			return (
 				<button
-					className={`${styles.button} ${disable
-? styles.disabled
-: ''}`}
+					ref={ref}
+					className={buttonClass}
 					onClick={!disable
 						? props.onClick
 						: undefined}
@@ -77,9 +80,8 @@ const Button = (props: ButtonProps) => {
 		case 'text-icon':
 			return (
 				<button
-					className={`${styles.button} ${disable
-? styles.disabled
-: ''}`}
+					ref={ref}
+					className={buttonClass}
 					onClick={!disable
 						? props.onClick
 						: undefined}
@@ -102,9 +104,8 @@ const Button = (props: ButtonProps) => {
 		case 'text':
 			return (
 				<button
-					className={`${styles.button} ${disable
-? styles.disabled
-: ''}`}
+					ref={ref}
+					className={joinStyles(buttonClass, styles.buttonText)}
 					onClick={!disable
 						? props.onClick
 						: undefined}
@@ -116,11 +117,7 @@ const Button = (props: ButtonProps) => {
 
 		case 'icon-icon':
 			return (
-				<div
-					className={`${styles.buttonIconIcon} ${disable
-? styles.disabled
-: ''}`}
-				>
+				<div className={joinStyles(styles.buttonIconIcon, disable && styles.disabled)}>
 					<span
 						className={styles.icon}
 						onClick={e => {
@@ -149,9 +146,7 @@ const Button = (props: ButtonProps) => {
 		default:
 			return <></>
 	}
-}
+})
 
 export {Button}
-export type {
-	ButtonType, ButtonProps,
-}
+export type {ButtonType, ButtonProps}

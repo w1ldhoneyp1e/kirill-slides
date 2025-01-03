@@ -32,7 +32,7 @@ function editorReducer(editor: EditorType = defaultEditor, action: EditorAction)
 		case ACTION_TYPE.addText:
 			return addText(editor)
 		case ACTION_TYPE.addPicture:
-			return addPicture(editor)
+			return addPicture(editor, action)
 		case ACTION_TYPE.changeName:
 			return changePresentationName(editor, action)
 		case ACTION_TYPE.changeObjectPosition:

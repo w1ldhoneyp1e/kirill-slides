@@ -1,6 +1,6 @@
-.pictureObj {
+.picture {
 	position: absolute;
-	background-size: 'cover',
+	object-fit: cover;
 }
 
 .selected {

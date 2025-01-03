@@ -57,6 +57,11 @@ type AddTextAction = {
 
 type AddPictureAction = {
 	type: ACTION_TYPE.addPicture,
+	payload: {
+		src: string,
+		width: number,
+		height: number,
+	},
 }
 
 type ChangePresentationNameAction = {
@@ -109,4 +114,5 @@ export type {
 	ChangePresentationNameAction,
 	ChangeObjectPositionAction,
 	ChangeObjectSizeAction,
+	AddPictureAction,
 }

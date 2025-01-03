@@ -1,4 +1,5 @@
 import {
+	type AddPictureAction,
 	type ChangeObjectPositionAction,
 	type ChangeObjectSizeAction,
 	type ChangePresentationNameAction,
@@ -139,7 +140,30 @@ function addText(editor: EditorType): EditorType {
 	}
 }
 
-function addPicture(editor: EditorType): EditorType {
+function addPicture(editor: EditorType, action: {
+	payload: {
+		src: string,
+		width: number,
+		height: number,
+	},
+}): EditorType {
+	const {
+		src, width, height,
+	} = action.payload
+	const selectedSlideId = editor.selection.selectedSlideId
+
+	if (!selectedSlideId) {
+		console.warn('No slide selected for adding a picture.')
+		return editor
+	}
+
+	const MAX_WIDTH = 841.89
+	const MAX_HEIGHT = 595.28
+
+	const widthRatio = MAX_WIDTH / width
+	const heightRatio = MAX_HEIGHT / height
+	const scale = Math.min(1, widthRatio, heightRatio) // Масштабируем, только если превышены пределы
+
 	const newPic: PictureType = {
 		id: getUID(),
 		position: {
@@ -147,20 +171,21 @@ function addPicture(editor: EditorType): EditorType {
 			y: 0,
 		},
 		size: {
-			width: 200,
-			height: 200,
+			width: width * scale,
+			height: height * scale,
 		},
 		type: 'picture',
-		src: 'placeholder',
+		src,
 	}
 
 	const newSlides = editor.presentation.slides.map(slide =>
-		slide.id === editor.selection.selectedSlideId
+		slide.id === selectedSlideId
 			? {
 				...slide,
 				contentObjects: [...slide.contentObjects, newPic],
 			}
-			: slide)
+			: slide,
+	)
 
 	return {
 		...editor,
