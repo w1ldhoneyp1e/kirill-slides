@@ -1,5 +1,5 @@
 import {useState} from 'react'
-import {API_KEY, FOLDER_ID} from '../../../consts/ApiKey'
+import {API_KEY} from '../../../consts/ApiKey'
 
 const useImageSearch = () => {
 	const [images, setImages] = useState<string[]>([])
@@ -12,7 +12,7 @@ const useImageSearch = () => {
 
 		setInitialized(false)
 		try {
-			const response = await fetch(`https://yandex.ru/images-xml?folderid=${FOLDER_ID}&apikey=${API_KEY}&text=${query}`)
+			const response = await fetch(`http://localhost:3005/api/images?query=${query}&access_token=${API_KEY}`)
 			const data = await response.json()
 			setImages(data.results.map((result: any) => result.urls.small))
 		}
