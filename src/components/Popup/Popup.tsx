@@ -17,10 +17,16 @@ type PopUpProps = {
 	footer?: ButtonProps[],
 	children: React.ReactNode,
 	className?: string,
+	width?: number | string,
 }
 
 const Popup: React.FC<PopUpProps> = ({
-	onClose, title, footer, children, className,
+	onClose,
+	title,
+	footer,
+	children,
+	className,
+	width,
 }) => {
 	const popUpRef = useRef<HTMLDivElement>(null)
 
@@ -39,10 +45,11 @@ const Popup: React.FC<PopUpProps> = ({
 	}, [onClose])
 
 	return (
-		<div className={joinStyles(styles.overlay, className)}>
+		<div className={styles.overlay}>
 			<div
 				className={styles.popup}
 				ref={popUpRef}
+				style={{width}}
 			>
 				<h2 className={styles.title}>{title}</h2>
 				<Button
@@ -52,7 +59,7 @@ const Popup: React.FC<PopUpProps> = ({
 					onClick={onClose}
 					className={styles.closeButtonOutside}
 				/>
-				<div className={styles.body}>{children}</div>
+				<div className={joinStyles(styles.body, className)}>{children}</div>
 				{footer && (
 					<div className={styles.footer}>
 						{footer.map(button => (

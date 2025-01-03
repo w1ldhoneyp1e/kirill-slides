@@ -1,0 +1,13 @@
+.emptyStateContainer {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.text {
+	margin: 0;
+    color: var(--color-gray-darker);
+    font-size: 17px;
+    font-weight: 600;
+}

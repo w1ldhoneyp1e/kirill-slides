@@ -10,7 +10,7 @@ import {type ButtonProps} from '../../../components/Button/Button.tsx'
 import {ButtonGroup} from '../../../components/ButtonGroup/ButtonGroup.tsx'
 import {Divider} from '../../../components/Divider/Divider.tsx'
 import {type PopoverItem, Popover} from '../../../components/Popover/Popover.tsx'
-import {Popup} from '../../../components/Popup/Popup.tsx'
+import {ImageListPopup} from '../../ImageListPopup/ImageListPopup.tsx'
 import {useGetButtons} from './hooks/useGetButtons.ts'
 import {useImageUploader} from './hooks/useImageUploader.ts'
 import styles from './Toolbar.module.css'
@@ -18,7 +18,6 @@ import styles from './Toolbar.module.css'
 function Toolbar() {
 	const [popoverOpened, setPopoverOpened] = useState(false)
 	const [popupOpened, setPopupOpened] = useState(false)
-	const [isLoading, setLoading] = useState(false)
 	const buttonRef = useRef<HTMLButtonElement>(null)
 
 	const {
@@ -38,14 +37,6 @@ function Toolbar() {
 		state: 'default',
 		icon: AddPicture24px,
 		onClick: () => setPopoverOpened(true),
-	}
-
-	const onAccept = () => {
-		setLoading(true)
-		setTimeout(() => {
-			setLoading(false)
-			setPopupOpened(false)
-		}, 2000)
 	}
 
 	const items: PopoverItem[] = useMemo(() => [
@@ -68,6 +59,7 @@ function Toolbar() {
 			},
 		},
 	], [uploadImage])
+
 
 	return (
 		<div className={styles.toolBar}>
@@ -105,28 +97,9 @@ function Toolbar() {
 				/>
 			)}
 			{popupOpened && (
-				<Popup
-					className={styles.popup}
-					title="Test Popup"
+				<ImageListPopup
 					onClose={() => setPopupOpened(false)}
-					footer={[
-						{
-							text: 'Отмена',
-							onClick: () => setPopupOpened(false),
-						},
-						{
-							text: 'Принять',
-							onClick: onAccept,
-							state: isLoading
-								? 'loading'
-								: 'default',
-						},
-					]}
-				>
-					<div>
-						{'Test'}
-					</div>
-				</Popup>
+				/>
 			)}
 		</div>
 	)
