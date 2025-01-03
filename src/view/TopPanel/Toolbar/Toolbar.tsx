@@ -44,9 +44,8 @@ function Toolbar() {
 		setLoading(true)
 		setTimeout(() => {
 			setLoading(false)
-			console.log('Изображение добавлено!')
 			setPopupOpened(false)
-		}, 2000) // Симуляция загрузки
+		}, 2000)
 	}
 
 	const items: PopoverItem[] = useMemo(() => [

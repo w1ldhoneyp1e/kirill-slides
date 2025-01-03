@@ -4,7 +4,7 @@
 	left: 0;
 	right: 0;
 	bottom: 0;
-	background-color: rgba(0, 0, 0, 0.5);
+	background-color: rgba(255, 255, 255, 0.7);
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -12,38 +12,51 @@
   }
   
   .popup {
-	background-color: white;
+	background-color: var(--color-white-background);
 	width: 400px;
 	max-width: 90%;
-	padding: 20px;
 	border-radius: 8px;
-	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: -4px 4px 0 var(--color-gray-dark);
+    border: 3px solid var(--color-gray-dark);
 	position: relative;
 	color: var(--color-gray-darker);
   }
   
   .title {
 	margin: 0;
-	margin-block-end: 20px;
-  }
+	padding: 20px;
+    border-bottom: 2px solid var(--color-gray-dark);
+	border-radius: 8px 8px 0 0;
+	background-color: var(--color-blue-light);
+}
   
   .body {
-	margin-top: 20px;
+	padding: 20px;
   }
   
   .footer {
-	margin-top: 20px;
+	padding: 20px;
+    border-top: 2px solid var(--color-gray-dark);
+	border-radius: 0 0 8px 8px;
 	gap: 15px;
 	display: flex;
 	justify-content: flex-end;
-  }
+	background-color: rgb(245, 245, 245);
+}
   
   .closeButtonOutside {
 	position: absolute;
 	top: 0; /* Расстояние от верхнего края */
-	right: -40px; /* Расстояние от правого края */
+	right: -50px; /* Расстояние от правого края */
 	cursor: pointer;
+    border: 3px solid var(--color-gray-dark);
 	box-shadow: none;
+	width: 35px;
+	height: 35px;
+	border-radius: 6px;
 	z-index: 1;
   }
   
+  .footerButtons {
+    border: 2px solid var(--color-gray-dark);
+  }

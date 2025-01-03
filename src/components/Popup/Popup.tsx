@@ -58,6 +58,7 @@ const Popup: React.FC<PopUpProps> = ({
 						{footer.map(button => (
 							<Button
 								key={getUID()}
+								className={styles.footerButtons}
 								type="text"
 								text={button.text}
 								state={button.state || 'default'}
