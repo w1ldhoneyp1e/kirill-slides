@@ -1,6 +1,6 @@
 .space {
 	margin-block: 20px;
-	margin-inline-end: 20px;
+	margin-inline: 20px;
 	height: calc(100% - 43px);
 	width: calc(100vw - var(--left-part-width));
 	display: flex;
