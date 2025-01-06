@@ -1,7 +1,6 @@
 :root {
 	font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
 	line-height: 1.5;
-	font-weight: 400;
 
 	color-scheme: light dark;
 	color: rgba(255, 255, 255, 0.87);
@@ -43,6 +42,13 @@ body {
 	button {
 		background-color: #f9f9f9;
 	}
+}
+
+@font-face {
+    font-family: '8bitWonder';
+    src: url('./assets/fonts/8bitWonder.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
 }
 
 /* Стили для скроллбара для Chromium-based браузеров */
