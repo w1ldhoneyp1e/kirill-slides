@@ -10,10 +10,14 @@
     min-width: 35px;
     min-height: 35px;
     box-shadow: -2px 2px 0 var(--color-gray-dark);
+    transition: background-color 0.3s ease, box-shadow 0.1s ease;
+    padding-inline: 8px;
+}
+
+.text {
     color: var(--color-gray-darker);
     font-weight: 600;
     font-size: 15px;
-    transition: background-color 0.3s ease, box-shadow 0.1s ease;
 }
 
 .button:hover:not(.disabled) {
@@ -28,10 +32,6 @@
     justify-content: center;
 }
 
-.buttonText {
-    padding-inline: 8px;
-}
-
 .buttonIconIcon {
     display: flex;
     flex-direction: row;
@@ -43,7 +43,6 @@
     min-height: 30px;
     box-shadow: -3px 3px 0 var(--color-gray-dark);
     transition: background-color 0.3s ease, box-shadow 0.1s ease;
-    padding-inline: 8px;
     border: 0;
 }
 
@@ -85,15 +84,6 @@
     animation: rotate 1.5s linear infinite;
 }
 
-@keyframes rotate {
-    0% {
-        transform: rotate(0deg);
-    }
-    100% {
-        transform: rotate(360deg);
-    }
-}
-
 .button.loading span {
     visibility: hidden;
 }
@@ -105,4 +95,32 @@
     border-top: 2px solid var(--color-soft-blue);
     border-radius: 50%;
     animation: rotate 1.5s linear infinite;
+}
+
+.buttonContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    flex-grow: 1;
+}
+
+.innerButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+.leftButton {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.rightButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

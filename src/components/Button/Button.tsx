@@ -33,6 +33,13 @@ type ButtonProps = {
 	onClick: () => void,
 	text: string,
 } | {
+	type: 'icon-text-icon',
+	onClick: () => void,
+	icon: ReactNode,
+	text: string,
+	rightIcon: ReactNode,
+	onRightIconClick: () => void,
+} | {
 	type: 'icon-icon',
 	firstIcon: {
 		icon: ReactNode,
@@ -81,7 +88,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
 					{state === 'loading'
 						? <Preloader />
 						: props.icon}
-					<span>{props.text}</span>
+					<span className={styles.text}>{props.text}</span>
 				</button>
 			)
 
@@ -89,7 +96,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
 			return (
 				<button
 					ref={ref}
-					className={buttonClass}
+					className={joinStyles(buttonClass, styles.text)}
 					onClick={state === 'loading' || state === 'disabled'
 						? undefined
 						: props.onClick}
@@ -113,7 +120,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
 			return (
 				<button
 					ref={ref}
-					className={joinStyles(buttonClass, styles.buttonText)}
+					className={joinStyles(buttonClass, styles.text)}
 					onClick={state === 'loading' || state === 'disabled'
 						? undefined
 						: props.onClick}
@@ -150,6 +157,38 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
 					>
 						{props.secondIcon.icon}
 					</span>
+				</div>
+			)
+
+		case 'icon-text-icon':
+			return (
+				<div className={buttonClass}>
+					<button
+						ref={ref}
+						className={joinStyles(styles.innerButton, styles.leftButton, styles.buttonContainer)}
+						onClick={state === 'loading' || state === 'disabled'
+							? undefined
+							: props.onClick}
+						disabled={state === 'disabled'}
+					>
+						{state === 'loading'
+							? <Preloader />
+							: (
+								<>
+									{props.icon && <span className={styles.icon}>{props.icon}</span>}
+									<span className={styles.text}>{props.text}</span>
+								</>
+							)}
+					</button>
+					<button
+						className={joinStyles(styles.innerButton, styles.rightButton)}
+						onClick={state === 'loading' || state === 'disabled'
+							? undefined
+							: props.onRightIconClick}
+						disabled={state === 'disabled'}
+					>
+						{props.rightIcon}
+					</button>
 				</div>
 			)
 
