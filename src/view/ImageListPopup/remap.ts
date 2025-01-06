@@ -13,6 +13,7 @@ function remap_ApiUnsplashResponse_to_Images(data: UnsplashResponse | null): Ima
 			width,
 			height,
 			url,
+			selected: false,
 		}
 	})
 }

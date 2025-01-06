@@ -1,5 +1,6 @@
 import React from 'react'
 import {getUID} from '../../store/methods'
+import {joinStyles} from '../../utils/joinStyles'
 import {type Image} from '../ImageListPopup/types'
 import styles from './ImageList.module.css'
 
@@ -8,9 +9,14 @@ type ImageItemProps = {
 	onSelect: () => void,
 }
 
-const ImageItem: React.FC<ImageItemProps> = ({image, onSelect}) => (
+const ImageItem: React.FC<ImageItemProps> = ({
+	image,
+	onSelect,
+}) => (
 	<div
-		className={styles.imageItem}
+		className={image.selected
+			? joinStyles(styles.imageItem, styles.selected)
+			: styles.imageItem}
 		onClick={onSelect}
 	>
 		<img

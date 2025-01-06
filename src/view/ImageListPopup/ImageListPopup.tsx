@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import {useCallback, useState} from 'react'
 import {Images24px} from '../../assets/Images24px'
 import {EmptyState} from '../../components/EmptyState/EmptyState'
 import {Popup} from '../../components/Popup/Popup'
@@ -29,7 +29,7 @@ function ImageListPopup({
 		searchImages,
 	} = useImageSearch()
 
-	const onAccept = () => {
+	const onAccept = useCallback(() => {
 		setLoading(true)
 		if (selectedImage === null) {
 			return
@@ -41,11 +41,20 @@ function ImageListPopup({
 		})
 		setLoading(false)
 		onClose()
-	}
+	}, [addPicture, onClose, selectedImage])
 
-	const handleSearch = () => {
+	const onSearch = useCallback(() => {
 		searchImages(searchValue.trim())
-	}
+		setSelectedImage(null)
+	}, [searchImages, searchValue])
+
+	const onSelect = useCallback((image: Image) => {
+		images.forEach(_image => {
+			_image.selected = false
+		})
+		setSelectedImage(image)
+		image.selected = true
+	}, [images])
 
 	return (
 		<Popup
@@ -71,7 +80,7 @@ function ImageListPopup({
 				<SearchField
 					className={styles.searchField}
 					onInput={setSearchValue}
-					onSearch={handleSearch}
+					onSearch={onSearch}
 					placeholder="Мишки в лесу..."
 				/>
 				{(images.length || initialized === false)
@@ -79,7 +88,7 @@ function ImageListPopup({
 						? (
 							<ImageList
 								images={images}
-								onSelect={setSelectedImage}
+								onSelect={onSelect}
 							/>
 						)
 						: <Preloader />
