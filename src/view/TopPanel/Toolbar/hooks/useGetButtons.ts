@@ -84,7 +84,7 @@ function useGetButtons() {
 
 	const backgroundButton: ButtonProps = {
 		type: 'text',
-		text: 'Background',
+		text: 'Фон',
 		state: selectedSlide
 			? 'default'
 			: 'disabled',

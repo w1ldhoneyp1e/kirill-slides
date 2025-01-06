@@ -19,19 +19,19 @@ function TopPanel() {
 			<Toolbar />
 			<Button
 				type="text"
-				text="Export"
+				text="Экспорт"
 				state="default"
 				onClick={() => handleExport()}
 			/>
 			<Button
 				type="text"
-				text="Import"
+				text="Импорт"
 				state="default"
 				onClick={() => handleImport()}
 			/>
 			<Button
 				type="text"
-				text="Export to PDF"
+				text="Экспорт в PDF"
 				state="default"
 				onClick={() => exportToPDF(presentation)}
 			/>
