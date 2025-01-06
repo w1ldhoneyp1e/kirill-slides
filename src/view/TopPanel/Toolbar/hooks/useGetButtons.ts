@@ -7,12 +7,20 @@ import {Undo24px} from '../../../../assets/Undo24px.tsx'
 import {type ButtonProps} from '../../../../components/Button/Button.tsx'
 import {HistoryContext} from '../../../hooks/historyContext.ts'
 import {useAppActions} from '../../../hooks/useAppActions.ts'
+import {useAppSelector} from '../../../hooks/useAppSelector.ts'
 
 function useGetButtons() {
 	const {
-		addSlide, addText, setEditor,
+		addSlide,
+		addText,
+		setEditor,
+		deselect,
 	} = useAppActions()
+	const selection = useAppSelector(editor => editor.selection)
 	const history = useContext(HistoryContext)
+
+	const selectedSlide = selection.selectedSlideId
+	const selectedObjects = selection.selectedObjIds
 
 	const onUndo = useCallback(() => {
 		const newEditor = history.undo()
@@ -56,14 +64,20 @@ function useGetButtons() {
 	const cursorButton: ButtonProps = {
 		type: 'icon',
 		icon: Cursor24px,
-		state: 'default',
-		onClick: () => {},
+		state: selectedObjects.length
+			? 'default'
+			: 'disabled',
+		onClick: () => deselect({
+			type: 'object',
+		}),
 	}
 
 	const addTextButton: ButtonProps = {
 		type: 'icon',
 		icon: AddText24px,
-		state: 'default',
+		state: selectedSlide
+			? 'default'
+			: 'disabled',
 		onClick: addText,
 	}
 
@@ -71,7 +85,9 @@ function useGetButtons() {
 	const backgroundButton: ButtonProps = {
 		type: 'text',
 		text: 'Background',
-		state: 'default',
+		state: selectedSlide
+			? 'default'
+			: 'disabled',
 		onClick: () => {},
 	}
 

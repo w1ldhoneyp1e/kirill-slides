@@ -10,12 +10,15 @@ import {type ButtonProps} from '../../../components/Button/Button.tsx'
 import {ButtonGroup} from '../../../components/ButtonGroup/ButtonGroup.tsx'
 import {Divider} from '../../../components/Divider/Divider.tsx'
 import {type PopoverItem, Popover} from '../../../components/Popover/Popover.tsx'
+import {useAppSelector} from '../../hooks/useAppSelector.ts'
 import {ImageListPopup} from '../../ImageListPopup/ImageListPopup.tsx'
 import {useGetButtons} from './hooks/useGetButtons.ts'
 import {useImageUploader} from './hooks/useImageUploader.ts'
 import styles from './Toolbar.module.css'
 
 function Toolbar() {
+	const selectedSlide = useAppSelector(editor => editor.selection.selectedSlideId)
+
 	const [popoverOpened, setPopoverOpened] = useState(false)
 	const [popupOpened, setPopupOpened] = useState(false)
 	const buttonRef = useRef<HTMLButtonElement>(null)
@@ -34,7 +37,9 @@ function Toolbar() {
 	const addImageButton: ButtonProps = {
 		ref: buttonRef,
 		type: 'icon',
-		state: 'default',
+		state: selectedSlide
+			? 'default'
+			: 'disabled',
 		icon: AddPicture24px,
 		onClick: () => setPopoverOpened(true),
 	}
