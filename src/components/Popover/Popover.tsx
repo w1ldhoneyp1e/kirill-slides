@@ -11,20 +11,20 @@ import styles from './Popover.module.css'
 type PopoverItem =
 {
 	type: 'text',
-	text: string, // Обязательно для 'text'
-	icon?: never, // Исключено для 'text'
+	text: string,
+	icon?: never,
 	onClick: () => void,
 }
 | {
 	type: 'icon',
-	icon: JSX.Element, // Обязательно для 'icon'
-	text?: never, // Исключено для 'icon'
+	icon: JSX.Element,
+	text?: never,
 	onClick: () => void,
 }
 | {
 	type: 'icon-text',
-	text: string, // Обязательно для 'icon-text'
-	icon: JSX.Element, // Обязательно для 'icon-text'
+	text: string,
+	icon: JSX.Element,
 	onClick: () => void,
 }
 
@@ -54,7 +54,6 @@ const Popover: React.FC<PopoverProps> = ({
 	}, [anchorRef])
 
 	useEffect(() => {
-		// Запуск анимации открытия
 		setIsOpen(true)
 
 		const handleClickOutside = (event: MouseEvent) => {
@@ -65,7 +64,7 @@ const Popover: React.FC<PopoverProps> = ({
 			&& !anchorRef.current.contains(event.target as Node)
 			) {
 				setIsOpen(false)
-				setTimeout(onClose, 200) // Ждем завершения анимации перед закрытием
+				setTimeout(onClose, 200)
 			}
 		}
 
@@ -88,7 +87,7 @@ const Popover: React.FC<PopoverProps> = ({
 						onClick={() => {
 							item.onClick()
 							setIsOpen(false)
-							setTimeout(onClose, 200) // Ждем завершения анимации перед закрытием
+							setTimeout(onClose, 200)
 						}}
 					>
 						{item.type === 'icon' && item.icon}

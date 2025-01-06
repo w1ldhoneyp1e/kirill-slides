@@ -1,6 +1,6 @@
 import './App.css'
 import {type HistoryType} from './utils/history'
-import {HistoryContext} from './view/hooks/heistoryContext'
+import {HistoryContext} from './view/hooks/historyContext'
 import {useUndoRedo} from './view/hooks/useUndoRedo'
 import {TopPanel} from './view/TopPanel/TopPanel'
 import {WorkSpace} from './view/WorkSpace/WorkSpace'

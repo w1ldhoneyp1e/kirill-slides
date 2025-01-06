@@ -32,7 +32,7 @@ const useTargetIndex = ({
 			newTargetIndex = currentIndex - 1
 		}
 
-		return Math.max(0, Math.min(newTargetIndex, slides.length - 1)) // Ограничиваем диапазон индексов
+		return Math.max(0, Math.min(newTargetIndex, slides.length - 1))
 	}, [delta, slide.id, slides, heightRef, gap])
 
 	return targetIndex

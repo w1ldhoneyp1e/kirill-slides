@@ -4,15 +4,15 @@ import {
 	forwardRef,
 } from 'react'
 import {joinStyles} from '../../utils/joinStyles'
-import Preloader from '../Preloader/Preloader' // Импортируем компонент прелоадера
+import Preloader from '../Preloader/Preloader'
 import styles from './Button.module.css'
 
   type ButtonType = 'icon' | 'icon-text' | 'text' | 'text-icon' | 'icon-icon'
 
 type ButtonProps = {
-	state: 'default' | 'disabled' | 'loading', // Теперь state обязательный
+	state: 'default' | 'disabled' | 'loading',
 	ref?: Ref<HTMLButtonElement>,
-	className?: string, // Добавляем возможность передавать className
+	className?: string,
 } & ({
 	type: 'icon',
 	onClick: () => void,
@@ -47,12 +47,10 @@ type ButtonProps = {
 const Button = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
 	const {
 		type, state, className,
-	} = props // теперь className передается через props
+	} = props
 
-	// Основной класс кнопки с учетом состояния и className
 	const buttonClass = joinStyles(styles.button, state === 'disabled' && styles.disabled, className)
 
-	// Визуализация кнопки в зависимости от типа и состояния
 	switch (type) {
 		case 'icon':
 			return (

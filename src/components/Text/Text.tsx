@@ -74,24 +74,23 @@ function Text({
 	}
 
 	return (
-		<>
-			<div
-				ref={textRef}
-				className={styles.text}
-				style={style}
-				onClick={e => {
-					if (e.defaultPrevented) {
-						return
-					}
-					setSelection({
-						type: 'object',
-						id: text.id,
-					})
-					e.preventDefault()
-				}}
-			>
-				{text.value}
-				{isSelected
+		<div
+			ref={textRef}
+			className={styles.text}
+			style={style}
+			onClick={e => {
+				if (e.defaultPrevented) {
+					return
+				}
+				setSelection({
+					type: 'object',
+					id: text.id,
+				})
+				e.preventDefault()
+			}}
+		>
+			{text.value}
+			{isSelected
                 && scale === 1
 				&& (
 					<ResizeFrame
@@ -103,8 +102,7 @@ function Text({
 						onStopResize={() => {}}
 					/>
 				)}
-			</div>
-		</>
+		</div>
 
 	)
 }

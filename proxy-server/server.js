@@ -5,7 +5,7 @@ const express = require('express')
 const app = express()
 const port = 3005
 
-app.use(cors()) // добавляем cors middleware
+app.use(cors())
 
 app.get('/api/images', async (req, res) => {
 	const {query, access_token} = req.query

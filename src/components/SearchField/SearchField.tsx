@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from 'react'
-import {Search24px} from '../../assets/Search24px' // Импорт иконки поиска
-import {Button} from '../../components/Button/Button' // Импорт компонента Button
-import styles from './SearchField.module.css' // Подключаем стили
+import {Search24px} from '../../assets/Search24px'
+import {Button} from '../../components/Button/Button'
+import styles from './SearchField.module.css'
 
 type SearchFieldProps = {
 	onInput: (query: string) => void,
 	onSearch: () => void,
-	placeholder?: string, // Добавляем пропс для placeholder
+	placeholder?: string,
 }
 
 const SearchField: React.FC<SearchFieldProps> = ({
@@ -17,7 +17,7 @@ const SearchField: React.FC<SearchFieldProps> = ({
 	const [query, setQuery] = useState('')
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setQuery(e.target.value) // Обновляем состояние при вводе текста
+		setQuery(e.target.value)
 	}
 
 	useEffect(() => {
@@ -30,16 +30,16 @@ const SearchField: React.FC<SearchFieldProps> = ({
 				type="text"
 				value={query}
 				onInput={handleChange}
-				placeholder={placeholder} // Используем переданный placeholder
+				placeholder={placeholder}
 				className={styles.searchInput}
 			/>
 			<Button
 				type="icon"
-				icon={Search24px} // Прокидываем иконку
+				icon={Search24px}
 				state={query.trim()
 					? 'default'
-					: 'disabled'} // Блокируем кнопку, если поле пустое
-				onClick={onSearch} // Обработчик клика для поиска
+					: 'disabled'}
+				onClick={onSearch}
 				className={styles.searchButton}
 			/>
 		</div>

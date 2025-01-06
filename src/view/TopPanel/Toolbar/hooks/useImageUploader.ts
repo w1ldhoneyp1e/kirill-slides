@@ -19,7 +19,6 @@ function useImageUploader() {
 			reader.onload = () => {
 				const img = new Image()
 				img.onload = () => {
-					// Передаём изображение в экшен
 					addPicture({
 						src: reader.result as string,
 						width: img.width,

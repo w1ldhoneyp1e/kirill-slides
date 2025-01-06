@@ -5,7 +5,7 @@ import {Plus24px} from '../../../../assets/Plus24px.tsx'
 import {Redo24px} from '../../../../assets/Redo24px.tsx'
 import {Undo24px} from '../../../../assets/Undo24px.tsx'
 import {type ButtonProps} from '../../../../components/Button/Button.tsx'
-import {HistoryContext} from '../../../hooks/heistoryContext.ts'
+import {HistoryContext} from '../../../hooks/historyContext.ts'
 import {useAppActions} from '../../../hooks/useAppActions.ts'
 
 function useGetButtons() {

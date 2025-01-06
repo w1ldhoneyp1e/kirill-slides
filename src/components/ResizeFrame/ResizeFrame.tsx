@@ -28,7 +28,6 @@ export const ResizeFrame: React.FC<ResizeFrameProps> = ({
 
 	const onResize = () => {}
 
-	// Используем хуки useDragAndDrop только для вызова onMouseUp
 	useDragAndDrop({
 		ref: resizeRefs.topLeft,
 		parentRef,

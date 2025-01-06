@@ -1,6 +1,6 @@
 type DividerProps = {
 	type: 'horizontal' | 'vertical',
-	size: 'full' | 'half' | '3/4', // Размер разделителя
+	size: 'full' | 'half' | '3/4',
 }
 
 const Divider = ({

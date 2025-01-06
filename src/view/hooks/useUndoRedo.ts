@@ -18,8 +18,6 @@ const useUndoRedo = (history: HistoryType) => {
 			if (isUndo) {
 				event.preventDefault()
 				const newEditor = history.undo()
-				console.log('undo done')
-				console.log(newEditor)
 				if (newEditor) {
 					setEditor(newEditor)
 				}

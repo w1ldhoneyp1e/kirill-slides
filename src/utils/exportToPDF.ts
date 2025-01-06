@@ -19,16 +19,13 @@ async function exportToPDF(presentation: PresentationType) {
 
 	const pdfDoc = await PDFDocument.create()
 
-	// Регистрируем fontkit для работы с пользовательскими шрифтами
 	pdfDoc.registerFontkit(fontkit)
 
 	console.log(presentation)
 
-	// Добавляем страницы и элементы
 	for (const slide of presentation.slides) {
 		const page = pdfDoc.addPage([width, height])
 
-		// Обработка фона
 		if (slide.background.type === 'solid') {
 			const {
 				r, g, b,
@@ -52,26 +49,23 @@ async function exportToPDF(presentation: PresentationType) {
 			})
 		}
 
-		// Обработка элементов контента
 		for (const obj of slide.contentObjects) {
 			if (obj.type === 'text') {
 				let font
 				try {
-					font = await pdfDoc.embedFont(obj.fontFamily) // Пытаемся встроить шрифт
+					font = await pdfDoc.embedFont(obj.fontFamily)
 				}
 				catch (e) {
 					console.error(`Ошибка при встраивании шрифта: ${obj.fontFamily}`, e)
-					font = await pdfDoc.embedFont('Helvetica') // Если не получилось, используем шрифт по умолчанию
+					font = await pdfDoc.embedFont('Helvetica')
 				}
 
 				const {
 					r, g, b,
 				} = hexToRgb(obj.hexColor)
 
-				// Инвертируем координату Y для альбомной ориентации
 				const adjustedY = height - obj.position.y
 
-				// Центрируем текст по вертикали (по оси Y)
 				const centerY = adjustedY - obj.size.height / 2 + obj.fontSize / 2
 
 				page.drawText(obj.value, {
