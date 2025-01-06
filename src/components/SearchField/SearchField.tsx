@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import {Search24px} from '../../assets/Search24px'
+import {Search24px} from '../../assets/icons/Search24px'
 import {Button} from '../../components/Button/Button'
 import {joinStyles} from '../../utils/joinStyles'
 import styles from './SearchField.module.css'

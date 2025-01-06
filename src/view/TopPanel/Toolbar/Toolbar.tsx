@@ -3,9 +3,9 @@ import {
 	useRef,
 	useState,
 } from 'react'
-import {AddPicture24px} from '../../../assets/AddPicture24px.tsx'
-import {Laptop24px} from '../../../assets/Laptop24px.tsx'
-import {Search24px} from '../../../assets/Search24px.tsx'
+import {AddPicture24px} from '../../../assets/icons/AddPicture24px.tsx'
+import {Laptop24px} from '../../../assets/icons/Laptop24px.tsx'
+import {Search24px} from '../../../assets/icons/Search24px.tsx'
 import {type ButtonProps} from '../../../components/Button/Button.tsx'
 import {ButtonGroup} from '../../../components/ButtonGroup/ButtonGroup.tsx'
 import {Divider} from '../../../components/Divider/Divider.tsx'

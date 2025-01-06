@@ -1,5 +1,5 @@
 import React, {useEffect, useRef} from 'react'
-import {Cross24px} from '../../assets/Cross24px'
+import {Cross24px} from '../../assets/icons/Cross24px'
 import {getUID} from '../../store/methods'
 import {joinStyles} from '../../utils/joinStyles'
 import {Button} from '../Button/Button'

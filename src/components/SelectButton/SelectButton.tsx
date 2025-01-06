@@ -3,7 +3,7 @@ import {
 	useRef,
 	useState,
 } from 'react'
-import {ChevronDown24px} from '../../assets/ChevronDown24px'
+import {ChevronDown24px} from '../../assets/icons/ChevronDown24px'
 import {Button} from '../Button/Button'
 import {type PopoverItem, Popover} from '../Popover/Popover'
 

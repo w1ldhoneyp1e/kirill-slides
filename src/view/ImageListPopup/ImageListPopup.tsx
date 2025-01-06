@@ -1,5 +1,5 @@
 import {useCallback, useState} from 'react'
-import {Images24px} from '../../assets/Images24px'
+import {Images24px} from '../../assets/icons/Images24px'
 import {EmptyState} from '../../components/EmptyState/EmptyState'
 import {Popup} from '../../components/Popup/Popup'
 import Preloader from '../../components/Preloader/Preloader'
