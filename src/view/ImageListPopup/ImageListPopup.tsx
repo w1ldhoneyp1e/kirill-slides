@@ -8,6 +8,7 @@ import {useAppActions} from '../hooks/useAppActions'
 import {ImageList} from '../ImageList/ImageList'
 import {useImageSearch} from './hooks/useImageSearch'
 import styles from './ImageListPopup.module.css'
+import {type Image} from './types'
 
 type ImageListPopupProps = {
 	onClose: () => void,
@@ -20,7 +21,7 @@ function ImageListPopup({
 
 	const [searchValue, setSearchValue] = useState('')
 	const [isLoading, setLoading] = useState(false)
-	const [selectedImages, setSelectedImages] = useState<string[]>([])
+	const [selectedImage, setSelectedImage] = useState<Image | null>(null)
 
 	const {
 		images,
@@ -30,24 +31,20 @@ function ImageListPopup({
 
 	const onAccept = () => {
 		setLoading(true)
-		selectedImages.forEach(
-			image => {
-				addPicture({
-					src: image,
-					height: 100,
-					width: 100,
-				})
-			})
+		if (selectedImage === null) {
+			return
+		}
+		addPicture({
+			src: selectedImage.url,
+			height: selectedImage.height,
+			width: selectedImage.width,
+		})
 		setLoading(false)
 		onClose()
 	}
 
-	const onSelectImage = (imageUrl: string) => {
-		setSelectedImages(prev => [...prev, imageUrl])
-	}
-
 	const handleSearch = () => {
-		searchImages(searchValue.trim()) // Выполняем запрос только при нажатии кнопки
+		searchImages(searchValue.trim())
 	}
 
 	return (
@@ -81,7 +78,7 @@ function ImageListPopup({
 						? (
 							<ImageList
 								images={images}
-								onSelect={onSelectImage}
+								onSelect={setSelectedImage}
 							/>
 						)
 						: <Preloader />

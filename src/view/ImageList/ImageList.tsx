@@ -1,33 +1,37 @@
 import React from 'react'
 import {getUID} from '../../store/methods'
+import {type Image} from '../ImageListPopup/types'
 
 type ImageItemProps = {
-	imageUrl: string,
+	image: Image,
 	onSelect: () => void,
 }
 
-const ImageItem: React.FC<ImageItemProps> = ({imageUrl, onSelect}) => (
+const ImageItem: React.FC<ImageItemProps> = ({image, onSelect}) => (
 	<div
 		className="image-item"
 		onClick={onSelect}
 	>
 		<img
-			src={imageUrl}
+			src={image.url}
 			alt="image"
 		/>
 	</div>
 )
 
 const ImageList: React.FC<{
-	images: string[],
-	onSelect: (image: string) => void,
-}> = ({images, onSelect}) => (
+	images: Image[],
+	onSelect: (image: Image) => void,
+}> = ({
+	images,
+	onSelect,
+}) => (
 	<div className="image-list">
-		{images.map(imageUrl => (
+		{images.map(image => (
 			<ImageItem
 				key={getUID()}
-				imageUrl={imageUrl}
-				onSelect={() => onSelect(imageUrl)}
+				image={image}
+				onSelect={() => onSelect(image)}
 			/>
 		))}
 	</div>
