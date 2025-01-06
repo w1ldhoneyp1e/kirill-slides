@@ -6,22 +6,37 @@ import {Shell} from './Shell/Shell'
 
 function Collection() {
 	const slides = useAppSelector((editor => editor.presentation.slides))
-	const {setSelection} = useAppActions()
+	const {
+		setSelection,
+		deselect,
+	} = useAppActions()
 	const parentRef = useRef<HTMLDivElement>(null)
 	return (
 		<div
 			className={styles.collection}
 			ref={parentRef}
+			onClick={
+				e => {
+					if (e.defaultPrevented) {
+						return
+					}
+					deselect({type: 'slide'})
+					e.preventDefault()
+				}
+			}
 		>
 			{slides.map(slide => (
 				<Shell
 					slide={slide}
 					key={slide.id}
 					parentRef={parentRef}
-					onClick={() => setSelection({
-						type: 'slide',
-						id: slide.id,
-					})}
+					onClick={e => {
+						setSelection({
+							type: 'slide',
+							id: slide.id,
+						})
+						e.preventDefault()
+					}}
 				/>
 			))}
 		</div>

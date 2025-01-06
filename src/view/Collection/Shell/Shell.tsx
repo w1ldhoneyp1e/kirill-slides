@@ -6,7 +6,7 @@ import {
 	useState,
 } from 'react'
 import {Slide} from '../../../components/Slide/Slide'
-import {type PositionType, type SlideType} from '../../../store/types'
+import {type SlideType} from '../../../store/types'
 import {useAppActions} from '../../hooks/useAppActions'
 import {useAppSelector} from '../../hooks/useAppSelector'
 import {useDragAndDrop} from '../../hooks/useDragAndDrop'
@@ -16,7 +16,7 @@ import styles from './Shell.module.css'
 const SLIDE_SCALE = 0.2
 
 type ShellProps = {
-	onClick: () => void,
+	onClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void,
 	slide: SlideType,
 	parentRef: React.RefObject<HTMLDivElement>,
 }
@@ -136,7 +136,7 @@ function Shell({
 			<div
 				className={styles.shell}
 				ref={slideRef}
-				onClick={onClick}
+				onClick={e => onClick(e)}
 				style={style}
 			>
 				<Slide
