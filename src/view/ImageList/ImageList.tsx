@@ -1,6 +1,7 @@
 import React from 'react'
 import {getUID} from '../../store/methods'
 import {type Image} from '../ImageListPopup/types'
+import styles from './ImageList.module.css'
 
 type ImageItemProps = {
 	image: Image,
@@ -9,7 +10,7 @@ type ImageItemProps = {
 
 const ImageItem: React.FC<ImageItemProps> = ({image, onSelect}) => (
 	<div
-		className="image-item"
+		className={styles.imageItem}
 		onClick={onSelect}
 	>
 		<img
@@ -26,7 +27,7 @@ const ImageList: React.FC<{
 	images,
 	onSelect,
 }) => (
-	<div className="image-list">
+	<div className={styles.imageList}>
 		{images.map(image => (
 			<ImageItem
 				key={getUID()}

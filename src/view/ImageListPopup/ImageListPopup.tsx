@@ -69,6 +69,7 @@ function ImageListPopup({
 		>
 			<>
 				<SearchField
+					className={styles.searchField}
 					onInput={setSearchValue}
 					onSearch={handleSearch}
 					placeholder="Мишки в лесу..."

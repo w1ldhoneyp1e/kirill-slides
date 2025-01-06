@@ -3,7 +3,7 @@ import {Cross24px} from '../../assets/Cross24px'
 import {getUID} from '../../store/methods'
 import {joinStyles} from '../../utils/joinStyles'
 import {Button} from '../Button/Button'
-import styles from './PopUp.module.css'
+import styles from './Popup.module.css'
 
 type ButtonProps = {
 	text: string,

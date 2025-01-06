@@ -1,10 +1,13 @@
 import {useState} from 'react'
 import {API_KEY_UNSPLASH} from '../../../consts/ApiKey'
-import {type Image} from '../types'
+import {remap_ApiUnsplashResponse_to_Images} from '../remap'
+import {type Image, type UnsplashResponse} from '../types'
 
 const useImageSearch = () => {
 	const [images, setImages] = useState<Image[]>([])
-	const [initialized, setInitialized] = useState<boolean | null>(null)
+	const [initialized, setInitialized] = useState(true)
+	const [error, setError] = useState<string | null>(null)
+
 
 	const searchImages = async (query: string) => {
 		if (!query) {
@@ -12,29 +15,35 @@ const useImageSearch = () => {
 		}
 
 		setInitialized(false)
+		setError(null)
+
 		try {
-			const response = await fetch(`https://api.unsplash.com/search/photos?query=${query}`,
+			const response = await fetch(
+				`https://api.unsplash.com/search/photos?query=${query}`,
 				{
 					headers: {
 						Authorization: `Client-ID ${API_KEY_UNSPLASH}`,
 					},
 				},
 			)
-			const data = await response.json()
-			// setImages(data.results.map((result: any) => result.urls.small))
+			const data: UnsplashResponse = await response.json()
+			const remapedData = remap_ApiUnsplashResponse_to_Images(data)
+			console.log('remapedData: ', remapedData)
+
+			setImages(remapedData)
 		}
 		catch (err) {
 			console.error('Ошибка при загрузке картинок:', err)
+			setError('Ошибка при загрузке изображений')
 		}
-		finally {
-			setInitialized(true)
-		}
+		setInitialized(true)
 	}
 
 	return {
 		images,
 		initialized,
 		searchImages,
+		error,
 	}
 }
 

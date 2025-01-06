@@ -14,7 +14,6 @@
   .popup {
 	background-color: var(--color-white-background);
 	width: 400px;
-	max-width: 90%;
 	border-radius: 8px;
     box-shadow: -4px 4px 0 var(--color-gray-dark);
     border: 3px solid var(--color-gray-dark);
