@@ -6,7 +6,7 @@ import {
 	useState,
 } from 'react'
 import {Slide} from '../../../components/Slide/Slide'
-import {type SlideType} from '../../../store/types'
+import {type PositionType, type SlideType} from '../../../store/types'
 import {useAppActions} from '../../hooks/useAppActions'
 import {useAppSelector} from '../../hooks/useAppSelector'
 import {useDragAndDrop} from '../../hooks/useDragAndDrop'
@@ -14,6 +14,7 @@ import {useTargetIndex} from './hooks/useGetTargetIndex'
 import styles from './Shell.module.css'
 
 const SLIDE_SCALE = 0.2
+const GAP = 30
 
 type ShellProps = {
 	onClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void,
@@ -26,49 +27,67 @@ function Shell({
 	onClick,
 	parentRef,
 }: ShellProps) {
-	const [onDrag, setOnDrag] = useState(false)
-	const slides = useAppSelector((editor => editor.presentation.slides))
-	const slideRef = useRef<HTMLDivElement>(null)
-	const gap = 30
-	const heightRef = useRef(0)
-
+	const slides = useAppSelector(editor => editor.presentation.slides)
+	const selectedSlideId = useAppSelector(editor => editor.selection.selectedSlideId)
 	const {setSlideIndex} = useAppActions()
+
+	const [onDrag, setOnDrag] = useState(false)
+	const [delta, setDelta] = useState<PositionType | null>(null)
+	const [height, setHeight] = useState(0)
+	const slideRef = useRef<HTMLDivElement>(null)
+	const initialPositionRef = useRef<PositionType>({
+		x: 0,
+		y: 0,
+	})
+
+	const onMouseDown = useCallback(() => {
+		if (slideRef.current && parentRef.current) {
+			const slideRect = slideRef.current.getBoundingClientRect()
+			const parentRect = parentRef.current.getBoundingClientRect()
+
+			initialPositionRef.current = {
+				x: slideRect.left - parentRect.left,
+				y: slideRect.top - parentRect.top,
+			}
+		}
+		setOnDrag(true)
+	}, [parentRef])
+
+	const onMouseMove = useCallback((_delta: PositionType) => {
+		setDelta(_delta)
+	}, [])
 
 	const onMouseUp = useCallback(() => {
 		setOnDrag(false)
+		setDelta(null)
 	}, [])
 
-	const onMouseDown = useCallback(() => {
-		setOnDrag(true)
-	}, [])
-
-	const delta = useDragAndDrop({
+	useDragAndDrop({
 		ref: slideRef,
-		parentRef,
 		onMouseDown,
+		onMouseMove,
 		onMouseUp,
-	})!
-
-	const targetIndex = useTargetIndex({
-		delta,
-		slide,
-		slides,
-		heightRef,
-		gap,
 	})
 
 	useEffect(() => {
 		if (slideRef.current) {
-			heightRef.current = slideRef.current.getBoundingClientRect().height
+			setHeight(slideRef.current.getBoundingClientRect().height)
 		}
 	}, [slideRef])
 
+	const targetIndex = useTargetIndex({
+		positionY: delta
+			? delta.y + initialPositionRef.current.y
+			: null,
+		slide,
+		slides,
+		height,
+		gap: GAP,
+	})
+
 	useEffect(() => {
-		if (
-			targetIndex !== slides.findIndex(s => s.id === slide.id)
-            && targetIndex >= 0
-            && targetIndex < slides.length
-		) {
+		const currentIndex = slides.findIndex(s => s.id === slide.id)
+		if (targetIndex !== currentIndex && targetIndex >= 0 && targetIndex < slides.length) {
 			setSlideIndex({
 				id: slide.id,
 				index: targetIndex,
@@ -76,60 +95,46 @@ function Shell({
 		}
 	}, [targetIndex, slide.id, setSlideIndex, slides])
 
-	useEffect(() => {
-		if (!slideRef.current || !parentRef.current || !delta) {
-			return
-		}
-		const slideRect = slideRef.current.getBoundingClientRect()
-		const parentRect = parentRef.current.getBoundingClientRect()
-
-		if (slideRect.width + delta.x > parentRect.width) {
-			slideRef.current.style.left = `${parentRect.width - slideRect.width}px`
+	const positionStyle = useMemo(() => {
+		if (!onDrag || !delta) {
+			return {}
 		}
 
-		if (delta.x < parentRect.x) {
-			slideRef.current.style.left = `${parentRect.x}px`
-		}
-	}, [delta, parentRef])
+		const {
+			x: initialX,
+			y: initialY,
+		} = initialPositionRef.current
+		const {
+			x: deltaX,
+			y: deltaY,
+		} = delta
 
-	const selectedSlideId = useAppSelector(editor => editor.selection.selectedSlideId)
-	const isSelected = useMemo(
-		() => slide.id === selectedSlideId,
-		[selectedSlideId, slide.id],
-	)
-
-	const style = onDrag && !!delta
-		? {
+		return {
+			top: initialY + deltaY,
+			left: initialX + deltaX,
 			cursor: 'pointer',
 			position: 'absolute' as const,
-			top: delta
-				? delta.y
-				: 0,
-			left: delta
-				? delta.x
-				: 0,
-			height: heightRef.current,
-			border: isSelected
-				? '3px solid var(--color-gray-dark)'
-				: '1px solid var(--color-gray-dark)',
+			height: height || 'auto',
 		}
-		: {
-			border: isSelected
-				? '3px solid var(--color-gray-dark)'
-				: '1px solid var(--color-gray-dark)',
-		}
+	}, [onDrag, delta, height])
+
+	const isSelected = useMemo(() => slide.id === selectedSlideId, [selectedSlideId, slide.id])
+
+	const style = {
+		...positionStyle,
+		border: isSelected
+			? '3px solid var(--color-gray-dark)'
+			: '1px solid var(--color-gray-dark)',
+	}
 
 	return (
 		<>
-			{onDrag
-            && (targetIndex === slides.findIndex(s => s.id === slide.id))
-			&& (
+			{onDrag && (
 				<div
 					className={styles.placeholder}
 					style={{
-						height: heightRef.current,
+						minHeight: height,
 						width: '100%',
-						background: 'transparent',
 					}}
 				/>
 			)}
@@ -147,5 +152,6 @@ function Shell({
 		</>
 	)
 }
+
 
 export {Shell}

@@ -1,39 +1,39 @@
 import {useMemo} from 'react'
-import {type PositionType, type SlideType} from '../../../../store/types'
+import {type SlideType} from '../../../../store/types'
 
 type UseTargetIndexProps = {
-	delta: PositionType,
+	positionY: number | null,
 	slide: SlideType,
 	slides: SlideType[],
-	heightRef: React.RefObject<number>,
+	height: number,
 	gap: number,
 }
 
 const useTargetIndex = ({
-	delta,
+	positionY,
 	slide,
 	slides,
-	heightRef,
+	height,
 	gap,
 }: UseTargetIndexProps): number => {
 	const targetIndex = useMemo(() => {
-		if (!delta || !heightRef.current) {
+		if (!positionY || !height) {
 			return slides.findIndex(s => s.id === slide.id)
 		}
 
 		const currentIndex = slides.findIndex(s => s.id === slide.id)
-		const indexPositionY = (heightRef.current + gap) * currentIndex
+		const indexPositionY = (height + gap) * currentIndex
 		let newTargetIndex = currentIndex
 
-		if (delta.y - indexPositionY > heightRef.current + gap) {
+		if (positionY - indexPositionY > height + gap) {
 			newTargetIndex = currentIndex + 1
 		}
-		else if (delta.y - indexPositionY < -(heightRef.current + gap)) {
+		else if (positionY - indexPositionY < -(height + gap)) {
 			newTargetIndex = currentIndex - 1
 		}
 
 		return Math.max(0, Math.min(newTargetIndex, slides.length - 1))
-	}, [delta, slide.id, slides, heightRef, gap])
+	}, [positionY, slide.id, slides, height, gap])
 
 	return targetIndex
 }

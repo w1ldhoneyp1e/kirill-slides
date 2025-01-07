@@ -9,7 +9,6 @@ import {useAppActions} from '../../view/hooks/useAppActions'
 import {useAppSelector} from '../../view/hooks/useAppSelector'
 import {useBoundedPosition} from '../../view/hooks/useBoundedPosition'
 import {useDragAndDrop} from '../../view/hooks/useDragAndDrop'
-import {ResizeFrame} from '../ResizeFrame/ResizeFrame'
 import styles from './Text.module.css'
 
 type TextProps = {
@@ -23,45 +22,51 @@ function Text({
 	parentRef,
 	scale,
 }: TextProps) {
-	const textRef = useRef<HTMLDivElement>(null)
-	const [isDrag, setIsDrag] = useState(false)
-	const selectedObjIds = useAppSelector((editor => editor.selection.selectedObjIds))
 	const {
-		setSelection, changeObjectPosition,
+		setSelection,
+		changeObjectPosition,
 	} = useAppActions()
+	const selectedObjIds = useAppSelector((editor => editor.selection.selectedObjIds))
+
+	const textRef = useRef<HTMLDivElement>(null)
+	const [position, setPosition] = useState<PositionType>(text.position)
 
 	const isSelected = useMemo(
 		() => selectedObjIds.includes(text.id),
 		[selectedObjIds, text.id],
 	)
 
-	const dispatchFn = useCallback(
-		(position: PositionType) => {
-			changeObjectPosition({
-				id: text.id,
-				position,
-			})
-		},
-		[changeObjectPosition, text.id],
-	)
+	const onMouseMove = useCallback((delta: PositionType) => {
+		const updatedPosition = {
+			x: position.x + delta.x,
+			y: position.y + delta.y,
+		}
 
-	const updatedPosition = useDragAndDrop({
+		setPosition(updatedPosition)
+	}, [position])
+
+	const onMouseUp = useCallback((delta: PositionType) => {
+		const updatedPosition = {
+			x: position.x + delta.x,
+			y: position.y + delta.y,
+		}
+
+		changeObjectPosition({
+			id: text.id,
+			position: updatedPosition,
+		})
+	},
+	[changeObjectPosition, position, text.id])
+
+	useDragAndDrop({
 		ref: textRef,
-		parentRef,
-		onMouseDown: () => setIsDrag(true),
-		onMouseUp: (position: PositionType) => {
-			dispatchFn(position)
-			setIsDrag(false)
-		},
+		onMouseMove,
+		onMouseUp,
 	})
 
 	const boundedPosition = useBoundedPosition({
-		x: updatedPosition && isDrag
-			? updatedPosition.x * scale
-			: text.position.x * scale,
-		y: updatedPosition && isDrag
-			? updatedPosition.y * scale
-			: text.position.y * scale,
+		x: position.x * scale,
+		y: position.y * scale,
 	}, parentRef, textRef)
 
 	const style = {
@@ -90,18 +95,6 @@ function Text({
 			}}
 		>
 			{text.value}
-			{isSelected
-                && scale === 1
-				&& (
-					<ResizeFrame
-						textRef={textRef}
-						parentRef={parentRef}
-						objId={text.id}
-						scale={scale}
-						onStartResize={() => {}}
-						onStopResize={() => {}}
-					/>
-				)}
 		</div>
 
 	)

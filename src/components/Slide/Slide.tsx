@@ -1,4 +1,8 @@
-import {type CSSProperties, useRef} from 'react'
+import {
+	type CSSProperties,
+	useMemo,
+	useRef,
+} from 'react'
 import {
 	type BackgroundType,
 	type PictureType,
@@ -33,9 +37,12 @@ function Slide({
 		return value
 	}
 
-	const style: CSSProperties = slide
-		? {background: setBackground(slide.background)}
-		: {}
+	const style: CSSProperties = useMemo(
+		() => slide
+			? {background: setBackground(slide.background)}
+			: {},
+		[slide],
+	)
 
 	return (
 		<div
