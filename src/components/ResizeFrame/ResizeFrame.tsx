@@ -1,11 +1,7 @@
-import React, {
-	useCallback,
-	useEffect,
-	useState,
-} from 'react'
+import React, {useEffect, useState} from 'react'
 import {type PositionType, type SizeType} from '../../store/types'
-import {useAppActions} from '../../view/hooks/useAppActions'
 import {useGetOnResize} from './hooks/useGetOnResize'
+import {useGetOnResizeEnd} from './hooks/useGetOnResizeEnd'
 import {Square} from './Square/Square'
 import {computeHandlePositions} from './utils/computeHandlePositions'
 
@@ -34,11 +30,6 @@ function ResizeFrame({
 	slideId,
 	objectId,
 }: ResizeFrameProps) {
-	const {
-		changeObjectPosition,
-		changeObjectSize,
-	} = useAppActions()
-
 	const [squares, setSquares] = useState<SquareType[]>([])
 
 	useEffect(() => {
@@ -52,18 +43,12 @@ function ResizeFrame({
 		size,
 	})
 
-	const onResizeEnd = useCallback(() => {
-		changeObjectSize({
-			objId: objectId,
-			slideId,
-			size,
-		})
-
-		changeObjectPosition({
-			id: objectId,
-			position,
-		})
-	}, [changeObjectPosition, changeObjectSize, objectId, position, size, slideId])
+	const onResizeEnd = useGetOnResizeEnd({
+		position,
+		size,
+		objectId,
+		slideId,
+	})
 
 	return (
 		<>
@@ -74,7 +59,7 @@ function ResizeFrame({
 					position={square.position}
 					cursor={square.cursor}
 					onResize={(delta: PositionType) => onResize(square.type, delta)}
-					onResizeEnd={onResizeEnd}
+					onResizeEnd={(delta: PositionType) => onResizeEnd(square.type, delta)}
 				/>
 			))}
 		</>

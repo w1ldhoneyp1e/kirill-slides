@@ -9,7 +9,7 @@ type SquareProps = {
 	position: PositionType,
 	cursor: string,
 	onResize: (delta: PositionType) => void,
-	onResizeEnd: () => void,
+	onResizeEnd: (delta: PositionType) => void,
 }
 
 function Square({

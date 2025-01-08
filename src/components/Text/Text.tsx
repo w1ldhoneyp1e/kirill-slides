@@ -96,7 +96,7 @@ function Text({
 			>
 				{text.value}
 			</div>
-			{isSelected
+			{isSelected && scale === 1
 				? (
 					<ResizeFrame
 						parentRef={parentRef}
