@@ -57,6 +57,7 @@ function Slide({
 							<Text
 								key={obj.id}
 								scale={scale}
+								slideId={slide.id}
 								parentRef={parentRef}
 								text={obj}
 							/>
@@ -79,4 +80,6 @@ function Slide({
 	)
 }
 
-export {Slide}
+export {
+	Slide,
+}

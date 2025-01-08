@@ -7,18 +7,21 @@ import {
 import {type PositionType, type TextType} from '../../store/types'
 import {useAppActions} from '../../view/hooks/useAppActions'
 import {useAppSelector} from '../../view/hooks/useAppSelector'
-import {useBoundedPosition} from '../../view/hooks/useBoundedPosition'
 import {useDragAndDrop} from '../../view/hooks/useDragAndDrop'
+import {boundPosition} from '../../view/utils/boundPosition'
+import {ResizeFrame} from '../ResizeFrame/ResizeFrame'
 import styles from './Text.module.css'
 
 type TextProps = {
 	text: TextType,
+	slideId: string,
 	parentRef: React.RefObject<HTMLDivElement>,
 	scale: number,
 }
 
 function Text({
 	text,
+	slideId,
 	parentRef,
 	scale,
 }: TextProps) {
@@ -26,37 +29,38 @@ function Text({
 		setSelection,
 		changeObjectPosition,
 	} = useAppActions()
-	const selectedObjIds = useAppSelector((editor => editor.selection.selectedObjIds))
+	const selectedObjects = useAppSelector(editor => editor.selection.selectedObjIds)
 
 	const textRef = useRef<HTMLDivElement>(null)
-	const [position, setPosition] = useState<PositionType>(text.position)
+	const [position, setPosition] = useState(text.position)
+	const [size, setSize] = useState(text.size)
 
-	const isSelected = useMemo(
-		() => selectedObjIds.includes(text.id),
-		[selectedObjIds, text.id],
-	)
+	const isSelected = selectedObjects.includes(text.id)
 
 	const onMouseMove = useCallback((delta: PositionType) => {
-		const updatedPosition = {
+		const updatedPosition = boundPosition({
 			x: position.x + delta.x,
 			y: position.y + delta.y,
-		}
+		},
+		parentRef,
+		textRef)
 
 		setPosition(updatedPosition)
-	}, [position])
+	}, [parentRef, position])
 
 	const onMouseUp = useCallback((delta: PositionType) => {
-		const updatedPosition = {
+		const updatedPosition = boundPosition({
 			x: position.x + delta.x,
 			y: position.y + delta.y,
-		}
+		},
+		parentRef,
+		textRef)
 
 		changeObjectPosition({
 			id: text.id,
 			position: updatedPosition,
 		})
-	},
-	[changeObjectPosition, position, text.id])
+	}, [changeObjectPosition, parentRef, position, text.id])
 
 	useDragAndDrop({
 		ref: textRef,
@@ -64,39 +68,48 @@ function Text({
 		onMouseUp,
 	})
 
-	const boundedPosition = useBoundedPosition({
-		x: position.x * scale,
-		y: position.y * scale,
-	}, parentRef, textRef)
-
-	const style = {
-		top: boundedPosition.y,
-		left: boundedPosition.x,
+	const style = useMemo(() => ({
+		top: position.y * scale,
+		left: position.x * scale,
 		color: text.hexColor,
 		fontSize: text.fontSize * scale,
-		width: text.size.width * scale,
-		height: text.size.height * scale,
-	}
+		width: size.width * scale,
+		height: size.height * scale,
+	}), [position, scale, size, text.fontSize, text.hexColor])
 
 	return (
-		<div
-			ref={textRef}
-			className={styles.text}
-			style={style}
-			onClick={e => {
-				if (e.defaultPrevented) {
-					return
-				}
-				setSelection({
-					type: 'object',
-					id: text.id,
-				})
-				e.preventDefault()
-			}}
-		>
-			{text.value}
-		</div>
-
+		<>
+			<div
+				ref={textRef}
+				className={styles.text}
+				style={style}
+				onClick={e => {
+					if (e.defaultPrevented) {
+						return
+					}
+					setSelection({
+						type: 'object',
+						id: text.id,
+					})
+					e.preventDefault()
+				}}
+			>
+				{text.value}
+			</div>
+			{isSelected
+				? (
+					<ResizeFrame
+						parentRef={parentRef}
+						objectId={text.id}
+						slideId={slideId}
+						position={position}
+						setPosition={setPosition}
+						size={size}
+						setSize={setSize}
+					/>
+				)
+				: ''}
+		</>
 	)
 }
 
