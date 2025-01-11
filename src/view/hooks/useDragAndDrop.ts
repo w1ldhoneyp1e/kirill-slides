@@ -2,6 +2,7 @@ import {
 	type RefObject,
 	useEffect,
 	useRef,
+	useState,
 } from 'react'
 import {type PositionType} from '../../store/types'
 
@@ -19,6 +20,7 @@ function useDragAndDrop({
 	onMouseUp,
 }: UseDragAndDropProps) {
 	const startPos = useRef<PositionType | null>(null)
+	const [delta, setDelta] = useState<PositionType>()
 
 	useEffect(() => {
 		const handleMouseMove = (e: MouseEvent) => {
@@ -30,7 +32,7 @@ function useDragAndDrop({
 				x: e.pageX - startPos.current.x,
 				y: e.pageY - startPos.current.y,
 			}
-
+			setDelta(_delta)
 			if (onMouseMove) {
 				onMouseMove(_delta)
 			}
@@ -79,6 +81,8 @@ function useDragAndDrop({
 			}
 		}
 	}, [onMouseDown, onMouseMove, onMouseUp, ref])
+
+	return delta
 }
 
 export {

@@ -1,7 +1,9 @@
 import {
 	useCallback,
+	useEffect,
 	useMemo,
 	useRef,
+	useState,
 } from 'react'
 import {
 	type PositionType,
@@ -31,7 +33,6 @@ function Text({
 	const {
 		setSelection,
 		changeObjectPosition,
-		changeObjectSize,
 	} = useAppActions()
 	const selectedObjects = useAppSelector(editor => editor.selection.selectedObjIds)
 	const text = useAppSelector(
@@ -40,10 +41,23 @@ function Text({
 			.find(o => o.id === textId) as TextType,
 	)
 
+	const [size, setSize] = useState<SizeType>(text.size)
+	const [position, setPosition] = useState<PositionType>(text.position)
 	const textRef = useRef<HTMLDivElement>(null)
 	const isSelected = selectedObjects.includes(text.id)
 
 	const onMouseMove = useCallback((delta: PositionType) => {
+		const updatedPosition = boundPosition({
+			x: text.position.x + delta.x,
+			y: text.position.y + delta.y,
+		},
+		parentRef,
+		textRef)
+
+		setPosition(updatedPosition)
+	}, [parentRef, text.position])
+
+	const onMouseUp = useCallback((delta: PositionType) => {
 		const updatedPosition = boundPosition({
 			x: text.position.x + delta.x,
 			y: text.position.y + delta.y,
@@ -60,16 +74,22 @@ function Text({
 	useDragAndDrop({
 		ref: textRef,
 		onMouseMove,
+		onMouseUp,
 	})
 
+	useEffect(() => {
+		setPosition(text.position)
+		setSize(text.size)
+	}, [text.position, text.size])
+
 	const style = useMemo(() => ({
-		top: text.position.y * scale,
-		left: text.position.x * scale,
+		top: position.y * scale,
+		left: position.x * scale,
 		color: text.hexColor,
 		fontSize: text.fontSize * scale,
-		width: text.size.width * scale,
-		height: text.size.height * scale,
-	}), [text.position, scale, text.size, text.fontSize, text.hexColor])
+		width: size.width * scale,
+		height: size.height * scale,
+	}), [position.y, position.x, scale, text.hexColor, text.fontSize, size.width, size.height])
 
 	return (
 		<>
@@ -96,17 +116,10 @@ function Text({
 						parentRef={parentRef}
 						objectId={text.id}
 						slideId={slideId}
-						setPosition={(position: PositionType) => changeObjectPosition({
-							id: textId,
-							position,
-						})}
-						position={text.position}
-						setSize={(size: SizeType) => changeObjectSize({
-							slideId,
-							objId: textId,
-							size,
-						})}
-						size={text.size}
+						setPosition={(_position: PositionType) => setPosition(_position)}
+						position={position}
+						setSize={(_size: SizeType) => setSize(_size)}
+						size={size}
 					/>
 				)
 				: null}

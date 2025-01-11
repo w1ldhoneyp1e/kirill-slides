@@ -1,7 +1,9 @@
 import {
 	useCallback,
+	useEffect,
 	useMemo,
 	useRef,
+	useState,
 } from 'react'
 import {
 	type PictureType,
@@ -33,7 +35,6 @@ function Picture({
 	const {
 		setSelection,
 		changeObjectPosition,
-		changeObjectSize,
 	} = useAppActions()
 
 	const picture = useAppSelector(
@@ -42,6 +43,8 @@ function Picture({
 			.find(o => o.id === pictureId) as PictureType,
 	)
 
+	const [position, setPosition] = useState<PositionType>(picture.position)
+	const [size, setSize] = useState<SizeType>(picture.size)
 	const pictureRef = useRef<HTMLImageElement>(null)
 	const isSelected = useMemo(
 		() => selectedObjIds.includes(pictureId),
@@ -56,23 +59,40 @@ function Picture({
 		parentRef,
 		pictureRef)
 
+		setPosition(updatedPosition)
+	}, [picture, parentRef])
+
+	const onMouseUp = useCallback((delta: PositionType) => {
+		const updatedPosition = boundPosition({
+			x: picture.position.x + delta.x,
+			y: picture.position.y + delta.y,
+		},
+		parentRef,
+		pictureRef)
+
 		changeObjectPosition({
 			id: picture.id,
 			position: updatedPosition,
 		})
 	}, [picture, parentRef, changeObjectPosition])
 
+	useEffect(() => {
+		setPosition(picture.position)
+		setSize(picture.size)
+	}, [picture.position, picture.size])
+
 	useDragAndDrop({
 		ref: pictureRef,
 		onMouseMove,
+		onMouseUp,
 	})
 
 	const style = useMemo(() => ({
-		top: picture.position.y * scale,
-		left: picture.position.x * scale,
-		width: picture.size.width * scale,
-		height: picture.size.height * scale,
-	}), [picture, scale])
+		top: position.y * scale,
+		left: position.x * scale,
+		width: size.width * scale,
+		height: size.height * scale,
+	}), [position.x, position.y, scale, size.height, size.width])
 
 	return (
 		<>
@@ -96,17 +116,10 @@ function Picture({
 						parentRef={parentRef}
 						objectId={pictureId}
 						slideId={slideId}
-						setPosition={(position: PositionType) => changeObjectPosition({
-							id: pictureId,
-							position,
-						})}
-						position={picture.position}
-						setSize={(size: SizeType) => changeObjectSize({
-							slideId,
-							objId: pictureId,
-							size,
-						})}
-						size={picture.size}
+						setPosition={(_position: PositionType) => setPosition(_position)}
+						position={position}
+						setSize={(_size: SizeType) => setSize(_size)}
+						size={size}
 					/>
 				)
 				: null}
