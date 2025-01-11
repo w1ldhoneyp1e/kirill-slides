@@ -37,10 +37,7 @@ function changeObjectPosition({
 		type: ACTION_TYPE.changeObjectPosition,
 		payload: {
 			id,
-			position: {
-				x: position.x,
-				y: position.y,
-			},
+			position: {...position},
 		},
 	}
 }
@@ -62,10 +59,7 @@ function changeObjectSize({
 		payload: {
 			slideId,
 			objId,
-			size: {
-				width: size.width,
-				height: size.height,
-			},
+			size: {...size},
 		},
 	}
 }

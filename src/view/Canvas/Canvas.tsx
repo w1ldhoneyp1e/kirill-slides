@@ -9,10 +9,12 @@ function Canvas() {
 	return (
 		<div className={styles.canvas}>
 			{slide
-				? <Slide slide={slide} />
+				? <Slide slideId={slide.id} />
 				: ''}
 		</div>
 	)
 }
 
-export {Canvas}
+export {
+	Canvas,
+}

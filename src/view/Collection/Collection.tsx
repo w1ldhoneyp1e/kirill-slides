@@ -27,7 +27,7 @@ function Collection() {
 		>
 			{slides.map(slide => (
 				<Shell
-					slide={slide}
+					slideId={slide.id}
 					key={slide.id}
 					parentRef={parentRef}
 					onClick={e => {

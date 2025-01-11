@@ -13,14 +13,14 @@ import {ResizeFrame} from '../ResizeFrame/ResizeFrame'
 import styles from './Text.module.css'
 
 type TextProps = {
-	text: TextType,
+	textId: string,
 	slideId: string,
 	parentRef: React.RefObject<HTMLDivElement>,
 	scale: number,
 }
 
 function Text({
-	text,
+	textId,
 	slideId,
 	parentRef,
 	scale,
@@ -30,6 +30,11 @@ function Text({
 		changeObjectPosition,
 	} = useAppActions()
 	const selectedObjects = useAppSelector(editor => editor.selection.selectedObjIds)
+	const text = useAppSelector(
+		editor => editor.presentation.slides
+			.find(s => s.id === slideId)!.contentObjects
+			.find(o => (o.id === textId))!,
+	) as TextType
 
 	const textRef = useRef<HTMLDivElement>(null)
 	const [position, setPosition] = useState(text.position)

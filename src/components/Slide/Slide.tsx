@@ -6,22 +6,25 @@ import {
 import {
 	type BackgroundType,
 	type PictureType,
-	type SlideType,
 	type TextType,
 } from '../../store/types'
+import {useAppSelector} from '../../view/hooks/useAppSelector'
 import {Picture} from '../Picture/Picture'
 import {Text} from '../Text/Text'
 import styles from './Slide.module.css'
 
 type SlideProps = {
-	slide: SlideType,
+	slideId: string,
 	scale?: number,
 }
 
 function Slide({
-	slide,
+	slideId,
 	scale = 1,
 }: SlideProps) {
+	const slides = useAppSelector(editor => editor.presentation.slides)
+	const slide = slides.find(s => s.id === slideId)!
+
 	const parentRef = useRef<HTMLDivElement>(null)
 
 	const contentObjects = slide.contentObjects
@@ -59,7 +62,7 @@ function Slide({
 								scale={scale}
 								slideId={slide.id}
 								parentRef={parentRef}
-								text={obj}
+								textId={obj.id}
 							/>
 						)
 					}

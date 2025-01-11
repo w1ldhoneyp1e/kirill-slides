@@ -6,7 +6,7 @@ import {
 	useState,
 } from 'react'
 import {Slide} from '../../../components/Slide/Slide'
-import {type PositionType, type SlideType} from '../../../store/types'
+import {type PositionType} from '../../../store/types'
 import {useAppActions} from '../../hooks/useAppActions'
 import {useAppSelector} from '../../hooks/useAppSelector'
 import {useDragAndDrop} from '../../hooks/useDragAndDrop'
@@ -18,16 +18,17 @@ const GAP = 30
 
 type ShellProps = {
 	onClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void,
-	slide: SlideType,
+	slideId: string,
 	parentRef: React.RefObject<HTMLDivElement>,
 }
 
 function Shell({
-	slide,
+	slideId,
 	onClick,
 	parentRef,
 }: ShellProps) {
 	const slides = useAppSelector(editor => editor.presentation.slides)
+	const slide = useAppSelector(editor => editor.presentation.slides.find(s => s.id === slideId)!)
 	const selectedSlideId = useAppSelector(editor => editor.selection.selectedSlideId)
 	const {setSlideIndex} = useAppActions()
 
@@ -145,7 +146,7 @@ function Shell({
 				style={style}
 			>
 				<Slide
-					slide={slide}
+					slideId={slide.id}
 					scale={SLIDE_SCALE}
 				/>
 			</div>
