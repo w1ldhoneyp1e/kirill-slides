@@ -1,13 +1,5 @@
-import {
-	type CSSProperties,
-	useMemo,
-	useRef,
-} from 'react'
-import {
-	type BackgroundType,
-	type PictureType,
-	type TextType,
-} from '../../store/types'
+import {useMemo, useRef} from 'react'
+import {type BackgroundType} from '../../store/types'
 import {useAppSelector} from '../../view/hooks/useAppSelector'
 import {Picture} from '../Picture/Picture'
 import {Text} from '../Text/Text'
@@ -22,29 +14,25 @@ function Slide({
 	slideId,
 	scale = 1,
 }: SlideProps) {
-	const slides = useAppSelector(editor => editor.presentation.slides)
-	const slide = slides.find(s => s.id === slideId)!
+	const slide = useAppSelector(editor =>
+		editor.presentation.slides.find(s => s.id === slideId)!,
+	)
 
 	const parentRef = useRef<HTMLDivElement>(null)
 
-	const contentObjects = slide.contentObjects
-
-	function setBackground(background: BackgroundType): string {
-		let value = ''
+	const setBackground = (background: BackgroundType): string => {
 		if (background.type === 'solid') {
-			value = background.hexColor
+			return background.hexColor
 		}
 		if (background.type === 'image') {
-			value = `url(${background.src})`
+			return `url(${background.src})`
 		}
-		return value
+		return ''
 	}
 
-	const style: CSSProperties = useMemo(
-		() => slide
-			? {background: setBackground(slide.background)}
-			: {},
-		[slide],
+	const style = useMemo(
+		() => ({background: setBackground(slide.background)}),
+		[slide.background],
 	)
 
 	return (
@@ -53,36 +41,31 @@ function Slide({
 			style={style}
 			ref={parentRef}
 		>
-			{contentObjects
-				? contentObjects.map((obj: TextType | PictureType) => {
-					if (obj.type === 'text') {
-						return (
-							<Text
-								key={obj.id}
-								scale={scale}
-								slideId={slide.id}
-								parentRef={parentRef}
-								textId={obj.id}
-							/>
-						)
-					}
-					else if (obj.type === 'picture') {
-						return (
-							<Picture
-								key={obj.id}
-								scale={scale}
-								pictureObj={obj}
-							/>
-						)
-					}
-					return null
-
-				})
-				: null}
+			{slide.contentObjects.map(obj => {
+				if (obj.type === 'text') {
+					return (
+						<Text
+							key={obj.id}
+							scale={scale}
+							slideId={slide.id}
+							parentRef={parentRef}
+							textId={obj.id}
+						/>
+					)
+				}
+				if (obj.type === 'picture') {
+					return (
+						<Picture
+							key={obj.id}
+							scale={scale}
+							pictureObj={obj}
+						/>
+					)
+				}
+				return null
+			})}
 		</div>
 	)
 }
 
-export {
-	Slide,
-}
+export {Slide}
