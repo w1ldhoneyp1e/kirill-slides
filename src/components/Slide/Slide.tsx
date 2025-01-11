@@ -58,7 +58,9 @@ function Slide({
 						<Picture
 							key={obj.id}
 							scale={scale}
-							pictureObj={obj}
+							parentRef={parentRef}
+							slideId={slide.id}
+							pictureId={obj.id}
 						/>
 					)
 				}
