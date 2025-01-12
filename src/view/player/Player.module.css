@@ -1,0 +1,11 @@
+.player {
+	max-height: 100vh;
+	overflow: hidden;
+	position: relative;
+}
+
+.backButton {
+	position: absolute;
+	right: 5%;
+	top: 30px;
+}

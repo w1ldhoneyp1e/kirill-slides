@@ -1,8 +1,11 @@
 import {useMemo} from 'react'
+import {useNavigate} from 'react-router-dom'
 import {Download24px} from '../../assets/icons/Download24px'
 import {Logo} from '../../assets/icons/Logo'
 import {PDF24px} from '../../assets/icons/PDF24px'
+import {Play24px} from '../../assets/icons/Play24px'
 import {Upload24px} from '../../assets/icons/Upload24px'
+import {Button} from '../../components/Button/Button'
 import {type SelectButtonOption, SelectButton} from '../../components/SelectButton/SelectButton'
 import {exportToPDF} from '../../utils/exportToPDF'
 import {useAppSelector} from '../hooks/useAppSelector'
@@ -14,6 +17,8 @@ import styles from './TopPanel.module.css'
 
 function TopPanel() {
 	const presentation = useAppSelector(editor => editor.presentation)
+
+	const goTo = useNavigate()
 
 	const handleExport = useHandleExport()
 	const handleImport = useHandleImport()
@@ -45,7 +50,13 @@ function TopPanel() {
 				options={options}
 				defaultOptionIndex={0}
 			/>
-
+			<Button
+				type="icon-text"
+				icon={Play24px}
+				state="default"
+				text="Воспроизвести"
+				onClick={() => goTo('/player')}
+			/>
 		</div>
 	)
 }
