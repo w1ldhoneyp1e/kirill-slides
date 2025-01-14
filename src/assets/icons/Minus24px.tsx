@@ -1,4 +1,4 @@
-const Plus24px = (
+const Minus24px = (
 	<svg
 		width="24"
 		height="24"
@@ -7,12 +7,14 @@ const Plus24px = (
 		xmlns="http://www.w3.org/2000/svg"
 	>
 		<path
-			d="M20 13H13V20H11V13H4V11H11V4H13V11H20V13Z"
+			fillRule="evenodd"
+			clipRule="evenodd"
+			d="M4 11H20V13H4V11Z"
 			fill="#444746"
 		/>
 	</svg>
 )
 
 export {
-	Plus24px,
+	Minus24px,
 }
