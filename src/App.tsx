@@ -6,6 +6,7 @@ import {
 } from 'react-router-dom'
 import './App.css'
 import {type HistoryType} from './utils/history'
+import {useUndoRedo} from './view/hooks/useUndoRedo'
 import {Player} from './view/player/Player'
 import {PresentationEditor} from './view/presentationEditor/PresentationEditor'
 
@@ -14,6 +15,8 @@ type AppProps = {
 }
 
 function App({history}: AppProps) {
+	useUndoRedo(history)
+
 	return (
 		<Router>
 			<Routes>

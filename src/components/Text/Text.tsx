@@ -10,6 +10,7 @@ import {
 	type SizeType,
 	type TextType,
 } from '../../store/types'
+import {isValidOffset} from '../../utils/isValidOffset'
 import {useAppActions} from '../../view/hooks/useAppActions'
 import {useAppSelector} from '../../view/hooks/useAppSelector'
 import {useDragAndDrop} from '../../view/hooks/useDragAndDrop'
@@ -47,6 +48,9 @@ function Text({
 	const isSelected = selectedObjects.includes(text.id)
 
 	const onMouseMove = useCallback((delta: PositionType) => {
+		if (!isValidOffset(delta)) {
+			return
+		}
 		const updatedPosition = boundPosition({
 			x: text.position.x + delta.x,
 			y: text.position.y + delta.y,
@@ -58,6 +62,9 @@ function Text({
 	}, [parentRef, text.position])
 
 	const onMouseUp = useCallback((delta: PositionType) => {
+		if (!isValidOffset(delta)) {
+			return
+		}
 		const updatedPosition = boundPosition({
 			x: text.position.x + delta.x,
 			y: text.position.y + delta.y,

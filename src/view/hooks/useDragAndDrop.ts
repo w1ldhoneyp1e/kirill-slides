@@ -33,7 +33,7 @@ function useDragAndDrop({
 				y: e.pageY - startPos.current.y,
 			}
 			setDelta(_delta)
-			if (onMouseMove) {
+			if (onMouseMove && _delta) {
 				onMouseMove(_delta)
 			}
 			e.preventDefault()
@@ -51,7 +51,7 @@ function useDragAndDrop({
 				y: e.pageY - startPos.current.y,
 			}
 
-			if (onMouseUp && _delta) {
+			if (onMouseUp) {
 				onMouseUp(_delta)
 			}
 		}

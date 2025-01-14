@@ -1,5 +1,6 @@
 import {useCallback} from 'react'
 import {type PositionType, type SizeType} from '../../../store/types'
+import {isValidOffset} from '../../../utils/isValidOffset'
 import {useAppActions} from '../../../view/hooks/useAppActions'
 
 type UseGetOnResizeProps = {
@@ -22,6 +23,9 @@ function useGetOnResizeEnd({
 
 	return useCallback(
 		(handle: string, delta: PositionType) => {
+			if (!isValidOffset(delta)) {
+				return
+			}
 			let newX = position.x
 			let newY = position.y
 			let newWidth = size.width

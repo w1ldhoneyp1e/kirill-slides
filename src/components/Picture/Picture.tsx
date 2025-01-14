@@ -10,6 +10,7 @@ import {
 	type PositionType,
 	type SizeType,
 } from '../../store/types'
+import {isValidOffset} from '../../utils/isValidOffset'
 import {joinStyles} from '../../utils/joinStyles'
 import {useAppActions} from '../../view/hooks/useAppActions'
 import {useAppSelector} from '../../view/hooks/useAppSelector'
@@ -52,6 +53,9 @@ function Picture({
 	)
 
 	const onMouseMove = useCallback((delta: PositionType) => {
+		if (!isValidOffset(delta)) {
+			return
+		}
 		const updatedPosition = boundPosition({
 			x: picture.position.x + delta.x,
 			y: picture.position.y + delta.y,
@@ -63,6 +67,9 @@ function Picture({
 	}, [picture, parentRef])
 
 	const onMouseUp = useCallback((delta: PositionType) => {
+		if (!isValidOffset(delta)) {
+			return
+		}
 		const updatedPosition = boundPosition({
 			x: picture.position.x + delta.x,
 			y: picture.position.y + delta.y,
