@@ -3,6 +3,8 @@ import {
 	type ChangeObjectPositionAction,
 	type ChangeObjectSizeAction,
 	type ChangePresentationNameAction,
+	type ChangeTextFontColorAction,
+	type ChangeTextFontSizeAction,
 	type ChangeTextValueAction,
 	type DeselectAction,
 	type SetSelectionAction,
@@ -341,14 +343,14 @@ function setTextValue(obj: TextType | PictureType, newText: string): TextType | 
 // изменение размера текста
 function changeTextFontSize(
 	editor: EditorType,
-	{
-		slideId, objId, fontSize,
-	}: {
-		slideId: string,
-		objId: string,
-		fontSize: number,
-	},
+	action: ChangeTextFontSizeAction,
 ): EditorType {
+	const {
+		slideId,
+		objId,
+		fontSize,
+	} = action.payload
+
 	const newSlides = editor.presentation.slides.map(slide => {
 		if (slide.id === slideId) {
 			const newContentObjects = slide.contentObjects.map(obj =>
@@ -429,19 +431,19 @@ function setTextFontFamily(obj: TextType | PictureType, newFontFamily: string): 
 // изменение цвета текста
 function changeTextColor(
 	editor: EditorType,
-	{
-		slideId, objId, newColor,
-	}: {
-		slideId: string,
-		objId: string,
-		newColor: string,
-	},
+	action: ChangeTextFontColorAction,
 ): EditorType {
+	const {
+		slideId,
+		objId,
+		fontColor,
+	} = action.payload
+
 	const newSlides = editor.presentation.slides.map(slide => {
 		if (slide.id === slideId) {
 			const newContentObjects = slide.contentObjects.map(obj =>
 				obj.id === objId
-					? setTextColor(obj, newColor)
+					? setTextColor(obj, fontColor)
 					: obj)
 
 			return {
@@ -465,7 +467,7 @@ function setTextColor(obj: TextType | PictureType, newColor: string): TextType |
 	return obj.type === 'text'
 		? {
 			...obj,
-			hexColor: newColor,
+			fontColor: newColor,
 		}
 		: {...obj}
 }
@@ -609,7 +611,7 @@ function getDefaultText() {
 		value: 'Default text',
 		fontSize: 11,
 		fontFamily: 'TimesNewRoman',
-		hexColor: '#000000',
+		fontColor: '#000000',
 		type: 'text',
 	}
 	return defaultText

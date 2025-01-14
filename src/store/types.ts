@@ -32,7 +32,7 @@ type TextType = SlideObjectType & {
 	value: string,
 	fontSize: number,
 	fontFamily: string,
-	hexColor: string,
+	fontColor: string,
 	type: 'text',
 }
 type PictureType = SlideObjectType & {

@@ -35,10 +35,10 @@ const TEXT_TYPE = {
 				value: {type: 'string'},
 				fontSize: {type: 'number'},
 				fontFamily: {type: 'string'},
-				hexColor: {type: 'string'},
+				fontColor: {type: 'string'},
 				type: {enum: ['text']},
 			},
-			required: ['value', 'fontSize', 'fontFamily', 'hexColor', 'type'],
+			required: ['value', 'fontSize', 'fontFamily', 'fontColor', 'type'],
 		},
 	],
 }

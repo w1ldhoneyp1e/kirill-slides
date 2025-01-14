@@ -106,11 +106,11 @@ function Text({
 	const style = useMemo(() => ({
 		top: position.y * scale,
 		left: position.x * scale,
-		color: text.hexColor,
+		color: text.fontColor,
 		fontSize: text.fontSize * scale,
 		width: size.width * scale,
 		height: size.height * scale,
-	}), [position.y, position.x, scale, text.hexColor, text.fontSize, size.width, size.height])
+	}), [position.y, position.x, scale, text.fontColor, text.fontSize, size.width, size.height])
 
 	return (
 		<>

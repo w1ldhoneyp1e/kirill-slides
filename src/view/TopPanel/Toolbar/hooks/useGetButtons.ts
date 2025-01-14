@@ -1,7 +1,7 @@
 import {useCallback, useContext} from 'react'
 import {AddText24px} from '../../../../assets/icons/AddText24px.tsx'
 import {Cursor24px} from '../../../../assets/icons/Cursor24px.tsx'
-import {Plus24px} from '../../../../assets/icons/Plus24px.tsx'
+import {AddPlus24px} from '../../../../assets/icons/AddPlus24px.tsx'
 import {Redo24px} from '../../../../assets/icons/Redo24px.tsx'
 import {Undo24px} from '../../../../assets/icons/Undo24px.tsx'
 import {type ButtonProps} from '../../../../components/Button/Button.tsx'
@@ -39,7 +39,7 @@ function useGetButtons() {
 	const addButton: ButtonProps = {
 		type: 'icon',
 		state: 'default',
-		icon: Plus24px,
+		icon: AddPlus24px,
 		onClick: addSlide,
 	}
 

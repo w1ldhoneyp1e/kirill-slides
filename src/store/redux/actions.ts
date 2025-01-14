@@ -10,6 +10,8 @@ enum ACTION_TYPE {
 
 	addText = 'addText',
 	changeTextValue = 'changeTextValue',
+	changeTextFontSize = 'changeTextFontSize',
+	changeTextFontColor = 'changeTextFontColor',
 
 	addPicture = 'addPicture',
 	changeObjectPosition = 'changeObjectPosition',
@@ -103,6 +105,24 @@ type ChangeTextValueAction = {
 	},
 }
 
+type ChangeTextFontSizeAction = {
+	type: ACTION_TYPE.changeTextFontSize,
+	payload: {
+		slideId: string,
+		objId: string,
+		fontSize: number,
+	},
+}
+
+type ChangeTextFontColorAction = {
+	type: ACTION_TYPE.changeTextFontColor,
+	payload: {
+		slideId: string,
+		objId: string,
+		fontColor: string,
+	},
+}
+
 type EditorAction =
     AddSlideAction
     | RemoveSlideAction
@@ -116,6 +136,8 @@ type EditorAction =
     | ChangeObjectPositionAction
     | ChangeObjectSizeAction
 	| ChangeTextValueAction
+	| ChangeTextFontSizeAction
+	| ChangeTextFontColorAction
 
 export {ACTION_TYPE}
 export type {
@@ -128,6 +150,8 @@ export type {
 	ChangeObjectSizeAction,
 	AddPictureAction,
 	ChangeTextValueAction,
+	ChangeTextFontSizeAction,
+	ChangeTextFontColorAction,
 	AddSlideAction,
 	RemoveSlideAction,
 	AddTextAction,

@@ -83,10 +83,50 @@ function changeTextValue({
 	}
 }
 
+function changeTextFontSize({
+	slideId,
+	objId,
+	fontSize,
+}: {
+	slideId: string,
+	objId: string,
+	fontSize: number,
+}) {
+	return {
+		type: ACTION_TYPE.changeTextFontSize,
+		payload: {
+			slideId,
+			objId,
+			fontSize,
+		},
+	}
+}
+
+function changeTextFontColor({
+	slideId,
+	objId,
+	fontColor,
+}: {
+	slideId: string,
+	objId: string,
+	fontColor: string,
+}) {
+	return {
+		type: ACTION_TYPE.changeTextFontColor,
+		payload: {
+			slideId,
+			objId,
+			fontColor,
+		},
+	}
+}
+
 export {
 	addText,
 	addPicture,
 	changeObjectPosition,
 	changeObjectSize,
 	changeTextValue,
+	changeTextFontSize,
+	changeTextFontColor,
 }
