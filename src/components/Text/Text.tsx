@@ -45,6 +45,8 @@ function Text({
 
 	const [size, setSize] = useState<SizeType>(text.size)
 	const [position, setPosition] = useState<PositionType>(text.position)
+	const [isEditing, setIsEditing] = useState(false)
+	const [currentText, setCurrentText] = useState(text.value)
 	const textRef = useRef<HTMLDivElement>(null)
 	const isSelected = selectedObjects.includes(text.id)
 
@@ -55,9 +57,7 @@ function Text({
 		const updatedPosition = boundPosition({
 			x: text.position.x + delta.x,
 			y: text.position.y + delta.y,
-		},
-		parentRef,
-		textRef)
+		}, parentRef, textRef)
 
 		setPosition(updatedPosition)
 	}, [parentRef, text.position])
@@ -69,9 +69,7 @@ function Text({
 		const updatedPosition = boundPosition({
 			x: text.position.x + delta.x,
 			y: text.position.y + delta.y,
-		},
-		parentRef,
-		textRef)
+		}, parentRef, textRef)
 
 		changeObjectPosition({
 			id: text.id,
@@ -88,7 +86,22 @@ function Text({
 	useEffect(() => {
 		setPosition(text.position)
 		setSize(text.size)
-	}, [text.position, text.size])
+		setCurrentText(text.value)
+	}, [text.position, text.size, text.value])
+
+	const handleDoubleClick = () => {
+		if (!isEditing) {
+			setIsEditing(true)
+		}
+	}
+
+	const handleBlur = () => {
+		setIsEditing(false)
+	}
+
+	const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+		setCurrentText(e.target.value)
+	}
 
 	const style = useMemo(() => ({
 		top: position.y * scale,
@@ -116,8 +129,27 @@ function Text({
 					})
 					e.preventDefault()
 				}}
+				onDoubleClick={e => {
+					if (!isEditing) {
+						handleDoubleClick()
+					}
+					e.stopPropagation()
+				}}
 			>
-				{text.value}
+				{isEditing
+					? (
+						<textarea
+							value={currentText}
+							onChange={handleChange}
+							onBlur={handleBlur}
+							autoFocus={true}
+							className={styles.textarea}
+							onClick={e => e.stopPropagation()}
+						/>
+					)
+					: (
+						text.value
+					)}
 			</div>
 			{isSelected && scale === 1
 				? (

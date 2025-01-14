@@ -113,6 +113,7 @@ function Shell({
 			x: initialX,
 			y: initialY,
 		} = initialPositionRef.current
+
 		const {
 			x: deltaX,
 			y: deltaY,

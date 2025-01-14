@@ -64,9 +64,29 @@ function changeObjectSize({
 	}
 }
 
+function changeTextValue({
+	slideId,
+	objId,
+	value,
+}: {
+	slideId: string,
+	objId: string,
+	value: string,
+}) {
+	return {
+		type: ACTION_TYPE.changeTextValue,
+		payload: {
+			slideId,
+			objId,
+			value,
+		},
+	}
+}
+
 export {
 	addText,
 	addPicture,
 	changeObjectPosition,
 	changeObjectSize,
+	changeTextValue,
 }

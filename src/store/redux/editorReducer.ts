@@ -6,6 +6,7 @@ import {
 	changeObjectPosition,
 	changeObjectSize,
 	changePresentationName,
+	changeTextValue,
 	deleteSlide,
 	deselect,
 	setSelection,
@@ -39,6 +40,8 @@ function editorReducer(editor: EditorType = defaultEditor, action: EditorAction)
 			return changeObjectPosition(editor, action)
 		case ACTION_TYPE.changeObjectSize:
 			return changeObjectSize(editor, action)
+		case ACTION_TYPE.changeTextValue:
+			return changeTextValue(editor, action)
 		default:
 			return editor
 	}

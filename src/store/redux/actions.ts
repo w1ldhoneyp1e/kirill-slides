@@ -9,6 +9,8 @@ enum ACTION_TYPE {
 	deselect = 'deselect',
 
 	addText = 'addText',
+	changeTextValue = 'changeTextValue',
+
 	addPicture = 'addPicture',
 	changeObjectPosition = 'changeObjectPosition',
 	changeObjectSize = 'changeObjectSize',
@@ -92,6 +94,15 @@ type ChangeObjectSizeAction = {
 	},
 }
 
+type ChangeTextValueAction = {
+	type: ACTION_TYPE.changeTextValue,
+	payload: {
+		slideId: string,
+		objId: string,
+		value: string,
+	},
+}
+
 type EditorAction =
     AddSlideAction
     | RemoveSlideAction
@@ -104,6 +115,7 @@ type EditorAction =
     | ChangePresentationNameAction
     | ChangeObjectPositionAction
     | ChangeObjectSizeAction
+	| ChangeTextValueAction
 
 export {ACTION_TYPE}
 export type {
@@ -115,4 +127,9 @@ export type {
 	ChangeObjectPositionAction,
 	ChangeObjectSizeAction,
 	AddPictureAction,
+	ChangeTextValueAction,
+	AddSlideAction,
+	RemoveSlideAction,
+	AddTextAction,
+	SetEditorAction,
 }

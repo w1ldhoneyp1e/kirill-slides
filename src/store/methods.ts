@@ -3,6 +3,7 @@ import {
 	type ChangeObjectPositionAction,
 	type ChangeObjectSizeAction,
 	type ChangePresentationNameAction,
+	type ChangeTextValueAction,
 	type DeselectAction,
 	type SetSelectionAction,
 	type SetSlideIndexAction,
@@ -296,14 +297,14 @@ function setObjectSize<T extends SlideObjectType>(object: T, size: SizeType): T 
 // изменение текста
 function changeTextValue(
 	editor: EditorType,
-	{
-		slideId, objId, value,
-	}: {
-		slideId: string,
-		objId: string,
-		value: string,
-	},
+	action: ChangeTextValueAction,
 ): EditorType {
+	const {
+		slideId,
+		objId,
+		value,
+	} = action.payload
+
 	const newSlides = editor.presentation.slides.map(slide => {
 		if (slide.id === slideId) {
 			const newContentObjects = slide.contentObjects.map(obj =>
