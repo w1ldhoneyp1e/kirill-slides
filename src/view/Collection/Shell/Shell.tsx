@@ -6,6 +6,7 @@ import {
 	useState,
 } from 'react'
 import {Slide} from '../../../components/Slide/Slide'
+import {getUID} from '../../../store/methods'
 import {type PositionType} from '../../../store/types'
 import {joinStyles} from '../../../utils/joinStyles'
 import {useAppActions} from '../../hooks/useAppActions'
@@ -30,6 +31,7 @@ function Shell({
 	const slide = useAppSelector(editor => editor.presentation.slides.find(s => s.id === slideId)!)
 	const selectedSlideId = useAppSelector(editor => editor.selection.selectedSlideId)
 	const {
+		deselect,
 		setSlideIndex,
 		setSelection,
 	} = useAppActions()
@@ -98,7 +100,11 @@ function Shell({
 		}
 	}, [targetIndex, slide.id, setSlideIndex, slides])
 
-	const style = useMemo(() => {
+	const wrapperStyles = useMemo(() => ({
+		height: height || 'auto',
+	}), [height])
+
+	const shellStyle = useMemo(() => {
 		if (!onDrag || !delta) {
 			return {}
 		}
@@ -116,9 +122,8 @@ function Shell({
 			top: initialY + deltaY,
 			left: initialX + deltaX,
 			position: 'absolute' as const,
-			height: height || 'auto',
 		}
-	}, [onDrag, delta, height])
+	}, [onDrag, delta])
 
 	const isSelected = useMemo(() => slide.id === selectedSlideId, [selectedSlideId, slide.id])
 
@@ -142,18 +147,26 @@ function Shell({
 				ref={slideRef}
 				onClick={e => e.preventDefault()}
 				onMouseDown={e => {
+					deselect({type: 'object'})
 					setSelection({
 						type: 'slide',
 						id: slideId,
 					})
 					e.preventDefault()
 				}}
-				style={style}
+				style={shellStyle}
 			>
-				<Slide
-					slideId={slide.id}
-					scale={SLIDE_SCALE}
-				/>
+				<div
+					key={getUID()}
+					className={styles.shellSlideWrapper}
+					style={wrapperStyles}
+				>
+					<Slide
+						slideId={slide.id}
+						scale={SLIDE_SCALE}
+					/>
+				</div>
+
 			</div>
 		</>
 	)
