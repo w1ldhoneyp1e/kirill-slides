@@ -12,6 +12,7 @@ import {Plus24px} from '../../../assets/icons/Plus24px.tsx'
 import {Search24px} from '../../../assets/icons/Search24px.tsx'
 import {type ButtonProps, Button} from '../../../components/Button/Button.tsx'
 import {ButtonGroup} from '../../../components/ButtonGroup/ButtonGroup.tsx'
+import {ColorPickerPopover} from '../../../components/colorPickerPopover/ColorPickerPopover.tsx'
 import {Divider} from '../../../components/Divider/Divider.tsx'
 import {NumberField} from '../../../components/numberField/NumberField.tsx'
 import {type PopoverItem, Popover} from '../../../components/Popover/Popover.tsx'
@@ -168,6 +169,8 @@ function TextGroupButtons({
 
 	const [fontSize, setFontSize] = useState<number>(16)
 	const [fontColor, setFontColor] = useState<string>('#000000')
+	const [colorPickerOpen, setColorPickerOpen] = useState(false)
+	const buttonRef = useRef<HTMLButtonElement>(null)
 
 	useLayoutEffect(() => {
 		if (text) {
@@ -178,9 +181,12 @@ function TextGroupButtons({
 
 	const fontSizeColorButton: ButtonProps = {
 		type: 'icon',
+		state: 'default',
+		ref: buttonRef,
 		icon: Drop24px,
-		// TODO: add font size color
-		onClick: () => {},
+		onClick: () => {
+			setColorPickerOpen(true)
+		},
 	}
 
 	return (text && (
@@ -189,9 +195,9 @@ function TextGroupButtons({
 				size="half"
 				type="vertical"
 			/>
-			{/* <ButtonGroup
+			<ButtonGroup
 				items={[fontSizeColorButton]}
-			/> */}
+			/>
 			<div className={styles.fontSizeContainer}>
 				<Button
 					type="icon"
@@ -233,7 +239,20 @@ function TextGroupButtons({
 					state="default"
 				/>
 			</div>
-
+			{colorPickerOpen && (
+				<ColorPickerPopover
+					value={fontColor}
+					onChange={(color: string) => {
+						changeTextFontColor({
+							slideId: selectedSlide,
+							objId: selectedObjects[0],
+							fontColor: color,
+						})
+					}}
+					onClose={() => setColorPickerOpen(false)}
+					anchorRef={buttonRef}
+				/>
+			)}
 		</>
 	)
 	)

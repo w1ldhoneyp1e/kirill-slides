@@ -1,0 +1,68 @@
+.colorPicker {
+    position: absolute;
+    background-color: var(--color-soft-blue);
+    border: 1px solid var(--color-gray-dark);
+    border-radius: 4px;
+    box-shadow: -2px 2px 0 var(--color-gray-dark);
+    padding: 8px;
+    z-index: 1000;
+    opacity: 0;
+    transform: scale(0.95);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.open {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.grid {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.row {
+    display: flex;
+    gap: 4px;
+}
+
+.colorCell {
+    width: 24px;
+    height: 24px;
+    border: 1px solid var(--color-gray-dark);
+    border-radius: 4px;
+    cursor: pointer;
+    padding: 0;
+    transition: transform 0.1s ease;
+}
+
+.colorCell:hover {
+    transform: scale(1.1);
+}
+
+.colorCell.selected {
+    box-shadow: 0 0 0 2px var(--color-gray-darker);
+}
+
+.footer {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid var(--color-gray-dark);
+}
+
+.transparentButton {
+    width: 100%;
+    padding: 6px;
+    background: none;
+    border: 1px solid var(--color-gray-dark);
+    border-radius: 4px;
+    color: var(--color-gray-darker);
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.2s ease;
+}
+
+.transparentButton:hover {
+    background-color: var(--color-grayish-blue);
+}
