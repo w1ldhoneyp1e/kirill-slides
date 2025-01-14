@@ -56,7 +56,11 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
 		type, state, className,
 	} = props
 
-	const buttonClass = joinStyles(styles.button, state === 'disabled' && styles.disabled, className)
+	const buttonClass = joinStyles(
+		styles.button,
+		state === 'disabled' && styles.disabled,
+		className,
+	)
 
 	switch (type) {
 		case 'icon':
