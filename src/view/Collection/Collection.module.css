@@ -8,5 +8,5 @@
 	width: var(--left-part-width);
 	overflow-y: auto;
 	overflow-x: hidden;
-	gap: 30px;
+	gap: 15px;
 }

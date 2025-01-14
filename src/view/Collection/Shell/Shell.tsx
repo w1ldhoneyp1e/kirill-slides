@@ -7,6 +7,7 @@ import {
 } from 'react'
 import {Slide} from '../../../components/Slide/Slide'
 import {type PositionType} from '../../../store/types'
+import {joinStyles} from '../../../utils/joinStyles'
 import {useAppActions} from '../../hooks/useAppActions'
 import {useAppSelector} from '../../hooks/useAppSelector'
 import {useDragAndDrop} from '../../hooks/useDragAndDrop'
@@ -51,10 +52,10 @@ function Shell({
 				y: slideRect.top - parentRect.top,
 			}
 		}
-		setOnDrag(true)
 	}, [parentRef])
 
 	const onMouseMove = useCallback((_delta: PositionType) => {
+		setOnDrag(true)
 		setDelta(_delta)
 	}, [])
 
@@ -96,7 +97,7 @@ function Shell({
 		}
 	}, [targetIndex, slide.id, setSlideIndex, slides])
 
-	const positionStyle = useMemo(() => {
+	const style = useMemo(() => {
 		if (!onDrag || !delta) {
 			return {}
 		}
@@ -121,26 +122,23 @@ function Shell({
 
 	const isSelected = useMemo(() => slide.id === selectedSlideId, [selectedSlideId, slide.id])
 
-	const style = {
-		...positionStyle,
-		border: isSelected
-			? '3px solid var(--color-gray-dark)'
-			: '1px solid var(--color-gray-dark)',
-	}
-
 	return (
 		<>
-			{onDrag && (
-				<div
-					className={styles.placeholder}
-					style={{
-						minHeight: height,
-						width: '100%',
-					}}
-				/>
-			)}
 			<div
-				className={styles.shell}
+				className={joinStyles(
+					styles.placeholder,
+					onDrag
+						? ''
+						: styles.invisible,
+				)}
+			/>
+			<div
+				className={joinStyles(
+					styles.shell,
+					isSelected
+						? styles.selected
+						: '',
+				)}
 				ref={slideRef}
 				onClick={e => onClick(e)}
 				style={style}
