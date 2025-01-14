@@ -18,20 +18,21 @@ const SLIDE_SCALE = 0.2
 const GAP = 30
 
 type ShellProps = {
-	onClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void,
 	slideId: string,
 	parentRef: React.RefObject<HTMLDivElement>,
 }
 
 function Shell({
 	slideId,
-	onClick,
 	parentRef,
 }: ShellProps) {
 	const slides = useAppSelector(editor => editor.presentation.slides)
 	const slide = useAppSelector(editor => editor.presentation.slides.find(s => s.id === slideId)!)
 	const selectedSlideId = useAppSelector(editor => editor.selection.selectedSlideId)
-	const {setSlideIndex} = useAppActions()
+	const {
+		setSlideIndex,
+		setSelection,
+	} = useAppActions()
 
 	const [onDrag, setOnDrag] = useState(false)
 	const [delta, setDelta] = useState<PositionType | null>(null)
@@ -114,7 +115,6 @@ function Shell({
 		return {
 			top: initialY + deltaY,
 			left: initialX + deltaX,
-			cursor: 'pointer',
 			position: 'absolute' as const,
 			height: height || 'auto',
 		}
@@ -140,7 +140,14 @@ function Shell({
 						: '',
 				)}
 				ref={slideRef}
-				onClick={e => onClick(e)}
+				onClick={e => e.preventDefault()}
+				onMouseDown={e => {
+					setSelection({
+						type: 'slide',
+						id: slideId,
+					})
+					e.preventDefault()
+				}}
 				style={style}
 			>
 				<Slide

@@ -32,6 +32,7 @@ function Text({
 	scale,
 }: TextProps) {
 	const {
+		deselect,
 		setSelection,
 		changeObjectPosition,
 	} = useAppActions()
@@ -104,10 +105,11 @@ function Text({
 				ref={textRef}
 				className={styles.text}
 				style={style}
-				onClick={e => {
-					if (e.defaultPrevented) {
-						return
-					}
+				onClick={e => e.preventDefault()}
+				onMouseDown={e => {
+					deselect({
+						type: 'object',
+					})
 					setSelection({
 						type: 'object',
 						id: text.id,

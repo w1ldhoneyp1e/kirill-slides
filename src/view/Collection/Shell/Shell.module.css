@@ -11,6 +11,8 @@
 	border-radius: 15px;
 	border: 1px solid var(--color-gray-dark);
 	box-shadow: 2px 2px 0 var(--color-gray-dark);
+
+	cursor: pointer;
 }
 
 .selected {

@@ -1,6 +1,7 @@
 .picture {
 	position: absolute;
 	object-fit: cover;
+	cursor: pointer;
 }
 
 .selected {

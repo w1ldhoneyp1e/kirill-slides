@@ -6,10 +6,7 @@ import {Shell} from './Shell/Shell'
 
 function Collection() {
 	const slides = useAppSelector((editor => editor.presentation.slides))
-	const {
-		setSelection,
-		deselect,
-	} = useAppActions()
+	const {deselect} = useAppActions()
 	const parentRef = useRef<HTMLDivElement>(null)
 	return (
 		<div
@@ -30,13 +27,6 @@ function Collection() {
 					slideId={slide.id}
 					key={slide.id}
 					parentRef={parentRef}
-					onClick={e => {
-						setSelection({
-							type: 'slide',
-							id: slide.id,
-						})
-						e.preventDefault()
-					}}
 				/>
 			))}
 		</div>

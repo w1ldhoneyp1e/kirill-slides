@@ -34,6 +34,7 @@ function Picture({
 }: PictureProps) {
 	const selectedObjIds = useAppSelector((editor => editor.selection.selectedObjIds))
 	const {
+		deselect,
 		setSelection,
 		changeObjectPosition,
 	} = useAppActions()
@@ -109,8 +110,12 @@ function Picture({
 				src={picture.src}
 				style={style}
 				draggable="false"
-				onClick={e => {
+				onClick={e => e.preventDefault()}
+				onMouseDown={e => {
 					e.preventDefault()
+					deselect({
+						type: 'object',
+					})
 					setSelection({
 						type: 'object',
 						id: pictureId,
