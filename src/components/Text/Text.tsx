@@ -35,6 +35,7 @@ function Text({
 		deselect,
 		setSelection,
 		changeObjectPosition,
+		changeTextValue,
 	} = useAppActions()
 	const selectedObjects = useAppSelector(editor => editor.selection.selectedObjIds)
 	const text = useAppSelector(
@@ -96,6 +97,11 @@ function Text({
 	}
 
 	const handleBlur = () => {
+		changeTextValue({
+			slideId,
+			objId: textId,
+			value: currentText,
+		})
 		setIsEditing(false)
 	}
 

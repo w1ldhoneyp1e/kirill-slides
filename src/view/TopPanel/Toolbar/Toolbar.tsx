@@ -1,5 +1,5 @@
 import {
-	useEffect,
+	useLayoutEffect,
 	useMemo,
 	useRef,
 	useState,
@@ -13,6 +13,7 @@ import {Search24px} from '../../../assets/icons/Search24px.tsx'
 import {type ButtonProps, Button} from '../../../components/Button/Button.tsx'
 import {ButtonGroup} from '../../../components/ButtonGroup/ButtonGroup.tsx'
 import {Divider} from '../../../components/Divider/Divider.tsx'
+import {NumberField} from '../../../components/numberField/NumberField.tsx'
 import {type PopoverItem, Popover} from '../../../components/Popover/Popover.tsx'
 import {type SlideType, type TextType} from '../../../store/types.ts'
 import {useAppActions} from '../../hooks/useAppActions.ts'
@@ -25,7 +26,7 @@ import styles from './Toolbar.module.css'
 function Toolbar() {
 	const selectedSlide = useAppSelector(editor => editor.selection.selectedSlideId)
 	const selectedObjects = useAppSelector(editor => editor.selection.selectedObjIds)
-	const slides = useAppSelector(editor => editor.slides)
+	const slides = useAppSelector(editor => editor.presentation.slides)
 
 	const [popoverOpened, setPopoverOpened] = useState(false)
 	const [popupOpened, setPopupOpened] = useState(false)
@@ -168,7 +169,7 @@ function TextGroupButtons({
 	const [fontSize, setFontSize] = useState<number>(16)
 	const [fontColor, setFontColor] = useState<string>('#000000')
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		if (text) {
 			setFontSize(text.fontSize)
 			setFontColor(text.fontColor)
@@ -184,47 +185,55 @@ function TextGroupButtons({
 
 	return (text && (
 		<>
-			<ButtonGroup
+			<Divider
+				size="half"
+				type="vertical"
+			/>
+			{/* <ButtonGroup
 				items={[fontSizeColorButton]}
-			/>
-			<Button
-				type="icon"
-				icon={Plus24px}
-				onClick={() => {
-					setFontSize(fontSize + 1)
-					changeTextFontSize({
-						slideId: selectedSlide,
-						objId: selectedObjects[0],
-						fontSize: fontSize + 1,
-					})
-				}}
-				state="default"
-			/>
-			<NumberField
-				className={styles.fontSizeField}
-				value={text.fontSize}
-				onChange={value => {
-					setFontSize(value)
-					changeTextFontSize({
-						slideId: selectedSlide,
-						objId: selectedObjects[0],
-						fontSize: value,
-					})
-				}}
-			/>
-			<Button
-				type="icon"
-				icon={Minus24px}
-				onClick={() => {
-					setFontSize(fontSize - 1)
-					changeTextFontSize({
-						slideId: selectedSlide,
-						objId: selectedObjects[0],
-						fontSize: fontSize - 1,
-					})
-				}}
-				state="default"
-			/>
+			/> */}
+			<div className={styles.fontSizeContainer}>
+				<Button
+					type="icon"
+					icon={Plus24px}
+					onClick={() => {
+						setFontSize(fontSize + 1)
+						changeTextFontSize({
+							slideId: selectedSlide,
+							objId: selectedObjects[0],
+							fontSize: fontSize + 1,
+						})
+					}}
+					state="default"
+				/>
+				<NumberField
+					className={styles.fontSizeField}
+					value={fontSize}
+					maxValue={100}
+					onChange={value => {
+						setFontSize(value)
+						changeTextFontSize({
+							slideId: selectedSlide,
+							objId: selectedObjects[0],
+							fontSize: value,
+						})
+					}}
+				/>
+				<Button
+					type="icon"
+					icon={Minus24px}
+					onClick={() => {
+						setFontSize(fontSize - 1)
+						changeTextFontSize({
+							slideId: selectedSlide,
+							objId: selectedObjects[0],
+							fontSize: fontSize - 1,
+						})
+					}}
+					state="default"
+				/>
+			</div>
+
 		</>
 	)
 	)

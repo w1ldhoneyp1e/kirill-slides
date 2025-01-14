@@ -6,6 +6,8 @@ import {
 	changeObjectPosition,
 	changeObjectSize,
 	changePresentationName,
+	changeTextColor,
+	changeTextFontSize,
 	changeTextValue,
 	deleteSlide,
 	deselect,
@@ -42,6 +44,10 @@ function editorReducer(editor: EditorType = defaultEditor, action: EditorAction)
 			return changeObjectSize(editor, action)
 		case ACTION_TYPE.changeTextValue:
 			return changeTextValue(editor, action)
+		case ACTION_TYPE.changeTextFontSize:
+			return changeTextFontSize(editor, action)
+		case ACTION_TYPE.changeTextFontColor:
+			return changeTextColor(editor, action)
 		default:
 			return editor
 	}
