@@ -1,14 +1,23 @@
 .colorPicker {
     position: absolute;
+    z-index: 10;
+
     background-color: var(--color-soft-blue);
+
     border: 1px solid var(--color-gray-dark);
     border-radius: 4px;
-    box-shadow: -2px 2px 0 var(--color-gray-dark);
+    box-shadow: -1px 1px 0 var(--color-gray-dark);
+
     padding: 8px;
-    z-index: 1000;
     opacity: 0;
+
     transform: scale(0.95);
     transition: opacity 0.2s ease, transform 0.2s ease;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 8px;
 }
 
 .open {
@@ -43,12 +52,6 @@
 
 .colorCell.selected {
     box-shadow: 0 0 0 2px var(--color-gray-darker);
-}
-
-.footer {
-    margin-top: 8px;
-    padding-top: 8px;
-    border-top: 1px solid var(--color-gray-dark);
 }
 
 .transparentButton {

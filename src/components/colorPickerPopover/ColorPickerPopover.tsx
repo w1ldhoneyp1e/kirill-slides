@@ -4,8 +4,11 @@ import {
 	useRef,
 	useState,
 } from 'react'
+import {Palette24px} from '../../assets/icons/Palette24px'
 import {getUID} from '../../store/methods'
 import {joinStyles} from '../../utils/joinStyles'
+import {Button} from '../Button/Button'
+import {Divider} from '../Divider/Divider'
 import styles from './ColorPickerPopover.module.css'
 
 type ColorPickerProps = {
@@ -98,17 +101,41 @@ function ColorPickerPopover({
 					</div>
 				))}
 			</div>
-			<div className={styles.footer}>
-				<button
-					className={styles.transparentButton}
-					onClick={() => {
-						onChange('transparent')
+			<Divider
+				type="horizontal"
+				size="full"
+			/>
+			<Button
+				type="icon-text"
+				icon={<Palette24px />}
+				text="Выбрать из палитры"
+				state="default"
+				onClick={() => {
+					const input = document.createElement('input')
+					input.type = 'color'
+					input.value = value === 'transparent'
+						? '#000000'
+						: value
+					input.addEventListener('change', e => {
+						onChange((e.target as HTMLInputElement).value)
 						onClose()
-					}}
-				>
-					{'Прозрачный\r'}
-				</button>
-			</div>
+					})
+					input.click()
+				}}
+			/>
+			<Divider
+				type="horizontal"
+				size="full"
+			/>
+			<Button
+				type="text"
+				text="Прозрачный"
+				state="default"
+				onClick={() => {
+					onChange('transparent')
+					onClose()
+				}}
+			/>
 		</div>
 	)
 }
