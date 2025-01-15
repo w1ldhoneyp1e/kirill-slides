@@ -1,0 +1,36 @@
+.fontFamilyPopover {
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 300px;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.fontList {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.fontItem {
+    padding: 8px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+}
+
+.fontItem:hover {
+    background-color: var(--color-grayish-blue);
+}
+
+.searchField {
+    width: 100%;
+} 

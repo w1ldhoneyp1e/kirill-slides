@@ -3,13 +3,15 @@ import {
 	useRef,
 	useState,
 } from 'react'
+import {Font24px} from '../../../assets/icons/Font24px'
 import {Marker24px} from '../../../assets/icons/Marker24px'
 import {Minus24px} from '../../../assets/icons/Minus24px'
 import {Plus24px} from '../../../assets/icons/Plus24px'
-import {Button} from '../../../components/Button/Button'
+import {type ButtonProps, Button} from '../../../components/Button/Button'
 import {ButtonGroup} from '../../../components/ButtonGroup/ButtonGroup'
 import {ColorPickerPopover} from '../../../components/colorPickerPopover/ColorPickerPopover'
 import {Divider} from '../../../components/Divider/Divider'
+import {FontFamilyPopover} from '../../../components/FontFamilyPopover/FontFamilyPopover'
 import {NumberField} from '../../../components/numberField/NumberField'
 import {type SlideType, type TextType} from '../../../store/types'
 import {useAppActions} from '../../hooks/useAppActions'
@@ -37,7 +39,10 @@ export function TextGroupButtons({
 	const [fontSize, setFontSize] = useState<number>(16)
 	const [fontColor, setFontColor] = useState<string>('#000000')
 	const [colorPickerOpen, setColorPickerOpen] = useState(false)
+	const [searchFontFamilyOpen, setSearchFontFamilyOpen] = useState(false)
+
 	const buttonRef = useRef<HTMLButtonElement>(null)
+	const fontFamiltButtonRef = useRef<HTMLButtonElement>(null)
 
 	useLayoutEffect(() => {
 		if (text) {
@@ -50,6 +55,22 @@ export function TextGroupButtons({
 		return null
 	}
 
+	const markerButton: ButtonProps = {
+		type: 'icon',
+		state: 'default',
+		ref: buttonRef,
+		icon: Marker24px,
+		onClick: () => setColorPickerOpen(true),
+	}
+
+	const fontFamiltButton: ButtonProps = {
+		type: 'icon',
+		state: 'default',
+		ref: fontFamiltButtonRef,
+		icon: Font24px,
+		onClick: () => setSearchFontFamilyOpen(true),
+	}
+
 	return (
 		<>
 			<Divider
@@ -57,13 +78,7 @@ export function TextGroupButtons({
 				type="vertical"
 			/>
 			<ButtonGroup
-				items={[{
-					type: 'icon',
-					state: 'default',
-					ref: buttonRef,
-					icon: Marker24px,
-					onClick: () => setColorPickerOpen(true),
-				}]}
+				items={[markerButton, fontFamiltButton]}
 			/>
 			<div className={styles.fontSizeContainer}>
 				<Button
@@ -118,6 +133,16 @@ export function TextGroupButtons({
 					}}
 					onClose={() => setColorPickerOpen(false)}
 					anchorRef={buttonRef}
+				/>
+			)}
+			{searchFontFamilyOpen && (
+				<FontFamilyPopover
+					value={text.fontFamily}
+					onChange={(font: string) => {
+						// Здесь будет action для изменения шрифта
+					}}
+					onClose={() => setSearchFontFamilyOpen(false)}
+					anchorRef={fontFamiltButtonRef}
 				/>
 			)}
 		</>
