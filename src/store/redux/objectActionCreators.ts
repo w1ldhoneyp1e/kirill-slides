@@ -125,6 +125,25 @@ function changeTextFontColor({
 	}
 }
 
+function changeTextFontFamily({
+	slideId,
+	objId,
+	fontFamily,
+}: {
+	slideId: string,
+	objId: string,
+	fontFamily: string,
+}) {
+	return {
+		type: ACTION_TYPE.changeTextFontFamily,
+		payload: {
+			slideId,
+			objId,
+			fontFamily,
+		},
+	}
+}
+
 export {
 	addText,
 	addPicture,
@@ -134,4 +153,5 @@ export {
 	changeTextFontSize,
 	changeTextFontColor,
 	deleteObjects,
+	changeTextFontFamily,
 }

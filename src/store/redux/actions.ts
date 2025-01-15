@@ -13,6 +13,7 @@ enum ACTION_TYPE {
 	changeTextValue = 'changeTextValue',
 	changeTextFontSize = 'changeTextFontSize',
 	changeTextFontColor = 'changeTextFontColor',
+	changeTextFontFamily = 'changeTextFontFamily',
 
 	addPicture = 'addPicture',
 	deleteObjects = 'deleteObjects',
@@ -137,6 +138,15 @@ type ChangeSlideBackgroundAction = {
 	},
 }
 
+type ChangeTextFontFamilyAction = {
+	type: ACTION_TYPE.changeTextFontFamily,
+	payload: {
+		slideId: string,
+		objId: string,
+		fontFamily: string,
+	},
+}
+
 type EditorAction =
     AddSlideAction
     | RemoveSlideAction
@@ -154,6 +164,7 @@ type EditorAction =
 	| ChangeTextFontColorAction
 	| ChangeSlideBackgroundAction
 	| DeleteObjectsAction
+	| ChangeTextFontFamilyAction
 
 export {ACTION_TYPE}
 export type {
@@ -174,4 +185,5 @@ export type {
 	AddTextAction,
 	SetEditorAction,
 	DeleteObjectsAction,
+	ChangeTextFontFamilyAction,
 }

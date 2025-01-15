@@ -5,6 +5,7 @@ import {
 	type ChangePresentationNameAction,
 	type ChangeSlideBackgroundAction,
 	type ChangeTextFontColorAction,
+	type ChangeTextFontFamilyAction,
 	type ChangeTextFontSizeAction,
 	type ChangeTextValueAction,
 	type DeselectAction,
@@ -389,14 +390,14 @@ function setTextFontSize(obj: TextType | PictureType, newSize: number): TextType
 // изменение семейства шрифтов у текста
 function changeTextFontFamily(
 	editor: EditorType,
-	{
-		slideId, objId, fontFamily,
-	}: {
-		slideId: string,
-		objId: string,
-		fontFamily: string,
-	},
+	action: ChangeTextFontFamilyAction,
 ): EditorType {
+	const {
+		slideId,
+		objId,
+		fontFamily,
+	} = action.payload
+
 	const newSlides = editor.presentation.slides.map(slide => {
 		if (slide.id === slideId) {
 			const newContentObjects = slide.contentObjects.map(obj =>
