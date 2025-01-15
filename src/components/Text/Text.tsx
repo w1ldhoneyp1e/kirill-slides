@@ -5,6 +5,7 @@ import {
 	useRef,
 	useState,
 } from 'react'
+import {useFontCache} from '../../hooks/useFontCache'
 import {useObjectContextMenu} from '../../hooks/useObjectContextMenu'
 import {
 	type PositionType,
@@ -25,28 +26,6 @@ type TextProps = {
 	slideId: string,
 	parentRef: React.RefObject<HTMLDivElement>,
 	scale: number,
-}
-
-const loadGoogleFont = async (fontFamily: string): Promise<void> => {
-	if (!fontFamily || fontFamily === 'inherit') {
-		return
-	}
-
-	const link = document.createElement('link')
-	link.href = `https://fonts.googleapis.com/css2?family=${fontFamily.replace(/ /g, '+')}&display=swap`
-	link.rel = 'stylesheet'
-
-	const existingLink = document.querySelector(`link[href="${link.href}"]`)
-	if (existingLink) {
-		return
-	}
-
-	document.head.appendChild(link)
-
-	return new Promise((resolve, reject) => {
-		link.onload = () => resolve()
-		link.onerror = () => reject()
-	})
 }
 
 function Text({
@@ -74,6 +53,8 @@ function Text({
 	const [currentText, setCurrentText] = useState(text.value)
 	const textRef = useRef<HTMLDivElement>(null)
 	const isSelected = selectedObjects.includes(text.id)
+
+	const {loadFromCache, applyFont} = useFontCache()
 
 	const onMouseMove = useCallback((delta: PositionType) => {
 		if (!isValidOffset(delta)) {
@@ -124,11 +105,13 @@ function Text({
 
 	useEffect(() => {
 		if (text.fontFamily) {
-			loadGoogleFont(text.fontFamily).catch(err => {
-				console.error('Ошибка при загрузке шрифта:', err)
+			loadFromCache(text.fontFamily).then(css => {
+				if (css) {
+					applyFont(text.fontFamily, css)
+				}
 			})
 		}
-	}, [text.fontFamily])
+	}, [text.fontFamily, applyFont, loadFromCache])
 
 	const handleDoubleClick = () => {
 		if (!isEditing) {
@@ -157,6 +140,11 @@ function Text({
 		width: size.width * scale,
 		height: size.height * scale,
 		fontFamily: text.fontFamily || 'inherit',
+		fontWeight: 'normal',
+		fontStyle: 'normal',
+		textRendering: 'optimizeLegibility',
+		WebkitFontSmoothing: 'antialiased',
+		MozOsxFontSmoothing: 'grayscale',
 	}), [position.y, position.x, scale, text.fontColor, text.fontSize, size.width, size.height, text.fontFamily])
 
 	return (
@@ -164,7 +152,10 @@ function Text({
 			<div
 				ref={textRef}
 				className={styles.text}
-				style={style}
+				style={{
+					...style,
+					textRendering: 'optimizeLegibility' as const,
+				}}
 				onClick={e => e.stopPropagation()}
 				onMouseDown={e => {
 					deselect({
