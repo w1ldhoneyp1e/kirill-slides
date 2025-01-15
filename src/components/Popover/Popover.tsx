@@ -6,6 +6,7 @@ import React, {
 } from 'react'
 import {getUID} from '../../store/methods'
 import {joinStyles} from '../../utils/joinStyles'
+import {PopoverLayer} from '../PopoverLayer/PopoverLayer'
 import styles from './Popover.module.css'
 
 type PopoverItem =
@@ -73,42 +74,42 @@ const Popover: React.FC<PopoverProps> = ({
 	}, [onClose, anchorRef])
 
 	return (
-		<div
-			ref={popoverRef}
-			className={joinStyles(styles.popover, isOpen
-				? styles.open
-				: '')}
-			style={style}
-		>
-			{items.map((item, index) => (
-				<React.Fragment key={getUID()}>
-					<div
-						className={styles.popoverItem}
-						onClick={() => {
-							item.onClick()
-							setIsOpen(false)
-							setTimeout(onClose, 200)
-						}}
-					>
-						{item.type === 'icon' && item.icon}
-						{item.type === 'text' && (
-							<span className={styles.text}>
-								{item.text}
-							</span>
-						)}
-						{item.type === 'icon-text' && (
-							<>
-								{item.icon}
+		<PopoverLayer>
+			<div
+				ref={popoverRef}
+				className={joinStyles(styles.popover, isOpen && styles.open)}
+				style={style}
+			>
+				{items.map((item, index) => (
+					<React.Fragment key={getUID()}>
+						<div
+							className={styles.popoverItem}
+							onClick={() => {
+								item.onClick()
+								setIsOpen(false)
+								setTimeout(onClose, 200)
+							}}
+						>
+							{item.type === 'icon' && item.icon}
+							{item.type === 'text' && (
 								<span className={styles.text}>
 									{item.text}
 								</span>
-							</>
-						)}
-					</div>
-					{index < items.length - 1 && <div className={styles.separator} />}
-				</React.Fragment>
-			))}
-		</div>
+							)}
+							{item.type === 'icon-text' && (
+								<>
+									{item.icon}
+									<span className={styles.text}>
+										{item.text}
+									</span>
+								</>
+							)}
+						</div>
+						{index < items.length - 1 && <div className={styles.separator} />}
+					</React.Fragment>
+				))}
+			</div>
+		</PopoverLayer>
 	)
 }
 

@@ -60,8 +60,8 @@ function ColorPickerPopover({
 				&& !pickerRef.current.contains(event.target as Node)
 				&& anchorRef.current
 				&& !anchorRef.current.contains(event.target as Node)
+				&& !paletteOpen
 			) {
-				onClose()
 				setIsOpen(false)
 				setTimeout(onClose, 200)
 			}
@@ -69,7 +69,7 @@ function ColorPickerPopover({
 
 		document.addEventListener('mousedown', handleClickOutside)
 		return () => document.removeEventListener('mousedown', handleClickOutside)
-	}, [onClose, anchorRef])
+	}, [onClose, anchorRef, paletteOpen])
 
 	return (
 		<div

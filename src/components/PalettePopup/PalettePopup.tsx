@@ -140,7 +140,6 @@ function PalettePopup({
 	)
 }
 
-// Вспомогательные функции для конвертации цветов
 function HSVtoRGB(h: number, s: number, v: number) {
 	s /= 100
 	v /= 100
