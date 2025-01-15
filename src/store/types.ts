@@ -34,6 +34,7 @@ type TextType = SlideObjectType & {
 	fontFamily: string,
 	fontColor: string,
 	type: 'text',
+	fontWeight: 'normal' | 'bold',
 }
 type PictureType = SlideObjectType & {
 	src: string,

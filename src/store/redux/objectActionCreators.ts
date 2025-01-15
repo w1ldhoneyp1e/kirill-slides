@@ -144,6 +144,26 @@ function changeTextFontFamily({
 	}
 }
 
+function changeTextFontWeight({
+	slideId,
+	objId,
+	fontWeight,
+}: {
+	slideId: string,
+	objId: string,
+	fontWeight: 'normal' | 'bold',
+}) {
+	return {
+		type: ACTION_TYPE.changeTextFontWeight,
+		payload: {
+			slideId,
+			objId,
+			fontWeight,
+		},
+	}
+}
+
+
 export {
 	addText,
 	addPicture,
@@ -154,4 +174,5 @@ export {
 	changeTextFontColor,
 	deleteObjects,
 	changeTextFontFamily,
+	changeTextFontWeight,
 }

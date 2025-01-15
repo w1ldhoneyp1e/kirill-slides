@@ -140,7 +140,7 @@ function Text({
 		width: size.width * scale,
 		height: size.height * scale,
 		fontFamily: text.fontFamily || 'inherit',
-		fontWeight: 'normal',
+		fontWeight: text.fontWeight || 'normal',
 		fontStyle: 'normal',
 		textRendering: 'optimizeLegibility',
 		WebkitFontSmoothing: 'antialiased',
@@ -148,14 +148,17 @@ function Text({
 		display: 'flex',
 		justifyContent: 'center',
 		alignItems: 'center',
-	}), [position.y, position.x, scale, text.fontColor, text.fontSize, size.width, size.height, text.fontFamily])
+	}), [position, scale, text, size.width, size.height])
 
 	return (
 		<>
 			<div
 				ref={textRef}
 				className={styles.text}
-				style={style}
+				style={{
+					...style,
+					textRendering: 'optimizeLegibility' as const,
+				}}
 				onClick={e => e.stopPropagation()}
 				onMouseDown={e => {
 					deselect({

@@ -3,6 +3,7 @@ import {
 	useRef,
 	useState,
 } from 'react'
+import {Bold24px} from '../../../assets/icons/Bold24px'
 import {Font24px} from '../../../assets/icons/Font24px'
 import {Marker24px} from '../../../assets/icons/Marker24px'
 import {Minus24px} from '../../../assets/icons/Minus24px'
@@ -33,6 +34,7 @@ function TextGroupButtons({
 		changeTextFontSize,
 		changeTextFontColor,
 		changeTextFontFamily,
+		changeTextFontWeight,
 	} = useAppActions()
 
 	const slide = slides.find(s => s.id === selectedSlide)
@@ -83,6 +85,22 @@ function TextGroupButtons({
 		},
 	}
 
+	const toggleBoldButton: ButtonProps = {
+		type: 'icon',
+		state: text.fontWeight === 'bold'
+			? 'active'
+			: 'default',
+		ref: buttonRef,
+		icon: Bold24px,
+		onClick: () => {
+			changeTextFontWeight({
+				slideId: selectedSlide,
+				objId: selectedObjects[0],
+				fontWeight: 'bold',
+			})
+		},
+	}
+
 	return (
 		<>
 			<Divider
@@ -90,7 +108,11 @@ function TextGroupButtons({
 				type="vertical"
 			/>
 			<ButtonGroup
-				items={[markerButton, fontFamiltButton]}
+				items={[
+					markerButton,
+					fontFamiltButton,
+					toggleBoldButton,
+				]}
 			/>
 			<div className={styles.fontSizeContainer}>
 				<Button

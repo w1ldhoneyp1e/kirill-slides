@@ -7,6 +7,7 @@ import {
 	type ChangeTextFontColorAction,
 	type ChangeTextFontFamilyAction,
 	type ChangeTextFontSizeAction,
+	type ChangeTextFontWeightAction,
 	type ChangeTextValueAction,
 	type DeselectAction,
 	type SetSelectionAction,
@@ -475,6 +476,43 @@ function setTextColor(obj: TextType | PictureType, newColor: string): TextType |
 		: {...obj}
 }
 
+function changeTextFontWeight(
+	editor: EditorType,
+	action: ChangeTextFontWeightAction,
+): EditorType {
+	const {
+		slideId,
+		objId,
+		fontWeight,
+	} = action.payload
+
+	const newSlides = editor.presentation.slides.map(slide => {
+		if (slide.id === slideId) {
+			const newContentObjects = slide.contentObjects.map(obj =>
+				obj.id === objId
+					? {
+						...obj,
+						fontWeight,
+					}
+					: obj)
+
+			return {
+				...slide,
+				contentObjects: newContentObjects,
+			}
+		}
+		return slide
+	})
+
+	return {
+		...editor,
+		presentation: {
+			...editor.presentation,
+			slides: newSlides,
+		},
+	}
+}
+
 // изменение фона слайда
 function changeSlideBackground(
 	editor: EditorType,
@@ -641,4 +679,5 @@ export {
 	deleteObjects,
 	setSelection,
 	deselect,
+	changeTextFontWeight,
 }
