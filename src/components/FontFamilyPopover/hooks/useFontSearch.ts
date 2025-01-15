@@ -1,10 +1,6 @@
 import {useCallback, useState} from 'react'
 import {API_KEY_GOOGLE_FONTS} from '../../../consts/apiKeys'
 
-const DB_NAME = 'FontCache'
-const STORE_NAME = 'fonts'
-const DB_VERSION = 1
-
 type GoogleFont = {
 	family: string,
 	variants: string[],
@@ -21,26 +17,35 @@ type GoogleFontsResponse = {
 const useFontSearch = () => {
 	const [fonts, setFonts] = useState<string[]>([])
 	const [allFonts, setAllFonts] = useState<string[]>([])
-	const [initialized, setInitialized] = useState(true)
-	const [error, setError] = useState<string | null>(null)
 	const [loading, setLoading] = useState(false)
+	const [initialized, setInitialized] = useState(false)
+	const [error, setError] = useState<string | null>(null)
 
 	const openDB = useCallback((): Promise<IDBDatabase> => new Promise((resolve, reject) => {
-		const request = indexedDB.open(DB_NAME, DB_VERSION)
+		const request = indexedDB.open('FontsDB', 1)
 
 		request.onerror = () => reject(request.error)
 		request.onsuccess = () => resolve(request.result)
 
 		request.onupgradeneeded = event => {
 			const db = (event.target as IDBOpenDBRequest).result
-			if (!db.objectStoreNames.contains(STORE_NAME)) {
-				db.createObjectStore(STORE_NAME, {keyPath: 'family'})
+			if (!db.objectStoreNames.contains('fonts')) {
+				db.createObjectStore('fonts', {keyPath: 'family'})
 			}
 		}
 	}), [])
 
-	const applyFont = useCallback((family: string, css: string) => {
-		const styleId = `font-${family.replace(/\s+/g, '-')}`
+	const saveFontToDb = async (db: IDBDatabase, fontFamily: string, css: string) => {
+		const transaction = db.transaction(['fonts'], 'readwrite')
+		const store = transaction.objectStore('fonts')
+		await store.put({
+			family: fontFamily,
+			css,
+		})
+	}
+
+	const applyFont = useCallback((fontFamily: string, css: string) => {
+		const styleId = `font-${fontFamily}`
 		if (!document.getElementById(styleId)) {
 			const style = document.createElement('style')
 			style.id = styleId
@@ -49,22 +54,16 @@ const useFontSearch = () => {
 		}
 	}, [])
 
-	async function saveFontToDb(db: IDBDatabase, font: string, css: string): Promise<void> {
-		return new Promise((resolve, reject) => {
-			const transaction = db.transaction(STORE_NAME, 'readwrite')
-			const store = transaction.objectStore(STORE_NAME)
+	const loadFontCSS = async (font: string, weight: string = 'regular'): Promise<string> => {
+		const fontUrl = `https://fonts.googleapis.com/css2?family=${encodeURIComponent(font)}:wght@${weight === 'regular'
+? '400'
+: '700'}&display=swap`
+		const cssResponse = await fetch(fontUrl)
 
-			const request = store.put({
-				family: font,
-				css,
-			})
-
-			request.onsuccess = () => resolve()
-			request.onerror = () => reject(request.error)
-
-			transaction.oncomplete = () => resolve()
-			transaction.onerror = () => reject(transaction.error)
-		})
+		if (cssResponse.ok) {
+			return cssResponse.text()
+		}
+		throw new Error(`Ошибка загрузки шрифта ${font}`)
 	}
 
 	const loadFonts = useCallback(async () => {
@@ -96,14 +95,15 @@ const useFontSearch = () => {
 
 			for (const font of fontList) {
 				try {
-					const fontUrl = `https://fonts.googleapis.com/css2?family=${encodeURIComponent(font)}&display=swap`
-					const cssResponse = await fetch(fontUrl)
+					// Загружаем regular версию
+					const regularCSS = await loadFontCSS(font)
+					await saveFontToDb(db, font, regularCSS)
+					applyFont(font, regularCSS)
 
-					if (cssResponse.ok) {
-						const css = await cssResponse.text()
-						await saveFontToDb(db, font, css)
-						applyFont(font, css)
-					}
+					// Загружаем bold версию
+					const boldCSS = await loadFontCSS(font, 'bold')
+					await saveFontToDb(db, `${font}_bold`, boldCSS)
+					applyFont(`${font}_bold`, boldCSS)
 				}
 				catch (err) {
 					console.error(`Ошибка загрузки шрифта ${font}:`, err)
@@ -124,25 +124,25 @@ const useFontSearch = () => {
 		}
 	}, [openDB, applyFont, loading])
 
-	const searchFonts = useCallback((query: string) => {
-		if (!query.trim()) {
+	const handleSearch = useCallback((query: string) => {
+		if (!query) {
 			setFonts(allFonts)
 			return
 		}
 
-		const filteredFonts = allFonts.filter(font =>
+		const filtered = allFonts.filter(font =>
 			font.toLowerCase().includes(query.toLowerCase()),
 		)
-		setFonts(filteredFonts)
+		setFonts(filtered)
 	}, [allFonts])
 
 	return {
 		fonts,
-		initialized,
-		searchFonts,
-		loadFonts,
-		error,
 		loading,
+		initialized,
+		error,
+		loadFonts,
+		handleSearch,
 	}
 }
 

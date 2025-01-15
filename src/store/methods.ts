@@ -654,6 +654,7 @@ function getDefaultText() {
 		fontFamily: 'TimesNewRoman',
 		fontColor: '#000000',
 		type: 'text',
+		fontWeight: 'normal',
 	}
 	return defaultText
 }

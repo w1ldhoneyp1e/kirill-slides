@@ -20,11 +20,13 @@
     font-size: 15px;
 }
 
-.button:hover:not(.disabled) {
+.button:hover:not(.disabled),
+.button.active:not(.disabled) {
     background-color: var(--color-grayish-blue);
 }
 
-.button:active:not(.disabled) {
+.button:active:not(.disabled),
+.button.active:not(.disabled) {
     box-shadow: -1px 1px 0 var(--color-gray-dark);
 }
 
@@ -46,11 +48,13 @@
     border: 0;
 }
 
-.buttonIconIcon:hover:not(.disabled) {
+.buttonIconIcon:hover:not(.disabled),
+.buttonIconIcon.active:not(.disabled) {
     background-color: var(--color-grayish-brown);
 }
 
-.buttonIconIcon:active:not(.disabled) {
+.buttonIconIcon:active:not(.disabled),
+.buttonIconIcon.active:not(.disabled) {
     box-shadow: -2px 2px 0 var(--color-gray-dark);
 }
 

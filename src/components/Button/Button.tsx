@@ -7,10 +7,11 @@ import {joinStyles} from '../../utils/joinStyles'
 import Preloader from '../Preloader/Preloader'
 import styles from './Button.module.css'
 
-  type ButtonType = 'icon' | 'icon-text' | 'text' | 'text-icon' | 'icon-icon'
+  type ButtonType = 'icon' | 'icon-text' | 'text' | 'text-icon' | 'icon-icon' | 'icon-text-icon'
 
 type ButtonProps = {
-	state: 'default' | 'disabled' | 'loading',
+	type: ButtonType,
+	state?: 'default' | 'disabled' | 'loading' | 'active',
 	ref?: Ref<HTMLButtonElement>,
 	className?: string,
 } & ({
@@ -59,6 +60,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
 	const buttonClass = joinStyles(
 		styles.button,
 		state === 'disabled' && styles.disabled,
+		state === 'active' && styles.active,
 		className,
 	)
 
@@ -138,7 +140,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
 
 		case 'icon-icon':
 			return (
-				<div className={joinStyles(styles.buttonIconIcon, state === 'disabled' && styles.disabled)}>
+				<div className={joinStyles(styles.buttonIconIcon, state === 'disabled' && styles.disabled, state === 'active' && styles.active)}>
 					<span
 						className={styles.icon}
 						onClick={e => {

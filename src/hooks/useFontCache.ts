@@ -1,6 +1,6 @@
-const DB_NAME = 'FontCache'
-const STORE_NAME = 'fonts'
+const DB_NAME = 'FontsDB'
 const DB_VERSION = 1
+const STORE_NAME = 'fonts'
 
 type FontCache = {
 	family: string,
@@ -48,7 +48,7 @@ const useFontCache = () => {
 		}
 	}
 
-	const loadFromCache = async (fontFamily: string): Promise<string | null> => {
+	const loadFromCache = async (fontFamily: string, weight: 'normal' | 'bold' = 'normal'): Promise<string | null> => {
 		if (!fontFamily || fontFamily === 'inherit') {
 			return null
 		}
@@ -58,8 +58,12 @@ const useFontCache = () => {
 			const transaction = db.transaction(STORE_NAME, 'readonly')
 			const store = transaction.objectStore(STORE_NAME)
 
+			const fontKey = weight === 'bold'
+				? `${fontFamily}_bold`
+				: fontFamily
+
 			const cachedFont = await new Promise<FontCache | undefined>(resolve => {
-				const request = store.get(fontFamily)
+				const request = store.get(fontKey)
 				request.onsuccess = () => resolve(request.result)
 			})
 
@@ -75,24 +79,11 @@ const useFontCache = () => {
 		}
 	}
 
-	const applyFont = (fontFamily: string, css: string) => {
-		const existingStyle = document.querySelector(`style[data-font="${fontFamily}"]`)
-		if (!existingStyle) {
-			const style = document.createElement('style')
-			style.setAttribute('data-font', fontFamily)
-			style.textContent = css
-			document.head.appendChild(style)
-		}
-	}
-
 	return {
 		addToCache,
 		loadFromCache,
-		applyFont,
 	}
 }
 
-export {
-	useFontCache,
-}
+export {useFontCache}
 

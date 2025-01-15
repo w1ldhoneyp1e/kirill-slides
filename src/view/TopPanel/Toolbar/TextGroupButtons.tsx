@@ -96,7 +96,9 @@ function TextGroupButtons({
 			changeTextFontWeight({
 				slideId: selectedSlide,
 				objId: selectedObjects[0],
-				fontWeight: 'bold',
+				fontWeight: text.fontWeight === 'bold'
+					? 'normal'
+					: 'bold',
 			})
 		},
 	}
