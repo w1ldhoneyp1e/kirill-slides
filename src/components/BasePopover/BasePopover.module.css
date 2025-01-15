@@ -3,7 +3,10 @@
     border-radius: 8px;
     box-shadow: -2px 2px 0 var(--color-gray-dark);
     border: 2px solid var(--color-gray-dark);
+    position: fixed;
+    box-sizing: border-box;
     opacity: 0;
+    transform-origin: top right;
     transform: scale(0.95);
     transition: opacity 0.2s ease, transform 0.2s ease;
 }
