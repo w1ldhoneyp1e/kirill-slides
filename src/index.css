@@ -23,6 +23,10 @@
 	--color-grayish-brown: #CECECE; /* Кнопка undoRedo на ховер */
 }
 
+* {
+	box-sizing: border-box;
+}
+
 body {
 	margin: 0;
 	display: flex;

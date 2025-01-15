@@ -41,11 +41,10 @@ export function BasePopover({
 		}
 		else if (anchorRef?.current) {
 			const rect = anchorRef.current.getBoundingClientRect()
-			const popoverWidth = popoverRef.current?.offsetWidth || 0
 			setStyle({
 				position: 'fixed',
 				top: rect.bottom + window.scrollY,
-				left: (rect.right + window.scrollX) - popoverWidth,
+				right: window.innerWidth - (rect.right + window.scrollX),
 				zIndex: 1000,
 			})
 		}
