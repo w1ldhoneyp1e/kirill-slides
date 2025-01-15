@@ -18,6 +18,8 @@
     flex-direction: column;
     justify-content: space-between;
     gap: 8px;
+    right: 0;
+    width: max-content;
 }
 
 .open {

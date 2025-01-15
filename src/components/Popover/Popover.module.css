@@ -9,6 +9,8 @@
 	opacity: 0;
 	transform: scale(0.95);
 	transition: opacity 0.2s ease, transform 0.2s ease;
+	right: 0;
+	width: max-content;
 }
   
 .popover.open {
