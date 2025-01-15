@@ -2,34 +2,32 @@ import {useCallback, useState} from 'react'
 import {Font24px} from '../../assets/icons/Font24px'
 import {BasePopover} from '../BasePopover/BasePopover'
 import {EmptyState} from '../EmptyState/EmptyState'
-import Preloader from '../Preloader/Preloader'
+import {PreloaderWrapper} from '../Preloader/PreloaderWrapper'
 import {SearchField} from '../SearchField/SearchField'
 import styles from './FontFamilyPopover.module.css'
+import {useFontSearch} from './hooks/useFontSearch'
 
 type FontFamilyPopoverProps = {
 	value: string,
-	onChange: (font: string) => void,
+	onSelect: (font: string) => void,
 	onClose: () => void,
 	anchorRef: React.RefObject<HTMLElement>,
 }
 
 function FontFamilyPopover({
 	value,
-	onChange,
+	onSelect,
 	onClose,
 	anchorRef,
 }: FontFamilyPopoverProps) {
 	const [searchValue, setSearchValue] = useState('')
-	const [isLoading, setLoading] = useState(false)
-	const [fonts, setFonts] = useState<string[]>([])
-	const [initialized, setInitialized] = useState(false)
+	const {
+		fonts, initialized, searchFonts, error,
+	} = useFontSearch()
 
 	const onSearch = useCallback(() => {
-		setLoading(true)
-		// Здесь будет запрос на поиск шрифтов
-		setLoading(false)
-		setInitialized(true)
-	}, [searchValue])
+		searchFonts(searchValue)
+	}, [searchValue, searchFonts])
 
 	return (
 		<BasePopover
@@ -44,32 +42,43 @@ function FontFamilyPopover({
 				placeholder="Поиск шрифтов..."
 			/>
 			<div className={styles.content}>
-				{(fonts.length || initialized === false)
-					? initialized
-						? (
-							<div className={styles.fontList}>
-								{fonts.map(font => (
-									<div
-										key={font}
-										className={styles.fontItem}
-										onClick={() => {
-											onChange(font)
-											onClose()
-										}}
-									>
-										{font}
-									</div>
-								))}
-							</div>
-						)
-						: <Preloader />
-					: <EmptyState
-						icon={Font24px}
-						size={120}
-						height={300}
-						width={400}
-						message="Шрифты не найдены"
-					/>}
+				{error
+					? (
+						<EmptyState
+							icon={Font24px}
+							size={80}
+							height={200}
+							width={300}
+							message={error}
+						/>
+					)
+					: (fonts.length || initialized === false)
+						? initialized
+							? (
+								<div className={styles.fontList}>
+									{fonts.map(font => (
+										<div
+											key={font}
+											className={styles.fontItem}
+											onClick={() => {
+												onSelect(font)
+												onClose()
+											}}
+											style={{fontFamily: font}}
+										>
+											{font}
+										</div>
+									))}
+								</div>
+							)
+							: <PreloaderWrapper className={styles.preloader} />
+						: <EmptyState
+							icon={Font24px}
+							size={80}
+							height={200}
+							width={280}
+							message="Шрифты не найдены"
+						/>}
 			</div>
 		</BasePopover>
 	)

@@ -138,7 +138,7 @@ export function TextGroupButtons({
 			{searchFontFamilyOpen && (
 				<FontFamilyPopover
 					value={text.fontFamily}
-					onChange={(font: string) => {
+					onSelect={(font: string) => {
 						// Здесь будет action для изменения шрифта
 					}}
 					onClose={() => setSearchFontFamilyOpen(false)}

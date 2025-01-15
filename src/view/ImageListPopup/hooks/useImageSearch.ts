@@ -1,5 +1,5 @@
 import {useState} from 'react'
-import {API_KEY_UNSPLASH} from '../../../consts/ApiKey'
+import {API_KEY_UNSPLASH} from '../../../consts/apiKeys'
 import {remap_ApiUnsplashResponse_to_Images} from '../remap'
 import {type Image, type UnsplashResponse} from '../types'
 
