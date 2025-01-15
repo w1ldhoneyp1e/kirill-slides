@@ -1,4 +1,4 @@
-.numberField {
+.textField {
     background-color: var(--color-white-background);
     padding-inline: 10px;
     border-radius: 7px;
@@ -6,17 +6,5 @@
     font-size: 16px;
     color: var(--color-gray-darker);
     height: 35px;
-    width: 60px;
     outline: none;
-}
-
-.numberField::-webkit-inner-spin-button,
-.numberField::-webkit-outer-spin-button {
-    opacity: 0;
-}
-
-.numberFieldContainer {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-}
+} 

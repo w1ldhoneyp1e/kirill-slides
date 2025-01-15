@@ -3,8 +3,12 @@ import {
 	useRef,
 	useState,
 } from 'react'
-import {useDragAndDrop} from '../../view/hooks/useDragAndDrop'
+import {Minus24px} from '../../assets/icons/Minus24px'
+import {Plus24px} from '../../assets/icons/Plus24px'
+import {Button} from '../Button/Button'
+import {NumberField} from '../numberField/NumberField'
 import {Popup} from '../Popup/Popup'
+import {TextField} from '../TextField/TextField'
 import styles from './PalettePopup.module.css'
 
 type PalettePopupProps = {
@@ -23,41 +27,56 @@ function PalettePopup({
 		? 0
 		: 100)
 	const [hue, setHue] = useState(0)
+	const [marker, setMarker] = useState<{
+		x: number,
+		y: number,
+	}>({
+		x: 0,
+		y: 0,
+	})
 	const paletteRef = useRef<HTMLDivElement>(null)
 	const hueRef = useRef<HTMLDivElement>(null)
 
-	const handlePaletteMove = useCallback(({x, y}) => {
+	const updateColor = useCallback((h: number, x: number, y: number) => {
 		const rect = paletteRef.current?.getBoundingClientRect()
 		if (!rect) {
 			return
 		}
 
-		const saturation = Math.max(0, Math.min(x, rect.width)) / rect.width * 100
-		const brightness = 100 - (Math.max(0, Math.min(y, rect.height)) / rect.height * 100)
+		const saturation = (x / rect.width) * 100
+		const brightness = 100 - (y / rect.height) * 100
 
-		const rgb = HSVtoRGB(hue, saturation, brightness)
+		const rgb = HSVtoRGB(h, saturation, brightness)
 		setColor(RGBtoHex(rgb))
-	}, [hue])
+	}, [])
 
-	const handleHueMove = useCallback(({x}) => {
+	const handlePaletteClick = useCallback((e: React.MouseEvent) => {
+		const rect = paletteRef.current?.getBoundingClientRect()
+		if (!rect) {
+			return
+		}
+
+		const x = Math.max(0, Math.min(e.clientX - rect.left, rect.width))
+		const y = Math.max(0, Math.min(e.clientY - rect.top, rect.height))
+
+		setMarker({
+			x,
+			y,
+		})
+		updateColor(hue, x, y)
+	}, [hue, updateColor])
+
+	const handleHueClick = useCallback((e: React.MouseEvent) => {
 		const rect = hueRef.current?.getBoundingClientRect()
 		if (!rect) {
 			return
 		}
 
-		const newHue = Math.max(0, Math.min(x, rect.width)) / rect.width * 360
+		const x = Math.max(0, Math.min(e.clientX - rect.left, rect.width))
+		const newHue = (x / rect.width) * 360
 		setHue(newHue)
-	}, [])
-
-	useDragAndDrop({
-		ref: paletteRef,
-		onMouseMove: handlePaletteMove,
-	})
-
-	useDragAndDrop({
-		ref: hueRef,
-		onMouseMove: handleHueMove,
-	})
+		updateColor(newHue, marker.x, marker.y)
+	}, [marker.x, marker.y, updateColor])
 
 	const handleAccept = useCallback(() => {
 		if (alpha === 0) {
@@ -91,12 +110,21 @@ function PalettePopup({
 						ref={paletteRef}
 						className={styles.palette}
 						style={{backgroundColor: `hsl(${hue}, 100%, 50%)`}}
+						onClick={handlePaletteClick}
 					>
 						<div className={styles.paletteOverlay} />
+						<div
+							className={styles.marker}
+							style={{
+								left: marker.x,
+								top: marker.y,
+							}}
+						/>
 					</div>
 					<div
 						ref={hueRef}
 						className={styles.hueSlider}
+						onClick={handleHueClick}
 					>
 						<div
 							className={styles.hueHandle}
@@ -116,21 +144,36 @@ function PalettePopup({
 						<div className={styles.values}>
 							<div className={styles.hex}>
 								<span>{'HEX'}</span>
-								<input
-									type="text"
+								<TextField
 									value={color.toUpperCase()}
-									onChange={e => setColor(e.target.value)}
+									onChange={setColor}
 								/>
 							</div>
 							<div className={styles.alpha}>
 								<span>{'Прозрачность'}</span>
-								<input
-									type="number"
-									min={0}
-									max={100}
-									value={alpha}
-									onChange={e => setAlpha(Number(e.target.value))}
-								/>
+								<div className={styles.numberFieldContainer}>
+									<NumberField
+										value={alpha}
+										onChange={setAlpha}
+										maxValue={100}
+									/>
+									<Button
+										type="icon"
+										icon={Plus24px}
+										onClick={() => setAlpha(Math.min(100, alpha + 1))}
+										state={alpha >= 100
+											? 'disabled'
+											: 'default'}
+									/>
+									<Button
+										type="icon"
+										icon={Minus24px}
+										onClick={() => setAlpha(Math.max(0, alpha - 1))}
+										state={alpha <= 0
+											? 'disabled'
+											: 'default'}
+									/>
+								</div>
 							</div>
 						</div>
 					</div>

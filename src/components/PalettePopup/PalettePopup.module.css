@@ -91,7 +91,6 @@
 }
 
 .hex input, .alpha input {
-    padding: 8px;
     border: 2px solid var(--color-gray-dark);
     border-radius: 4px;
     font-family: monospace;
@@ -112,4 +111,21 @@
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.marker {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border: 2px solid white;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    box-shadow: 0 0 0 1px var(--color-gray-dark);
+}
+
+.numberFieldContainer {
+    display: flex;
+    align-items: center;
+    gap: 4px;
 } 

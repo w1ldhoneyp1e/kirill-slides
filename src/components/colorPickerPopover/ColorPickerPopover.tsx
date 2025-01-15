@@ -124,6 +124,7 @@ function ColorPickerPopover({
 				type="text"
 				text="Прозрачный"
 				state="default"
+				className={styles.transparentButton}
 				onClick={() => {
 					onChange('transparent')
 					onClose()
