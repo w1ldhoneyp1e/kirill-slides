@@ -16,6 +16,24 @@ type FontFamilyPopoverProps = {
 	onSearch: (query: string) => void,
 }
 
+const loadGoogleFont = async (fontFamily: string): Promise<void> => {
+	const link = document.createElement('link')
+	link.href = `https://fonts.googleapis.com/css2?family=${fontFamily.replace(/ /g, '+')}&display=swap`
+	link.rel = 'stylesheet'
+
+	const existingLink = document.querySelector(`link[href="${link.href}"]`)
+	if (existingLink) {
+		return
+	}
+
+	document.head.appendChild(link)
+
+	return new Promise((resolve, reject) => {
+		link.onload = () => resolve()
+		link.onerror = () => reject()
+	})
+}
+
 function FontFamilyPopover({
 	onSelect,
 	onClose,
@@ -31,6 +49,17 @@ function FontFamilyPopover({
 		setSearchValue(query)
 		onSearch(query)
 	}, [onSearch])
+
+	const handleSelect = useCallback(async (font: string) => {
+		try {
+			await loadGoogleFont(font)
+			onSelect(font)
+			onClose()
+		}
+		catch (err) {
+			console.error('Ошибка при загрузке шрифта:', err)
+		}
+	}, [onSelect, onClose])
 
 	return (
 		<BasePopover
@@ -64,7 +93,7 @@ function FontFamilyPopover({
 											key={font}
 											className={styles.item}
 											onClick={() => {
-												onSelect(font)
+												handleSelect(font)
 												onClose()
 											}}
 											style={{fontFamily: font}}

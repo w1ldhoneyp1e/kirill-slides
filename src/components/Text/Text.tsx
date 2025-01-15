@@ -27,6 +27,28 @@ type TextProps = {
 	scale: number,
 }
 
+const loadGoogleFont = async (fontFamily: string): Promise<void> => {
+	if (!fontFamily || fontFamily === 'inherit') {
+		return
+	}
+
+	const link = document.createElement('link')
+	link.href = `https://fonts.googleapis.com/css2?family=${fontFamily.replace(/ /g, '+')}&display=swap`
+	link.rel = 'stylesheet'
+
+	const existingLink = document.querySelector(`link[href="${link.href}"]`)
+	if (existingLink) {
+		return
+	}
+
+	document.head.appendChild(link)
+
+	return new Promise((resolve, reject) => {
+		link.onload = () => resolve()
+		link.onerror = () => reject()
+	})
+}
+
 function Text({
 	textId,
 	slideId,
@@ -100,6 +122,14 @@ function Text({
 		setCurrentText(text.value)
 	}, [text.position, text.size, text.value])
 
+	useEffect(() => {
+		if (text.fontFamily) {
+			loadGoogleFont(text.fontFamily).catch(err => {
+				console.error('Ошибка при загрузке шрифта:', err)
+			})
+		}
+	}, [text.fontFamily])
+
 	const handleDoubleClick = () => {
 		if (!isEditing) {
 			setIsEditing(true)
@@ -126,7 +156,8 @@ function Text({
 		fontSize: text.fontSize * scale,
 		width: size.width * scale,
 		height: size.height * scale,
-	}), [position.y, position.x, scale, text.fontColor, text.fontSize, size.width, size.height])
+		fontFamily: text.fontFamily || 'inherit',
+	}), [position.y, position.x, scale, text.fontColor, text.fontSize, size.width, size.height, text.fontFamily])
 
 	return (
 		<>
