@@ -6,8 +6,12 @@ import {
 } from 'react'
 import {AddPicture24px} from '../../../assets/icons/AddPicture24px.tsx'
 import {Drop24px} from '../../../assets/icons/Drop24px.tsx'
+import {Fill24px} from '../../../assets/icons/Fill24px.tsx'
+import {Gradient24px} from '../../../assets/icons/Gradient24px.tsx'
 import {Laptop24px} from '../../../assets/icons/Laptop24px.tsx'
+import {Marker24px} from '../../../assets/icons/Marker24px.tsx'
 import {Minus24px} from '../../../assets/icons/Minus24px.tsx'
+import {PictureDashBorder24px} from '../../../assets/icons/PictureDashBorder24px.tsx'
 import {Plus24px} from '../../../assets/icons/Plus24px.tsx'
 import {Search24px} from '../../../assets/icons/Search24px.tsx'
 import {type ButtonProps, Button} from '../../../components/Button/Button.tsx'
@@ -131,8 +135,52 @@ function SlideGroupButtons({
 	selectedSlide,
 }: SlideGroupButtonsProps) {
 	const {
-		backgroundButton,
-	} = useGetButtons()
+		changeSlideBackground,
+	} = useAppActions()
+
+	const [popoverOpen, setPopoverOpen] = useState(false)
+	const [colorPickerOpen, setColorPickerOpen] = useState(false)
+	const buttonRef = useRef<HTMLButtonElement>(null)
+
+	const backgroundOptions = [
+		{
+			type: 'icon-text' as const,
+			icon: PictureDashBorder24px,
+			text: 'Открыть с компьютера',
+			onClick: () => {
+				const input = document.createElement('input')
+				input.type = 'file'
+				input.accept = 'image/*'
+				input.onchange = e => {
+					const file = (e.target as HTMLInputElement).files?.[0]
+					if (file) {
+						const reader = new FileReader()
+						reader.onload = () => {
+							changeSlideBackground({
+								value: reader.result as string,
+								type: 'image',
+							})
+						}
+						reader.readAsDataURL(file)
+					}
+				}
+				input.click()
+			},
+		},
+		{
+			type: 'icon-text' as const,
+			icon: Drop24px,
+			text: 'Сплошной фон',
+			onClick: () => setColorPickerOpen(true),
+		},
+		{
+			type: 'icon-text' as const,
+			icon: Gradient24px,
+			text: 'Градиент',
+			onClick: () => {},
+			disabled: true,
+		},
+	]
 
 	return selectedObjects.length === 0 && selectedSlide && (
 		<>
@@ -140,9 +188,35 @@ function SlideGroupButtons({
 				size="half"
 				type="vertical"
 			/>
-			<ButtonGroup
-				items={[backgroundButton]}
+			<Button
+				ref={buttonRef}
+				type="icon"
+				state="default"
+				icon={Fill24px}
+				onClick={() => setPopoverOpen(true)}
 			/>
+			{popoverOpen && (
+				<Popover
+					items={backgroundOptions}
+					anchorRef={buttonRef}
+					onClose={() => setPopoverOpen(false)}
+				/>
+			)}
+			{colorPickerOpen && (
+				<ColorPickerPopover
+					value="#FFFFFF"
+					onChange={color => {
+						changeSlideBackground({
+							value: color,
+							type: 'solid',
+						})
+						setColorPickerOpen(false)
+						setPopoverOpen(false)
+					}}
+					onClose={() => setColorPickerOpen(false)}
+					anchorRef={buttonRef}
+				/>
+			)}
 		</>
 
 	)
@@ -183,7 +257,7 @@ function TextGroupButtons({
 		type: 'icon',
 		state: 'default',
 		ref: buttonRef,
-		icon: Drop24px,
+		icon: Marker24px,
 		onClick: () => {
 			setColorPickerOpen(true)
 		},

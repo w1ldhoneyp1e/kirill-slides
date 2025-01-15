@@ -18,8 +18,19 @@ function setSlideIndex(payload: {
 	}
 }
 
+function changeSlideBackground(payload: {
+	value: string,
+	type: 'solid' | 'image',
+}) {
+	return {
+		type: ACTION_TYPE.changeSlideBackground,
+		payload,
+	}
+}
+
 export {
 	addSlide,
 	removeSlide,
 	setSlideIndex,
+	changeSlideBackground,
 }

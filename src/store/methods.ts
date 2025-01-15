@@ -3,6 +3,7 @@ import {
 	type ChangeObjectPositionAction,
 	type ChangeObjectSizeAction,
 	type ChangePresentationNameAction,
+	type ChangeSlideBackgroundAction,
 	type ChangeTextFontColorAction,
 	type ChangeTextFontSizeAction,
 	type ChangeTextValueAction,
@@ -475,13 +476,13 @@ function setTextColor(obj: TextType | PictureType, newColor: string): TextType |
 // изменение фона слайда
 function changeSlideBackground(
 	editor: EditorType,
-	{
-		value, type,
-	}: {
-		value: string,
-		type: string,
-	},
+	action: ChangeSlideBackgroundAction,
 ): EditorType {
+	const {
+		value,
+		type,
+	} = action.payload
+
 	const slideId = editor.selection.selectedSlideId
 	const newSlides = editor.presentation.slides.map(slide => {
 		if (slide.id === slideId) {

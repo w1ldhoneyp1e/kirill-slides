@@ -4,6 +4,7 @@ enum ACTION_TYPE {
 	addSlide = 'addSlide',
 	removeSlide = 'removeSlide',
 	setSlideIndex = 'setSlideIndex',
+	changeSlideBackground = 'changeSlideBackground',
 
 	setSelection = 'setSelection',
 	deselect = 'deselect',
@@ -123,6 +124,14 @@ type ChangeTextFontColorAction = {
 	},
 }
 
+type ChangeSlideBackgroundAction = {
+	type: ACTION_TYPE.changeSlideBackground,
+	payload: {
+		value: string,
+		type: 'solid' | 'image',
+	},
+}
+
 type EditorAction =
     AddSlideAction
     | RemoveSlideAction
@@ -138,6 +147,8 @@ type EditorAction =
 	| ChangeTextValueAction
 	| ChangeTextFontSizeAction
 	| ChangeTextFontColorAction
+	| ChangeSlideBackgroundAction
+
 
 export {ACTION_TYPE}
 export type {
@@ -152,6 +163,7 @@ export type {
 	ChangeTextValueAction,
 	ChangeTextFontSizeAction,
 	ChangeTextFontColorAction,
+	ChangeSlideBackgroundAction,
 	AddSlideAction,
 	RemoveSlideAction,
 	AddTextAction,

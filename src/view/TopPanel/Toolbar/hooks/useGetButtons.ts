@@ -2,7 +2,6 @@ import {useCallback, useContext} from 'react'
 import {AddPlus24px} from '../../../../assets/icons/AddPlus24px.tsx'
 import {AddText24px} from '../../../../assets/icons/AddText24px.tsx'
 import {Cursor24px} from '../../../../assets/icons/Cursor24px.tsx'
-import {Fill24px} from '../../../../assets/icons/Fill24px.tsx'
 import {Redo24px} from '../../../../assets/icons/Redo24px.tsx'
 import {Undo24px} from '../../../../assets/icons/Undo24px.tsx'
 import {type ButtonProps} from '../../../../components/Button/Button.tsx'
@@ -82,23 +81,12 @@ function useGetButtons() {
 		onClick: addText,
 	}
 
-
-	const backgroundButton: ButtonProps = {
-		type: 'icon',
-		icon: Fill24px,
-		state: selectedSlide
-			? 'default'
-			: 'disabled',
-		onClick: () => {},
-	}
-
 	return {
 		addButton,
 		undoButton,
 		redoButton,
 		cursorButton,
 		addTextButton,
-		backgroundButton,
 	}
 }
 
