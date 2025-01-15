@@ -12,6 +12,7 @@ import {ButtonGroup} from '../../../components/ButtonGroup/ButtonGroup'
 import {ColorPickerPopover} from '../../../components/colorPickerPopover/ColorPickerPopover'
 import {Divider} from '../../../components/Divider/Divider'
 import {FontFamilyPopover} from '../../../components/FontFamilyPopover/FontFamilyPopover'
+import {useFontSearch} from '../../../components/FontFamilyPopover/hooks/useFontSearch'
 import {NumberField} from '../../../components/numberField/NumberField'
 import {type SlideType, type TextType} from '../../../store/types'
 import {useAppActions} from '../../hooks/useAppActions'
@@ -23,7 +24,7 @@ type TextGroupButtonsProps = {
 	selectedSlide: string,
 }
 
-export function TextGroupButtons({
+function TextGroupButtons({
 	slides,
 	selectedObjects,
 	selectedSlide,
@@ -31,6 +32,7 @@ export function TextGroupButtons({
 	const {
 		changeTextFontSize,
 		changeTextFontColor,
+		changeTextFontFamily,
 	} = useAppActions()
 
 	const slide = slides.find(s => s.id === selectedSlide)
@@ -40,6 +42,13 @@ export function TextGroupButtons({
 	const [fontColor, setFontColor] = useState<string>('#000000')
 	const [colorPickerOpen, setColorPickerOpen] = useState(false)
 	const [searchFontFamilyOpen, setSearchFontFamilyOpen] = useState(false)
+	const {
+		fonts,
+		initialized,
+		searchFonts,
+		loadFonts,
+		error,
+	} = useFontSearch()
 
 	const buttonRef = useRef<HTMLButtonElement>(null)
 	const fontFamiltButtonRef = useRef<HTMLButtonElement>(null)
@@ -68,7 +77,10 @@ export function TextGroupButtons({
 		state: 'default',
 		ref: fontFamiltButtonRef,
 		icon: Font24px,
-		onClick: () => setSearchFontFamilyOpen(true),
+		onClick: () => {
+			setSearchFontFamilyOpen(true)
+			loadFonts()
+		},
 	}
 
 	return (
@@ -137,14 +149,23 @@ export function TextGroupButtons({
 			)}
 			{searchFontFamilyOpen && (
 				<FontFamilyPopover
-					value={text.fontFamily}
 					onSelect={(font: string) => {
-						// Здесь будет action для изменения шрифта
+						changeTextFontFamily({
+							slideId: selectedSlide,
+							objId: selectedObjects[0],
+							fontFamily: font,
+						})
 					}}
 					onClose={() => setSearchFontFamilyOpen(false)}
 					anchorRef={fontFamiltButtonRef}
+					fonts={fonts}
+					initialized={initialized}
+					error={error}
+					onSearch={searchFonts}
 				/>
 			)}
 		</>
 	)
 }
+
+export {TextGroupButtons}

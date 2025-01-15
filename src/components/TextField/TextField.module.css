@@ -1,10 +1,25 @@
 .textField {
-    background-color: var(--color-white-background);
-    padding-inline: 10px;
-    border-radius: 7px;
+    padding: 8px;
+    background-color: var(--color-soft-blue);
+    border-radius: 4px;
     border: 1px solid var(--color-gray-dark);
-    font-size: 16px;
-    color: var(--color-gray-darker);
-    height: 35px;
+    width: 100%;
+    font-size: 14px;
     outline: none;
+    transition: background-color 0.3s ease, box-shadow 0.1s ease;
+    color: var(--color-gray-darker);
+}
+
+.textField:hover {
+    background-color: var(--color-grayish-blue);
+}
+
+.textField:focus {
+    background-color: var(--color-grayish-blue);
+    box-shadow: -1px 1px 0 var(--color-gray-dark);
+}
+
+.textField::placeholder {
+    color: var(--color-gray-darker);
+    opacity: 0.7;
 } 

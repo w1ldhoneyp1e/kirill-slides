@@ -1,4 +1,8 @@
-.fontFamilyPopover {
+.popover {
+    background-color: var(--color-white-background);
+    border-radius: 8px;
+    border: 2px solid var(--color-gray-dark);
+    box-shadow: -3px 3px 0 var(--color-gray-dark);
     padding: 8px;
     display: flex;
     flex-direction: column;
@@ -9,26 +13,30 @@
 .content {
     display: flex;
     flex-direction: column;
-    gap: 8px;
     max-height: 400px;
     overflow-y: auto;
 }
 
-.fontList {
+.list {
     display: flex;
     flex-direction: column;
-    gap: 4px;
 }
 
-.fontItem {
+.item {
     padding: 8px;
     cursor: pointer;
-    border-radius: 4px;
+    display: flex;
+    align-items: center;
     transition: background-color 0.2s ease;
 }
 
-.fontItem:hover {
+.item:hover {
     background-color: var(--color-grayish-blue);
+}
+
+.text {
+    color: var(--color-gray-darker);
+    font-size: 14px;
 }
 
 .searchField {

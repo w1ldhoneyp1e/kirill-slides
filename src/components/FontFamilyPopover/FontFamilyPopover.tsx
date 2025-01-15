@@ -3,42 +3,45 @@ import {Font24px} from '../../assets/icons/Font24px'
 import {BasePopover} from '../BasePopover/BasePopover'
 import {EmptyState} from '../EmptyState/EmptyState'
 import {PreloaderWrapper} from '../Preloader/PreloaderWrapper'
-import {SearchField} from '../SearchField/SearchField'
+import {TextField} from '../TextField/TextField'
 import styles from './FontFamilyPopover.module.css'
-import {useFontSearch} from './hooks/useFontSearch'
 
 type FontFamilyPopoverProps = {
-	value: string,
 	onSelect: (font: string) => void,
 	onClose: () => void,
 	anchorRef: React.RefObject<HTMLElement>,
+	fonts: string[],
+	initialized: boolean,
+	error: string | null,
+	onSearch: (query: string) => void,
 }
 
 function FontFamilyPopover({
-	value,
 	onSelect,
 	onClose,
 	anchorRef,
+	fonts,
+	initialized,
+	error,
+	onSearch,
 }: FontFamilyPopoverProps) {
 	const [searchValue, setSearchValue] = useState('')
-	const {
-		fonts, initialized, searchFonts, error,
-	} = useFontSearch()
 
-	const onSearch = useCallback(() => {
-		searchFonts(searchValue)
-	}, [searchValue, searchFonts])
+	const handleSearch = useCallback((query: string) => {
+		setSearchValue(query)
+		onSearch(query)
+	}, [onSearch])
 
 	return (
 		<BasePopover
 			onClose={onClose}
 			anchorRef={anchorRef}
-			className={styles.fontFamilyPopover}
+			className={styles.popover}
 		>
-			<SearchField
+			<TextField
 				className={styles.searchField}
-				onInput={setSearchValue}
-				onSearch={onSearch}
+				value={searchValue}
+				onChange={handleSearch}
 				placeholder="Поиск шрифтов..."
 			/>
 			<div className={styles.content}>
@@ -55,18 +58,18 @@ function FontFamilyPopover({
 					: (fonts.length || initialized === false)
 						? initialized
 							? (
-								<div className={styles.fontList}>
+								<div className={styles.list}>
 									{fonts.map(font => (
 										<div
 											key={font}
-											className={styles.fontItem}
+											className={styles.item}
 											onClick={() => {
 												onSelect(font)
 												onClose()
 											}}
 											style={{fontFamily: font}}
 										>
-											{font}
+											<span className={styles.text}>{font}</span>
 										</div>
 									))}
 								</div>
