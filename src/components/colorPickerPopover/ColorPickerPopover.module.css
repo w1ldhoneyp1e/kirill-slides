@@ -1,24 +1,9 @@
 .colorPicker {
-    position: absolute;
-    z-index: 10;
-
-    background-color: var(--color-soft-blue);
-
-    border: 1px solid var(--color-gray-dark);
-    border-radius: 4px;
-    box-shadow: -1px 1px 0 var(--color-gray-dark);
-
     padding: 8px;
-    opacity: 0;
-
-    transform: scale(0.95);
-    transition: opacity 0.2s ease, transform 0.2s ease;
-
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     gap: 8px;
-    right: 0;
     width: max-content;
 }
 

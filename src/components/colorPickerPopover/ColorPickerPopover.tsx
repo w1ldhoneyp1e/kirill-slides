@@ -1,12 +1,8 @@
-import {
-	useEffect,
-	useLayoutEffect,
-	useRef,
-	useState,
-} from 'react'
+import {useState} from 'react'
 import {Palette24px} from '../../assets/icons/Palette24px'
 import {getUID} from '../../store/methods'
 import {joinStyles} from '../../utils/joinStyles'
+import {BasePopover} from '../BasePopover/BasePopover'
 import {Button} from '../Button/Button'
 import {Divider} from '../Divider/Divider'
 import {PalettePopup} from '../PalettePopup/PalettePopup'
@@ -33,52 +29,13 @@ function ColorPickerPopover({
 	onClose,
 	anchorRef,
 }: ColorPickerProps) {
-	const [isOpen, setIsOpen] = useState(false)
-	const [style, setStyle] = useState<React.CSSProperties>()
 	const [paletteOpen, setPaletteOpen] = useState(false)
-	const pickerRef = useRef<HTMLDivElement>(null)
-
-	useLayoutEffect(() => {
-		const anchorRect = anchorRef.current?.getBoundingClientRect()
-		const pickerWidth = pickerRef.current?.offsetWidth || 0
-		if (anchorRect) {
-			console.log('top: ', anchorRect.bottom + window.scrollY)
-			console.log('left: ', anchorRect.right + window.scrollX - pickerWidth)
-			setStyle({
-				top: anchorRect.bottom + window.scrollY,
-				left: anchorRect.right + window.scrollX - pickerWidth,
-			})
-		}
-	}, [anchorRef])
-
-	useEffect(() => {
-		setIsOpen(true)
-
-		const handleClickOutside = (event: MouseEvent) => {
-			if (
-				pickerRef.current
-				&& !pickerRef.current.contains(event.target as Node)
-				&& anchorRef.current
-				&& !anchorRef.current.contains(event.target as Node)
-				&& !paletteOpen
-			) {
-				setIsOpen(false)
-				setTimeout(onClose, 200)
-			}
-		}
-
-		document.addEventListener('mousedown', handleClickOutside)
-		return () => document.removeEventListener('mousedown', handleClickOutside)
-	}, [onClose, anchorRef, paletteOpen])
 
 	return (
-		<div
-			ref={pickerRef}
-			className={joinStyles(
-				styles.colorPicker,
-				isOpen && styles.open,
-			)}
-			style={style}
+		<BasePopover
+			onClose={onClose}
+			anchorRef={anchorRef}
+			className={styles.colorPicker}
 		>
 			<div className={styles.grid}>
 				{COLORS.map(row => (
@@ -137,7 +94,7 @@ function ColorPickerPopover({
 					onClose={() => setPaletteOpen(false)}
 				/>
 			)}
-		</div>
+		</BasePopover>
 	)
 }
 

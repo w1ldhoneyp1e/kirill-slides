@@ -5,6 +5,7 @@ import {
 	useRef,
 	useState,
 } from 'react'
+import {useObjectContextMenu} from '../../hooks/useObjectContextMenu'
 import {
 	type PositionType,
 	type SizeType,
@@ -15,6 +16,7 @@ import {useAppActions} from '../../view/hooks/useAppActions'
 import {useAppSelector} from '../../view/hooks/useAppSelector'
 import {useDragAndDrop} from '../../view/hooks/useDragAndDrop'
 import {boundPosition} from '../../view/utils/boundPosition'
+import {Popover} from '../Popover/Popover'
 import {ResizeFrame} from '../ResizeFrame/ResizeFrame'
 import styles from './Text.module.css'
 
@@ -84,6 +86,14 @@ function Text({
 		onMouseUp,
 	})
 
+	const {
+		handleContextMenu,
+		position: cursorPosition,
+		isOpen,
+		handleClose,
+		contextMenuItems,
+	} = useObjectContextMenu()
+
 	useEffect(() => {
 		setPosition(text.position)
 		setSize(text.size)
@@ -124,7 +134,7 @@ function Text({
 				ref={textRef}
 				className={styles.text}
 				style={style}
-				onClick={e => e.preventDefault()}
+				onClick={e => e.stopPropagation()}
 				onMouseDown={e => {
 					deselect({
 						type: 'object',
@@ -141,6 +151,7 @@ function Text({
 					}
 					e.stopPropagation()
 				}}
+				onContextMenu={handleContextMenu}
 			>
 				{isEditing
 					? (
@@ -156,6 +167,15 @@ function Text({
 					: (
 						text.value
 					)}
+				{isOpen && cursorPosition && (
+					<div onClick={e => e.stopPropagation()}>
+						<Popover
+							items={contextMenuItems}
+							onClose={handleClose}
+							position={cursorPosition}
+						/>
+					</div>
+				)}
 			</div>
 			{isSelected && scale === 1
 				? (

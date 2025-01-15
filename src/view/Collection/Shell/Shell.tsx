@@ -5,7 +5,10 @@ import {
 	useRef,
 	useState,
 } from 'react'
+import {Trash24px} from '../../../assets/icons/Trash24px'
+import {Popover} from '../../../components/Popover/Popover'
 import {Slide} from '../../../components/Slide/Slide'
+import {useContextMenu} from '../../../hooks/useContextMenu'
 import {getUID} from '../../../store/methods'
 import {type PositionType} from '../../../store/types'
 import {joinStyles} from '../../../utils/joinStyles'
@@ -34,7 +37,15 @@ function Shell({
 		deselect,
 		setSlideIndex,
 		setSelection,
+		deleteSlide,
 	} = useAppActions()
+	const {
+		handleContextMenu,
+		position,
+		isOpen,
+		handleClose,
+	} = useContextMenu()
+	const buttonRef = useRef<HTMLDivElement>(null)
 
 	const [onDrag, setOnDrag] = useState(false)
 	const [delta, setDelta] = useState<PositionType | null>(null)
@@ -128,6 +139,18 @@ function Shell({
 
 	const isSelected = useMemo(() => slide.id === selectedSlideId, [selectedSlideId, slide.id])
 
+	const contextMenuItems = [
+		{
+			type: 'icon-text' as const,
+			icon: Trash24px,
+			text: 'Удалить',
+			onClick: () => {
+				deleteSlide()
+				handleClose()
+			},
+		},
+	]
+
 	return (
 		<>
 			<div
@@ -156,6 +179,7 @@ function Shell({
 					e.preventDefault()
 				}}
 				style={shellStyle}
+				onContextMenu={handleContextMenu}
 			>
 				<div
 					key={getUID()}
@@ -167,7 +191,14 @@ function Shell({
 						scale={SLIDE_SCALE}
 					/>
 				</div>
-
+				{isOpen && position && (
+					<Popover
+						items={contextMenuItems}
+						onClose={handleClose}
+						anchorRef={buttonRef}
+						position={position}
+					/>
+				)}
 			</div>
 		</>
 	)

@@ -2,7 +2,7 @@ import {type EditorType} from '../types'
 
 enum ACTION_TYPE {
 	addSlide = 'addSlide',
-	removeSlide = 'removeSlide',
+	deleteSlide = 'deleteSlide',
 	setSlideIndex = 'setSlideIndex',
 	changeSlideBackground = 'changeSlideBackground',
 
@@ -15,6 +15,7 @@ enum ACTION_TYPE {
 	changeTextFontColor = 'changeTextFontColor',
 
 	addPicture = 'addPicture',
+	deleteObjects = 'deleteObjects',
 	changeObjectPosition = 'changeObjectPosition',
 	changeObjectSize = 'changeObjectSize',
 
@@ -27,7 +28,7 @@ type AddSlideAction = {
 }
 
 type RemoveSlideAction = {
-	type: ACTION_TYPE.removeSlide,
+	type: ACTION_TYPE.deleteSlide,
 }
 
 type SetSlideIndexAction = {
@@ -67,6 +68,10 @@ type AddPictureAction = {
 		width: number,
 		height: number,
 	},
+}
+
+type DeleteObjectsAction = {
+	type: ACTION_TYPE.deleteObjects,
 }
 
 type ChangePresentationNameAction = {
@@ -148,7 +153,7 @@ type EditorAction =
 	| ChangeTextFontSizeAction
 	| ChangeTextFontColorAction
 	| ChangeSlideBackgroundAction
-
+	| DeleteObjectsAction
 
 export {ACTION_TYPE}
 export type {
@@ -168,4 +173,5 @@ export type {
 	RemoveSlideAction,
 	AddTextAction,
 	SetEditorAction,
+	DeleteObjectsAction,
 }

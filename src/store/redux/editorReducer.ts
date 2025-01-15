@@ -10,6 +10,7 @@ import {
 	changeTextColor,
 	changeTextFontSize,
 	changeTextValue,
+	deleteObjects,
 	deleteSlide,
 	deselect,
 	setSelection,
@@ -23,8 +24,6 @@ function editorReducer(editor: EditorType = defaultEditor, action: EditorAction)
 	switch (action.type) {
 		case ACTION_TYPE.addSlide:
 			return addSlide(editor)
-		case ACTION_TYPE.removeSlide:
-			return deleteSlide(editor)
 		case ACTION_TYPE.setSlideIndex:
 			return setSlideIndex(editor, action)
 		case ACTION_TYPE.setSelection:
@@ -51,6 +50,10 @@ function editorReducer(editor: EditorType = defaultEditor, action: EditorAction)
 			return changeTextColor(editor, action)
 		case ACTION_TYPE.changeSlideBackground:
 			return changeSlideBackground(editor, action)
+		case ACTION_TYPE.deleteObjects:
+			return deleteObjects(editor)
+		case ACTION_TYPE.deleteSlide:
+			return deleteSlide(editor)
 		default:
 			return editor
 	}

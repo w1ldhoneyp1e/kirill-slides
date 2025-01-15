@@ -23,6 +23,10 @@ function addPicture({
 	}
 }
 
+function deleteObjects() {
+	return {type: ACTION_TYPE.deleteObjects}
+}
+
 function changeObjectPosition({
 	id,
 	position,
@@ -129,4 +133,5 @@ export {
 	changeTextValue,
 	changeTextFontSize,
 	changeTextFontColor,
+	deleteObjects,
 }

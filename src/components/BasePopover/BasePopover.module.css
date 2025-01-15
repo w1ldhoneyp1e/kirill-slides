@@ -1,0 +1,14 @@
+.popover {
+    background: var(--color-soft-blue);
+    border-radius: 8px;
+    box-shadow: -2px 2px 0 var(--color-gray-dark);
+    border: 2px solid var(--color-gray-dark);
+    opacity: 0;
+    transform: scale(0.95);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.popover.open {
+    opacity: 1;
+    transform: scale(1);
+} 

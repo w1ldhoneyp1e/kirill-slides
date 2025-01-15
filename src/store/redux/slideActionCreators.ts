@@ -4,8 +4,8 @@ function addSlide() {
 	return {type: ACTION_TYPE.addSlide}
 }
 
-function removeSlide() {
-	return {type: ACTION_TYPE.removeSlide}
+function deleteSlide() {
+	return {type: ACTION_TYPE.deleteSlide}
 }
 
 function setSlideIndex(payload: {
@@ -30,7 +30,7 @@ function changeSlideBackground(payload: {
 
 export {
 	addSlide,
-	removeSlide,
+	deleteSlide,
 	setSlideIndex,
 	changeSlideBackground,
 }

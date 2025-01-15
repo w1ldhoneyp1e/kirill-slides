@@ -202,6 +202,7 @@ function addPicture(editor: EditorType, action: {
 
 function deleteObjects(editor: EditorType): EditorType {
 	const slide = findSlideById(editor, editor.selection.selectedSlideId)
+	console.log('slide ', slide)
 	const newSlide = {
 		...slide,
 		contentObjects: slide.contentObjects.filter(obj =>
