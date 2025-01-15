@@ -9,6 +9,7 @@ import {getUID} from '../../store/methods'
 import {joinStyles} from '../../utils/joinStyles'
 import {Button} from '../Button/Button'
 import {Divider} from '../Divider/Divider'
+import {PalettePopup} from '../PalettePopup/PalettePopup'
 import styles from './ColorPickerPopover.module.css'
 
 type ColorPickerProps = {
@@ -34,6 +35,7 @@ function ColorPickerPopover({
 }: ColorPickerProps) {
 	const [isOpen, setIsOpen] = useState(false)
 	const [style, setStyle] = useState<React.CSSProperties>()
+	const [paletteOpen, setPaletteOpen] = useState(false)
 	const pickerRef = useRef<HTMLDivElement>(null)
 
 	useLayoutEffect(() => {
@@ -111,16 +113,7 @@ function ColorPickerPopover({
 				text="Выбрать из палитры"
 				state="default"
 				onClick={() => {
-					const input = document.createElement('input')
-					input.type = 'color'
-					input.value = value === 'transparent'
-						? '#000000'
-						: value
-					input.addEventListener('change', e => {
-						onChange((e.target as HTMLInputElement).value)
-						onClose()
-					})
-					input.click()
+					setPaletteOpen(true)
 				}}
 			/>
 			<Divider
@@ -136,6 +129,13 @@ function ColorPickerPopover({
 					onClose()
 				}}
 			/>
+			{paletteOpen && (
+				<PalettePopup
+					value={value}
+					onChange={onChange}
+					onClose={() => setPaletteOpen(false)}
+				/>
+			)}
 		</div>
 	)
 }

@@ -8,7 +8,7 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	z-index: 1000;
+	z-index: 15;
   }
   
   .popup {
@@ -45,8 +45,8 @@
   
   .closeButtonOutside {
 	position: absolute;
-	top: 0; /* Расстояние от верхнего края */
-	right: -50px; /* Расстояние от правого края */
+	top: 0;
+	right: -50px;
 	cursor: pointer;
     border: 3px solid var(--color-gray-dark);
 	box-shadow: none;
