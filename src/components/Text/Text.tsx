@@ -145,6 +145,9 @@ function Text({
 		textRendering: 'optimizeLegibility',
 		WebkitFontSmoothing: 'antialiased',
 		MozOsxFontSmoothing: 'grayscale',
+		display: 'flex',
+		justifyContent: 'center',
+		alignItems: 'center',
 	}), [position.y, position.x, scale, text.fontColor, text.fontSize, size.width, size.height, text.fontFamily])
 
 	return (
@@ -152,10 +155,7 @@ function Text({
 			<div
 				ref={textRef}
 				className={styles.text}
-				style={{
-					...style,
-					textRendering: 'optimizeLegibility' as const,
-				}}
+				style={style}
 				onClick={e => e.stopPropagation()}
 				onMouseDown={e => {
 					deselect({
@@ -183,11 +183,28 @@ function Text({
 							onBlur={handleBlur}
 							autoFocus={true}
 							className={styles.textarea}
+							style={{
+								fontFamily: 'inherit',
+								fontSize: 'inherit',
+								color: 'inherit',
+								fontWeight: 'inherit',
+								fontStyle: 'inherit',
+								textRendering: 'inherit',
+								WebkitFontSmoothing: 'inherit',
+								MozOsxFontSmoothing: 'inherit',
+							}}
 							onClick={e => e.stopPropagation()}
 						/>
 					)
 					: (
-						text.value
+						<span
+							style={{
+								width: '100%',
+								textAlign: 'center',
+							}}
+						>
+							{text.value}
+						</span>
 					)}
 				{isOpen && cursorPosition && (
 					<div onClick={e => e.stopPropagation()}>
