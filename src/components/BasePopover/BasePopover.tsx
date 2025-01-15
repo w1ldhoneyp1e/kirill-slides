@@ -36,7 +36,7 @@ export function BasePopover({
 				position: 'fixed',
 				top: position.y,
 				left: position.x,
-				zIndex: 1000,
+				zIndex: 10,
 			})
 		}
 		else if (anchorRef?.current) {
@@ -45,7 +45,7 @@ export function BasePopover({
 				position: 'fixed',
 				top: rect.bottom + window.scrollY,
 				right: window.innerWidth - (rect.right + window.scrollX),
-				zIndex: 1000,
+				zIndex: 10,
 			})
 		}
 		setIsOpen(true)

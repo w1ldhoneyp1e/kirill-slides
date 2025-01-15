@@ -8,6 +8,7 @@
     flex-direction: column;
     gap: 8px;
     width: 300px;
+    z-index: 10;
 }
 
 .content {
