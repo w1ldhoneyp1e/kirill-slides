@@ -9,6 +9,7 @@ import {type HistoryType} from './utils/history'
 import {useUndoRedo} from './view/hooks/useUndoRedo'
 import {Player} from './view/player/Player'
 import {PresentationEditor} from './view/presentationEditor/PresentationEditor'
+import {VideoPlayer} from './view/videoPlayer/VideoPlayer'
 
 type AppProps = {
 	history: HistoryType,

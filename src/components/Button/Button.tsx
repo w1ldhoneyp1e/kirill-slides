@@ -1,4 +1,5 @@
 import {
+	type CSSProperties,
 	type ReactNode,
 	type Ref,
 	forwardRef,
@@ -14,6 +15,7 @@ type ButtonProps = {
 	state?: 'default' | 'disabled' | 'loading' | 'active',
 	ref?: Ref<HTMLButtonElement>,
 	className?: string,
+	style?: CSSProperties,
 } & ({
 	type: 'icon',
 	onClick: () => void,
@@ -54,7 +56,7 @@ type ButtonProps = {
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
 	const {
-		type, state, className,
+		type, state, className, style,
 	} = props
 
 	const buttonClass = joinStyles(
@@ -69,6 +71,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
 			return (
 				<button
 					ref={ref}
+					style={style}
 					className={joinStyles(buttonClass, styles.buttonIcon)}
 					onClick={state === 'loading' || state === 'disabled'
 						? undefined
