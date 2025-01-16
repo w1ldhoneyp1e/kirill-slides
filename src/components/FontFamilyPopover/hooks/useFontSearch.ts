@@ -56,8 +56,8 @@ const useFontSearch = () => {
 
 	const loadFontCSS = async (font: string, weight: string = 'regular'): Promise<string> => {
 		const fontUrl = `https://fonts.googleapis.com/css2?family=${encodeURIComponent(font)}:wght@${weight === 'regular'
-? '400'
-: '700'}&display=swap`
+			? '400'
+			: '700'}&display=swap`
 		const cssResponse = await fetch(fontUrl)
 
 		if (cssResponse.ok) {

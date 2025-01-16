@@ -40,6 +40,10 @@ function App({history}: AppProps) {
 						path="/player"
 						element={<Player />}
 					/>
+					<Route
+						path="/video-player"
+						element={<VideoPlayer />}
+					/>
 				</Route>
 			</Routes>
 		</Router>

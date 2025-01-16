@@ -1,0 +1,7 @@
+function VideoPlayer() {
+
+}
+
+export {
+	VideoPlayer,
+}
