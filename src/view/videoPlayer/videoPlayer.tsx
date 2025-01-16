@@ -84,10 +84,6 @@ function VideoPlayer() {
 					className={styles.video}
 					src={mockVideoLink}
 					controls={false}
-					style={{
-						width: '100%',
-						height: '100%',
-					}}
 				/>
 				<div
 					style={buttonGroupStyles}
