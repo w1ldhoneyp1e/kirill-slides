@@ -95,12 +95,10 @@ const useFontSearch = () => {
 
 			for (const font of fontList) {
 				try {
-					// Загружаем regular версию
 					const regularCSS = await loadFontCSS(font)
 					await saveFontToDb(db, font, regularCSS)
 					applyFont(font, regularCSS)
 
-					// Загружаем bold версию
 					const boldCSS = await loadFontCSS(font, 'bold')
 					await saveFontToDb(db, `${font}_bold`, boldCSS)
 					applyFont(`${font}_bold`, boldCSS)
